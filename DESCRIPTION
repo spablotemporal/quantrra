@@ -1,0 +1,15 @@
+Package: QuantRRA
+Title: Tools for package for rapid risk assessment
+Version: 0.0.0.1
+Authors@R: 
+    person(given = "Jose Pablo",
+           family = "Gomez-Vazquez",
+           role = c("aut", "cre"),
+           email = "jpgo@ucdavis.edu",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: Tools for package for rapid risk assessment
+License: What license it uses
+Encoding: UTF-8
+LazyData: true
+Depends: dplyr, ggplot2
+RoxygenNote: 7.1.1
