@@ -1,5 +1,5 @@
 # Before pushing we have to document the package, 
-# To document the package just create the funcion in thr /R dir and use funciton
+# To document the package just create the funcion in the /R dir and use funciton
 # devtools::document()
 .Rproj.user
 .Rhistory
