@@ -34,7 +34,7 @@ SampleDist <- function(x, n, full = F){
   }else if(dist$distribution %in% c('INVERSE-GAMMA', 'INV-GAMMA', 'INVERSE GAMMA')){
     xi <- invgamma::rinvgamma(n = n, shape = dist$parameters[1], rate =  dist$parameters[2])
   }else{
-    print('Distribution not recognized/supported')
+    print('Distribution not recognized/supported. Distributions supported include: Pert, Normal, Binomial, Triangle, Poisson, Uniform, and Inverse-gamma. If youre interested in support for particular distributions, please contact jpgo@ucdavis.edu')
   }
   if(full == T){
     dist[['x']] <- xi
