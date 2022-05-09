@@ -8,6 +8,7 @@
 # Outputs Table of mean, median and CIs
 RRA_s <- function(M, Tbl, nsim){
   # M = init_nodes; Tbl = st; nsim = 100
+  Tbl <- data.frame(Tbl) # Make sure its a datafram (not tibble or other format)
   # Reformat the strata data:
   Tbl_t <- Tbl[,-1] %>% 
     t() %>%
