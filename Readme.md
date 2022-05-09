@@ -4,7 +4,7 @@
 
 # Installing QuantRRA
 
-You can install `QuantRRA` development version from [GitHub](https://github.com/jpablo91/QuantRRA) using the following code in your R console (make sure you ahave R > 3.5):
+You can install `QuantRRA` development version from [GitHub](https://github.com/jpablo91/QuantRRA) using the following code in your R console (make sure you have R > 3.5):
 
 ```r
 # make sure you have the package devtools installed
