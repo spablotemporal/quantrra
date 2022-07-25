@@ -24,5 +24,6 @@ library(visNetwork)
 library(DT)
 library(QuantRRA)
 
+source('Documentation.R')
 init_nodes <- read.csv(unz('www/M_1.zip', 'nodes.csv'))
 init_edges <- read.csv(unz('www/M_1.zip', 'edges.csv'))

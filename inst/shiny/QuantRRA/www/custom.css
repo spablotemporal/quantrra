@@ -9,13 +9,13 @@
 
 /* background color of header (logo part) */
 .skin-blue .main-header .logo {
-          background-color: #222b2e;
+          background-color: #0e274e;
         }
         
         
 /* change the background color of header (logo part) when mouse hover */
 .skin-blue .main-header .logo:hover {
-          background-color: #334485;
+          background-color: #224376;
         }
         
 

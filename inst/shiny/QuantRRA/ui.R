@@ -1,12 +1,13 @@
-
 header <- dashboardHeader(title = 'QuantRRA')
-
 # Sidebar ---------
 sidebar <- dashboardSidebar(sidebarMenu(
   menuItem("Model", icon = icon("shield-virus"),
-           menuSubItem(text = 'Model', tabName = "firstTab"),
+           menuSubItem(text = 'Model', tabName = "ModelTab"),
+           menuSubItem(text = 'Stratified Model', tabName = 'StratifiedTab'),
            menuSubItem(text = 'Sensitivity Analysis', tabName = 'SATab'),
-           menuSubItem(text = 'Distribution Fitting', tabName = 'DFTab')),
+           menuSubItem(text = 'Distribution Fitting', tabName = 'DFTab')
+           ),
+  
   menuItem("Documentation", tabName = "t2", icon = icon("book")),
   menuItem('Examples', tabName = "t3", icon = icon('atlas')),
   hr()
@@ -18,13 +19,13 @@ body <- dashboardBody(
   ),
   tabItems(
     ## Model tab -----
-    tabItem(tabName = "firstTab",
-            h2("Quantitative rapid risk assesment"),
-            'This application is still under development, documentation will be shortly added, for any questions please contact the developers', tags$a("Jose Pablo Gomez", href = 'mailto:jpgo@ucdavis.edu'),
-            br(),
+    tabItem(tabName = "ModelTab",
+            h1("QuantRRA: Quantitative rapid risk assesment"),
+            tags$i('This application is still under development, documentation will be shortly added, for any questions please contact the developer: '), tags$a("Jose Pablo Gomez", href = 'mailto:jpgo@ucdavis.edu'),
+            hr(),
             'The following application was developed for the implementation of rapid risk assesment. A model tree file can be uploaded or specified in the app, and the risk is estimated using a stochastic probabilistic model.',
             br(),
-            'An example model file can be downloaded', tags$a('HERE', href = 'https://github.com/jpablo91/RA/blob/master/Data/M_Tbl/M.zip'),
+            'Example model files can be found in the library of exmaples tab in this application',
             hr(),
             fluidRow(column(width = 12,
                             box(title = 'Model table', width = 12, collapsible = T,
@@ -57,6 +58,8 @@ body <- dashboardBody(
     ## Sensitivity analysis tab -------
     tabItem(tabName = 'SATab',
             h2('Sensitivity Analysis'),
+            'To run the sensitivity analysis, make sure to run the model first on the main tab',
+            hr(),
             fluidRow(box(title = 'Sensitivity Analysis',
                          uiOutput(outputId = 'Outcomes'),
                          uiOutput(outputId = 'DepVar'),
@@ -74,69 +77,36 @@ body <- dashboardBody(
             h2('Distribution fitting'),
             'Comming soon ...'),
     
-    # Documentation tab -------
-    tabItem(tabName = 't2',
-            'This application was developed with the intention to provide a framework for a transparent, accesible and intuitive methodology for rapid risk assesment. ',
-            'We provide some examples for different models that can be adapted to specific scenarios. In this documentation we explain how to load a pre-existing model file, modify it, and how to creat a new mode from scratch. ',
+    tabItem(tabName = 'StratifiedTab',
+            h2('Stratified Model'),
+            'In this section you can use the model file and a dataset where each row represents a starata of the population with corresponding parameters, and run the model for each of those strata',
             br(),
-            'The main tab consist on 3 sections: Model table, Model tree and results',
-            tags$h2('Model table'),
-            'This table contains the information on how the nodes interact with each other to calculate the risk of the event. The model table can be edited inside this shiny app, you can modify the nodes names, distribution or formulas. The columns included in the table are:',
-            tags$li('id. A unique identifyier for the node. Try to use short names without spaces or special characters for this variables, and do not repeat the same id for different nodes.'),
-            tags$li('label. The name of the node. THis label can contain spaces or special characters. The purpose of this variable is to be a human friendly readable identifyier for the nodes'),
-            tags$li('type. There are two types of nodes, In and Out. In nodes are user defined inputs that use a probability distribution to describe the probability of the event happening. 
-                  Out nodes are calculated by the model there can be multiple outputs and the outputs can be calculated using other outputs. '),
-            tags$li('level. The hierarchy level of the node, the hierarchy order of the nodes is very important to tell the model the order of how the output nodes will be calculated. For example, if an output node O1 is dependent of another output node O2, the dependent node O2 needs to be a lower hierarchy than O1 in order to be calculated'),
-            tags$li('distribution. The distributions of the input nodes, current distributions supported includes: normal, binomial, poisson and pert. Only defined for In nodes'),
-            tags$li('formula. Formula used to calculate the node. Needs to be defined only for Out nodes'),
-            br(),
-            tags$h3('Distributions supported'),
-            'To specify the distribution you must write the name of the distribution followed by the parameters. Currently there are 4 probability distributions supported.',
-            tags$h4('Normal'),
-            'Normal distribution has two parameters: mean and standard deviation. For example, if we want to specify a normal distribution with mean = 20 and standard deviation = 1.5, we would write ',
-            tags$em('Normal(20, 1.5) '), 'in the column for the given node. For more information of the normal distribution visit: ', tags$a('https://en.wikipedia.org/wiki/Normal_distribution'),
-            tags$h4('Pert'),
-            'The Pert distribution has three parameters: min,mode, and max. For example, if we want to specify a pert distribution with a mode of 20, a min of 10 and a max of 35, we would write ',
-            tags$em('Pert(10, 20, 35) '), 'in the column for the given node. For more information of the pert distribution visit: ', tags$a('https://en.wikipedia.org/wiki/PERT_distribution'),
-            tags$h4('Binomial'),
-            'The Binomial distribution has two parameters: number of trials (n) and probability of success (p). For example, if we want to specify a binomial distribution with a n of 8, a p of 0.2, we would write ',
-            tags$em('Binomial(8, 0.2) '), 'in the column for the given node. For more information of the binomial distribution visit: ', tags$a('https://en.wikipedia.org/wiki/Binomial_distribution'),
-            tags$h4('Poisson'),
-            'The Poisson distribution has one parameters: lambda, which represents both the mean and standard deviation. For example, if we want to specify a Poisson distribution with a lambda of 10, we would write ',
-            tags$em('Poisson(10) '), 'in the column for the given node. For more information of the poisson distribution visit: ', tags$a('https://en.wikipedia.org/wiki/Poisson_distribution'),
-            tags$h2('Model tree'),
-            'This section provide a graphical representation of the current model. You can edit the model and add new nodes in this section. To add a new node click on the edit button,
-            this will change the interface to edit mode with two options: add Node and Add Edge. To exit the edit mode, click the x on the top right corner.',
-            tags$h2('Loading a model file'),
-            'When the app is initialized, a basic model file is already pre-loaded, you cans tart editing the provided model, or you can use another model from the examples. You can find some pre-existing model files in the ', 
-            tags$em('Examples '), 'tab of this app. For more information of the example model files, you can go to the reference in the link provided',
-            br(),
-            tags$img(src = 'G1.GIF', align = 'center'),
-            br(),
-            'Once you have downloaded, you can go back to the main tab and load the .zip file. ',
-            br(),
-            tags$img(src = 'G2.GIF', align = 'center'),
-            br(),
-            'For questions, contact: ', tags$a("Jose Pablo Gomez", href = 'mailto:jpgo@ucdavis.edu')),
-    
-    # Examples tab ----------
-    tabItem(tabName = 't3',
-            'Examples',
-            br(),
-            tags$h2('OIRSA'),
-            'This model was developed by the Organismo Internacional Regional de Sanidad Agropecuaria (OIRSA) to estimate the probability of introduction of african swine fever into the countries from the OIRSA region', 
-            br(),
-            tags$a('Reference', href = 'https://www.oirsa.org/contenido/2020/AR_PPA_Edición%20revisada%2001_07_20.pdf'),
+            'Some examples of stratified models can include: local risk estimation, risk estimation for different age groups, among others...',
             hr(),
-            downloadButton("downloadOIRSA", "Download"),
-            # tags$a('Download model', href ='https://www.oirsa.org/contenido/2020/AR_PPA_Edición%20revisada%2001_07_20.pdf'),
-            br(),
-            # tags$h2('OIE'),
-            # 'Description', 
-            # br(),
-            # tags$a('Reference', href = 'https://rr-africa.oie.int/wp-content/uploads/2018/03/handbook_on_import_risk_analysis_-_oie_-_vol__i.pdf'),
-            # downloadButton("downloadM2", "Download")
-    )
+            # Model table input
+            # Outputs
+            # ## barplot with ranking of risk
+            fluidRow(
+              tabBox(width = 12,
+                     tabPanel(title = 'Data',
+                              fileInput("uploadData", "Upload Data"),
+                              DTOutput('InData')),
+                     tabPanel(title = 'Spatial features', fileInput("uploadSp", "Upload Shapefile"))),
+              actionButton(inputId = 'RunStratified', label = 'Run stratified model'),
+              uiOutput(outputId = 'Outcomes_s'),
+              hr(),
+              tabBox(width = 12,
+                     tabPanel(title = 'Ranking', plotlyOutput(outputId = 'Ranking_p')),
+                     tabPanel(title = 'Map', plotlyOutput(outputId = 'Map_p'))
+              )
+            )
+            ### Select which variable (risk or uncertainty a.k.a variance?)
+            ## Option to add a shapefile and plot it
+            ),
+    # Documentation tab -------
+    Documentation,
+    # Examples tab ----------
+    Examples
   ))
 
 # UI --------

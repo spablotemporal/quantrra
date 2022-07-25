@@ -25,8 +25,31 @@ function(input, output){
     RRA(M = Graph$nodes, input$Nsim)
   })
   
-  ## Run sensitivity Analysis -------
+  ## Read Data for strat -------
+  Strat <- reactive({
+    input$uploadData$datapath %>% 
+      read.csv()
+  })
   
+  SpStrat <- reactive({
+    input$uploadSp$datapath %>% 
+      st_read(., quiet = T)
+  })
+  
+  ## Run strat model -----
+  DFs <- eventReactive(input$RunStratified, {
+    QuantRRA::RRA_s(M = Graph$nodes, Tbl = Strat(), nsim = input$Nsim)
+  })
+  
+  output$Outcomes_s <- renderUI({
+    opts <- Graph$nodes %>% 
+      filter(type == 'Out') %>% 
+      pull(id)
+    
+    selectInput(inputId = 'Outcomes', label = 'Outcomes', opts, selected = opts[length(opts)])
+  })
+  
+  ## Run sensitivity Analysis -------
   observeEvent(input$RunSA, {
     showModal(modalDialog("Running sensitivyt analysis...", footer=NULL, easyClose = T))
   })
@@ -59,7 +82,6 @@ function(input, output){
                              to = "N2",
                              stringsAsFactors = F)
   })
-  
   
   ## Outputs --------
   ### Nodes ---------
@@ -159,6 +181,21 @@ function(input, output){
     }
   })
   
+  ### Strat outputs -----------
+  output$InData <- renderDT({
+    Strat() %>% 
+      DT::datatable(data = ., options = list(pageLength = 5))
+  })
+  
+  # Ranking plot
+  output$Ranking_p <- renderPlotly({
+    # DFs() %>%
+    #   plot_ly(x = ~IDs,
+    #           y = ~O4_m) %>%
+    #   layout(xaxis = list(categoryorder = "total descending"))
+    RankingPlot(d = DFs(), var = 'O4')
+  })
+  
   ### Sensitivity analysis outputs --------
   output$VarExp <- renderValueBox({
     v <- round(SA()$VarianceExp, 4)
@@ -174,7 +211,6 @@ function(input, output){
   })
   
   ## Downloads -------
-  
   # Download the tree
   output$downloadData <- downloadHandler(
     filename = function() {'Model.zip'},
@@ -185,7 +221,7 @@ function(input, output){
       
       fs <- c('nodes.csv', 'edges.csv')
       write.csv(data.frame(Graph$nodes), file = 'nodes.csv', row.names = FALSE)
-      write.csv(data.frame(Graph$edges), file = 'edges.csv', row.names = FALSE)
+      write.csv(data.frame(Graph$edges[-1,]), file = 'edges.csv', row.names = FALSE)
       print(fs)
       
       zip(zipfile=file, files=fs)
@@ -194,8 +230,7 @@ function(input, output){
     },
     contentType = "application/zip"
   )
-  # Example files
-  # ------------------------
+  # Example files ------------------------
   output$downloadOIRSA <- downloadHandler(
     filename <- function() {
       paste("OIRSA_PPA", "zip", sep=".")
