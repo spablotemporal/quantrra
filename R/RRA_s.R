@@ -36,7 +36,7 @@ RRA_s <- function(M, Tbl, nsim){
   }) %>% 
     do.call(rbind,.) %>% 
     group_by(IDs) %>% 
-    summarise_at(.vars = o, .funs = c(m = ~median(., na.rm = T), q05 = ~quantile(., 0.5), q95 = ~quantile(., 0.95))) 
+    summarise_at(.vars = o, .funs = c(m = ~median(., na.rm = T), q05 = ~quantile(., 0.05), q95 = ~quantile(., 0.95))) 
   
   return(Out)
 }
