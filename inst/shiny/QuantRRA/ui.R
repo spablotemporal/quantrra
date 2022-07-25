@@ -30,7 +30,7 @@ body <- dashboardBody(
             fluidRow(column(width = 12,
                             box(title = 'Model table', width = 12, collapsible = T,
                                 'To start, you need to specify the model. Models can be constructed directly from the app using the network tools in the following section, or can be uploaded from a model file previosly created.',
-                                fileInput("upload", "Upload a model file"),
+                                fileInput("upload", "Upload a model file", accept = c('.zip')),
                                 DTOutput("nodes"),
                                 'If you want to save your model to continue working on it later or to share it, you can download the file here:',
                                 br(),
@@ -89,15 +89,22 @@ body <- dashboardBody(
             fluidRow(
               tabBox(width = 12,
                      tabPanel(title = 'Data',
-                              fileInput("uploadData", "Upload Data"),
+                              fileInput("uploadData", "Upload Data", accept = '.csv'),
                               DTOutput('InData')),
-                     tabPanel(title = 'Spatial features', fileInput("uploadSp", "Upload Shapefile"))),
+                     tabPanel(title = 'Spatial features', 
+                              # fileInput("uploadSp", "Upload Shapefile"),
+                              fileInput(inputId = "filemap",
+                                        label = "Upload map. Choose shapefile",
+                                        multiple = TRUE,
+                                        accept = c('.shp','.dbf','.sbn','.sbx','.shx','.prj'))
+                              )
+                     ),
               actionButton(inputId = 'RunStratified', label = 'Run stratified model'),
               uiOutput(outputId = 'Outcomes_s'),
               hr(),
               tabBox(width = 12,
                      tabPanel(title = 'Ranking', plotlyOutput(outputId = 'Ranking_p')),
-                     tabPanel(title = 'Map', plotlyOutput(outputId = 'Map_p'))
+                     tabPanel(title = 'Map', plotOutput(outputId = 'Map_p'))
               )
             )
             ### Select which variable (risk or uncertainty a.k.a variance?)
