@@ -13,12 +13,12 @@ RankingPlot <- function(d, var, id = 'IDs', col = 'red4'){
   lb <- pull(d, paste0(var, '_q05'))
   ub <- pull(d, paste0(var, '_q95'))
   # lb <- rabRR$
-  plot_ly(x = x,
+  plotly::plot_ly(x = x,
           y = y, type = 'bar', color = I(col), 
           error_y = ~list(symmetric = F,
                           arrayminus = lb,
                           array = ub,
                           color = '#000000')
   ) %>% 
-    layout(xaxis = list(categoryorder = "total descending"))
+    plotly::layout(xaxis = list(categoryorder = "total descending"))
 }
