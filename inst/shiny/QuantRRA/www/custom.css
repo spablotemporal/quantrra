@@ -5,20 +5,16 @@
   font-size: 14px;
 }
 
-
-
 /* background color of header (logo part) */
 .skin-blue .main-header .logo {
           background-color: #0e274e;
         }
-        
         
 /* change the background color of header (logo part) when mouse hover */
 .skin-blue .main-header .logo:hover {
           background-color: #224376;
         }
         
-
 /* background color for remaining part of the header */
 .skin-blue .main-header .navbar {
                               background-color: #334485;
@@ -31,7 +27,7 @@
 
 /* active sidebar menu item */
         .skin-blue .main-sidebar .sidebar .sidebar-menu .active a{
-                              background-color: white;
+                              background-color: #334485;
                               color:black;
                               }
 
@@ -49,5 +45,5 @@
                               
 /* sidebar toggle button */           
 .skin-blue .main-header .navbar .sidebar-toggle:hover{
-                              background-color: white;
+                              background-color: #334485;
 }

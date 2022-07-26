@@ -91,13 +91,12 @@ function(input, output){
   
   ## Run sensitivity Analysis -------
   observeEvent(input$RunSA, {
-    showModal(modalDialog("Running sensitivyt analysis...", footer=NULL, easyClose = T))
+    showModal(modalDialog("Running sensitivity analysis...", footer=NULL, easyClose = T))
   })
   
   SA <- eventReactive(input$RunSA, {
     f <- paste(input$DepVars, collapse = '+')
     f <- paste0(input$Outcomes, '~', f)
-    
     RFCART(data = Df(), f = eval(parse(text = f)), tree = 'interactive')
   })
   

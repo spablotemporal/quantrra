@@ -7,3 +7,6 @@
 .Ruserdata
 .DS_Store
 QuantRRA.Rproj
+
+vignettes/misc/
+vignettes/.DS_Store
