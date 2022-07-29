@@ -5,7 +5,7 @@
 #' @export
 
 
-FitDist <- function(x, dist, full = F){
+FitDist <- function(x, dist, full = F, bw = 0.2, digits = 2){
   # Function to get the mode (from https://www.tutorialspoint.com/r/r_mean_median_mode.htm)
   getmode <- function(v) {
     v <- x
@@ -37,13 +37,35 @@ FitDist <- function(x, dist, full = F){
     Opt <- optim(par = c(1, 1), fn = rss, x = x, distribution = dist, lower = 0)
   }
   Opt[['distribution']] <- dist
-  Opt <- list(distribution = paste0(Opt$distribution, '(', paste0(round(Opt$par, 4), collapse = ', '), ')'), 
-              value = round(Opt$value, 4)) %>% 
+  Opt <- list(distribution = paste0(Opt$distribution, '(', paste0(round(Opt$par, digits), collapse = ', '), ')'), 
+              value = round(Opt$value, digits)) %>% 
     do.call(cbind, .)
   Opt[,2] <- ifelse(Opt[,2] == 0, NA, Opt[,2])
   
   if(full){
-    plotDist(x)
+    y <- SampleDist(Opt[,1], n = 1000)
+    tb <- data.frame(min = min(x),
+                     max = max(x),
+                     mean = mean(x),
+                     StdDev = sd(x),
+                     OLS = Opt[,2]
+                     # N = length(x)
+    ) %>%
+      t() %>% data.frame() %>%
+      format(., digits = 3, scientific = F) %>%
+      ggtexttable(cols = 'Value', theme = ttheme('light'))
+    
+    p <- x %>%
+      data.frame() %>%
+      ggplot() +
+      geom_histogram(aes(x = .), fill = 'red4', col = 'white', lwd = 0.1) +
+      geom_density(aes(x = ., y = ..density.. * (nrow(.) * bw))) +
+      labs(title = Opt[,1], y = '') +
+      theme_minimal()
+    
+    # return(p)
+    
+    ggarrange(p, tb, widths = c(3, 1))
   }else{
     return(Opt)
   }

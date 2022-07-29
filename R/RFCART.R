@@ -36,6 +36,7 @@ RFCART <- function(data, f, main = '', seed = 1, palette  ='-RdYlGn', tree = 'no
     fit <- rpart::rpart(f, data=data, method = 'anova')
     PL[['RT']] <- visNetwork::visTree(fit) 
   }else if(tree == 'static'){
+    fit <- rpart::rpart(f, data=data, method = 'anova')
     PL[['RT']] <- rpart.plot::rpart.plot(fit, type = 4, box.palette = palette, branch.lty = 2) 
   }
   
