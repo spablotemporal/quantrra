@@ -4,7 +4,7 @@
 \alias{FitDist}
 \title{Function to Fit a distribution}
 \usage{
-FitDist(x, dist, full = F)
+FitDist(x, dist, full = F, bw = 0.2, digits = 2)
 }
 \arguments{
 \item{x}{Data to fit}
