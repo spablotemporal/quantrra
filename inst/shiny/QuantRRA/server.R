@@ -97,7 +97,7 @@ function(input, output){
   SA <- eventReactive(input$RunSA, {
     f <- paste(input$DepVars, collapse = '+')
     f <- paste0(input$Outcomes, '~', f)
-    RFCART(data = Df(), f = eval(parse(text = f)), tree = 'interactive')
+    QuantRRA::RFCART(data = Df(), f = eval(parse(text = f)), tree = 'interactive')
   })
   
   observeEvent(SA(), {
@@ -162,10 +162,10 @@ function(input, output){
         Graph$nodes,
         data.frame(id = input$ModelTree_graphChange$id,
                    label = input$ModelTree_graphChange$label,
-                   type = input$ModelTree_graphChange$type,
-                   level = as.numeric(input$ModelTree_graphChange$level),
-                   distribution = input$ModelTree_graphChange$distribution,
-                   formula = input$ModelTree_graphChange$formula,
+                   type = undf(input$ModelTree_graphChange$type),
+                   level = undf(as.numeric(input$ModelTree_graphChange$level), 0),
+                   distribution = undf(input$ModelTree_graphChange$distribution),
+                   formula = undf(input$ModelTree_graphChange$formula),
                    shape = 'box',
                    stringsAsFactors = F) %>% 
           mutate(color = ifelse(type == 'In', "#8FFF91", '#FF918F'),
