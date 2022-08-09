@@ -1,11 +1,6 @@
 ---
 title: "QuantRRA: Quantitative Risk assessment with R"
-output:
-  html_document:
-    df_print: paged
-    toc: true
-    toc_float: true
-    number_sections: true
+output: html_document
 ---
 
 ```{r gloabl options, include = F}
