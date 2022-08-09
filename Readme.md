@@ -13,4 +13,4 @@ devtools::install_github("jpablo91/QuantRRA")
 
 # Getting started
 
-see the package [vignette](vignettes/GettingStarted.Rmd) to get started
+see the package [vignette](vignettes/01_GettingStarted.Rmd) to get started
