@@ -14,3 +14,4 @@ devtools::install_github("jpablo91/QuantRRA")
 # Getting started
 
 see the package [example](https://cadms-ucd.github.io/Teaching/224_Lab7.html) to get started
+
