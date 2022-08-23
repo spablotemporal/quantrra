@@ -5,9 +5,9 @@ account: jpablo91
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5647291
-bundleId: 6144669
+bundleId: 6184622
 url: https://spablotemporal.shinyapps.io/QuantRRA/
-when: 1659077474.63459
-lastSyncTime: 1659077474.6346
+when: 1660068477.94282
+lastSyncTime: 1660068477.94282
 asMultiple: FALSE
 asStatic: FALSE
