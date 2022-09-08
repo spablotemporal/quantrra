@@ -35,6 +35,8 @@ SampleDist <- function(x, n, full = F){
     xi <- invgamma::rinvgamma(n = n, shape = dist$parameters[1], rate =  dist$parameters[2])
   }else if(dist$distribution %in% c('BETA')){
     xi <- rbeta(n = n, shape1 = dist$parameters[1], shape2 = dist$parameters[2])
+  }else if(dist$distribution %in% c('MULT', 'MULTINOMIAL')){
+    xi <- one_of(n = n, x = dist$parameters)
   }else{
     print('Distribution not recognized/supported. Distributions supported include: Pert, Normal, Binomial, Triangle, Poisson, Uniform, and Inverse-gamma. If youre interested in support for particular distributions, please contact jpgo@ucdavis.edu')
   }
