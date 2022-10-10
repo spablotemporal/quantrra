@@ -2,8 +2,3 @@
 .Rhistory
 .RData
 .Ruserdata
-
-.DS_Store
-misc
-data/misc/
-vignettes/misc/
