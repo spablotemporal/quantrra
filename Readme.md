@@ -13,5 +13,18 @@ devtools::install_github("jpablo91/QuantRRA")
 
 # Getting started
 
+QuantRRA was developed for the implementation of stochastic probabilistic risk assessment models. QuantRRA also offers a more user friendly interface trough shiny that can be accessed using:
+
+```r
+QuantRRA::runQuantRRA()
+```
+
+<img src="img/RunQuantRRA.gif" alt="" width="450" />
+
+
+
 see the package [example](https://cadms-ucd.github.io/Teaching/224_Lab7.html) to get started
+
+
+
 

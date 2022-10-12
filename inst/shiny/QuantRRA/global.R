@@ -22,7 +22,7 @@ library(plotly)
 library(visNetwork)
 library(DT)
 library(QuantRRA)
-library(rgdal)
+# library(rgdal)
 
 source('Documentation.R')
 init_nodes <- read.csv(unz('www/M_1.zip', 'nodes.csv'))

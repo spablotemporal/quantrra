@@ -1,6 +1,7 @@
 ---
 title: "QuantRRA: Quantitative Risk assessment with R"
-output: html_document
+output: github_document
+always_allow_html: true
 ---
 
 ```{r gloabl options, include = F}
@@ -10,17 +11,17 @@ knitr::opts_chunk$set(warning = F, message = F)
 
 # Objectives
 
-In this vignette we will be using the package `QuantRRA` for rapid risk assessment (still under development).  Make sure you have installed the latest version of [R](https://cloud.r-project.org), [Rstudio](https://www.rstudio.com/products/rstudio/), and [QuantRRA](https://github.com/jpablo91/QuantRRA). If you don't want/can't install R and Rstudio in your local machine, you can create a free account of [Rstudio cloud](http://rstudio.cloud/) and use a cloud server to run the code. The objectives for this vignette are:  
+In this vignette we will be using the library `QuantRRA` for rapid risk assessment (still under development).  Make sure you have installed the latest version of [R](https://cloud.r-project.org), [Rstudio](https://www.rstudio.com/products/rstudio/), and [QuantRRA](https://github.com/jpablo91/QuantRRA). If you don't want/can't install R and Rstudio in your local machine, you can create a free account of [Rstudio cloud](http://rstudio.cloud/) and use a cloud server to run the code. The objectives for this vignette are:  
 
   - Familiarize with methods to develop risk assessment using R
   - Integrate qualitative and quantitative information for the development of RRA
   - Develop a system that can be easily updated and re-parametrized
   - Use random forest and regression trees to evaluate the sensitivity of the model
-  - Use the RRA model in multiple regions.
 
 
 # Basics
-First we have to make sure we  have installed a couple of packages to run this lab:
+
+First we have to make sure we  have installed a couple of packages to run this vignette:
 
 ```{r installing packages, eval = F}
 packages <- c('devtools', # Package for installing external dependencies
@@ -39,7 +40,7 @@ package.check <- lapply(
 )
 
 
-devtools::install_github('jpablo91/QuantRRA', dependencies = T) # RRA toolset
+devtools::install_github('jpablo91/QuantRRA', dependencies = T) # Install QuantRRA
 ```
 
 
@@ -64,7 +65,7 @@ x <- rnorm(n = 100, # Number of observations to sample
 hist(x)
 ```
 
-In this lab we will be using the package `QuantRRA`, which is specifically developed for rapid risk assessment in R. The function `SampleDist()` support multiple distributions such as: Normal, binomial, uniform, pert, among others. The function requires two arguments:  
+In this vignette we will be using the library `QuantRRA`, which is specifically developed for rapid risk assessment in R. The function `SampleDist()` support multiple distributions such as: Normal, binomial, uniform, pert, among others. The function requires two arguments:  
   
   - `x` which is a string (text) of the distribution and its parameters.  
   - `n` the number of observations we will sample.  
