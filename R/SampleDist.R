@@ -37,6 +37,8 @@ SampleDist <- function(x, n, full = F){
     xi <- rbeta(n = n, shape1 = dist$parameters[1], shape2 = dist$parameters[2])
   }else if(dist$distribution %in% c('MULT', 'MULTINOMIAL')){
     xi <- one_of(n = n, x = dist$parameters)
+  }else if(dist$distribution %in% c('FIXED')){
+    xi <- dist$parameters[1]
   }else{
     print('Distribution not recognized/supported. Distributions supported include: Pert, Normal, Binomial, Triangle, Poisson, Uniform, and Inverse-gamma. If youre interested in support for particular distributions, please contact jpgo@ucdavis.edu')
   }
