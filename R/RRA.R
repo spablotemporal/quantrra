@@ -1,4 +1,4 @@
-#' Function to calculate the risk
+#' Function to run the stochastic probabilistic model using a QuantRRA table
 #' 
 #' @param M Model file
 #' @param nsim Number of simulations

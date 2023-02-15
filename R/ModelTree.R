@@ -1,4 +1,4 @@
-#' Function to plot the model tree
+#' Function to plot a model tree from a QuantRRA table
 #' 
 #' @param M Model list with nodes and edges, see example QuantRRA::ASFm
 #' @export

@@ -1,4 +1,4 @@
-#' Function to sample from different distributions 
+#' Function to plot a distribution with descriptive statistics
 #' 
 #' @param x Vector of the distribution
 #' @export

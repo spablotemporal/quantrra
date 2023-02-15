@@ -1,3 +1,4 @@
+#' Function to open the QuantRRA interactive platform
 #' @export
 runQuantRRA <- function() {
   appDir <- system.file("shiny", "QuantRRA", package = "QuantRRA")
