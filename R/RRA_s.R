@@ -6,7 +6,7 @@
 #' @export
 
 # Outputs Table of mean, median and CIs
-RRA_s <- function(M, Tbl, nsim){
+RRA_s <- function(M, Tbl, nsim, full = F, simplify = T){
   # M = M; Tbl = ct_s; nsim = 100
   Tbl <- data.frame(Tbl) # Make sure its a dataframe (not tibble or other format)
   # Reformat the strata data:
@@ -22,9 +22,16 @@ RRA_s <- function(M, Tbl, nsim){
   
   # Get strata names
   strata <- Tbl[,1]
+  
+  if(full){
+    varsOut <- c("In", "Out")
+  }else{
+    varsOut <- c("Out") 
+  }
+
   # get outputs names
   o <- Ms %>% 
-    filter(type == 'Out') %>% 
+    filter(type %in% varsOut) %>% 
     pull(id)
   
   Out <- lapply(strata, function(x){
@@ -34,10 +41,14 @@ RRA_s <- function(M, Tbl, nsim){
       RRA(M = ., nsim = nsim) %>% 
       select(o)  %>%
       mutate(IDs = x)
-  }) %>% 
-    do.call(rbind,.) %>% 
-    group_by(IDs) %>% 
-    summarise_at(.vars = o, .funs = c(m = ~median(., na.rm = T), q05 = ~quantile(., 0.05), q95 = ~quantile(., 0.95))) 
+  })
+  if(simplify){
+    Out <- Out %>% 
+      do.call(rbind,.) %>% 
+      group_by(IDs) %>% 
+      summarise_at(.vars = o, .funs = c(m = ~mean(., na.rm = T), q05 = ~quantile(., 0.05), q95 = ~quantile(., 0.95))) 
+  }
+  
   
   return(Out)
 }

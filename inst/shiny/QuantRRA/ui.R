@@ -52,7 +52,7 @@ body <- dashboardBody(
                                 numericInput('Nsim', 'Number of simulations',
                                              min = 1, value = 5000, width = '60%'),
                                 actionButton(inputId = 'Run', label = 'Run model'),
-                                # DTOutput("MTbl"),
+                                DTOutput("MTbl"),
                                 plotlyOutput('P4'))
             ))
     ),

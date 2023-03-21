@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotDist.R
 \name{plotDist}
 \alias{plotDist}
-\title{Function to sample from different distributions}
+\title{Function to plot a distribution with descriptive statistics}
 \usage{
 plotDist(x, col = "red4", main = "")
 }
@@ -10,5 +10,5 @@ plotDist(x, col = "red4", main = "")
 \item{x}{Vector of the distribution}
 }
 \description{
-Function to sample from different distributions
+Function to plot a distribution with descriptive statistics
 }

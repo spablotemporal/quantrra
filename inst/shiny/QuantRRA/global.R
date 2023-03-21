@@ -4,14 +4,16 @@
 
 # QuantRRA: QUANTITATIVE RAPID RISK ASSESMENT 
 # TO DO: ------------------
-# - [x] Modify all the model files for the new specification of Pert distribution (mode, min, max) -> (min, mode, max)
+# - [ ] Add a modal box when running the model 
 # - [ ] Implement additional distributions in the documentation. Triangle, inverse gamma, uniform, etc 
-# - [x] Tab for the sensitivity analysis
 # - [ ] Tab for the distribution fitting
-# - [ ] Tab for stratified models
-#   - [ ] Bar plot for the risk
-#   - [ ] Bubble plot
-#   - [ ] Map (option to add shp file)
+# - [ ] Bubble plot at the stratified models tab
+# Completed:
+# - [x] Modify all the model files for the new specification of Pert distribution (mode, min, max) -> (min, mode, max)
+# - [x] Tab for the sensitivity analysis
+# - [X] Tab for stratified models
+#   - [X] Bar plot for the risk
+#   - [X] Map (option to add shp file)
 
 # Setup ----------
 # libraries used 

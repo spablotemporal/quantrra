@@ -2,7 +2,7 @@
 % Please edit documentation in R/ModelTree.R
 \name{ModelTree}
 \alias{ModelTree}
-\title{Function to plot the model tree}
+\title{Function to plot a model tree from a QuantRRA table}
 \usage{
 ModelTree(M)
 }
@@ -10,5 +10,5 @@ ModelTree(M)
 \item{M}{Model list with nodes and edges, see example QuantRRA::ASFm}
 }
 \description{
-Function to plot the model tree
+Function to plot a model tree from a QuantRRA table
 }

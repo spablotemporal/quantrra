@@ -2,7 +2,7 @@
 % Please edit documentation in R/RRA.R
 \name{RRA}
 \alias{RRA}
-\title{Function to calculate the risk}
+\title{Function to run the stochastic probabilistic model using a QuantRRA table}
 \usage{
 RRA(M, nsim)
 }
@@ -12,5 +12,5 @@ RRA(M, nsim)
 \item{nsim}{Number of simulations}
 }
 \description{
-Function to calculate the risk
+Function to run the stochastic probabilistic model using a QuantRRA table
 }

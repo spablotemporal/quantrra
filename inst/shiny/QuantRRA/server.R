@@ -21,9 +21,20 @@ function(input, output){
   
   ## Run the model -------
   Df <- eventReactive(input$Run, {
-    # Graph$N
     RRA(M = Graph$nodes, input$Nsim)
   })
+  
+  # We should add a message box here to show the process
+  # observeEvent(input$Run, {
+  #   showModal(modalDialog("Running model...", footer=NULL, easyClose = F))
+  #   RRA(M = Graph$nodes, input$Nsim)
+  # })
+  # 
+  # observeEvent(Df(), {
+  #   removeModal()
+  # })
+  
+  
   
   ## Read Data for strat -------
   Strat <- reactive({
@@ -141,7 +152,7 @@ function(input, output){
                     rownames = F)
   })
   
-  # Render the graph.
+  ### Render the graph.------------
   output$ModelTree <- renderVisNetwork({
     visNetwork(Graph$nodes, Graph$edges) %>%
       visHierarchicalLayout(direction = "LR") %>%
@@ -220,6 +231,39 @@ function(input, output){
     }
   })
   
+  ### P4 -----------
+  output$P4 <- renderPlotly({
+    # Filter only outputs
+    o <- Graph$nodes %>% 
+      filter(type == 'Out')
+    
+    if(nrow(o) > 1){
+      PL <- lapply(1:nrow(o), function(x){
+        # x <- 1
+        p <- Df() %>% 
+          ggplot() +
+          geom_histogram(aes_string(o$id[x])) +
+          geom_vline(data = data.frame(m = round(quantile(Df()[,o$id[x]], 0.5), 4)), aes(xintercept = m), lty = 1, lwd = 1, col = 'grey20') +
+          labs(title = paste0(o$id[x], ': ', o$label[x])) +
+          theme_minimal()
+        
+        ggplotly(p)
+      })
+      
+      subplot(PL, nrows = 2)
+    }else{
+      p <- Df() %>% 
+        ggplot() +
+        geom_histogram(aes_string(o$id)) +
+        geom_vline(data = data.frame(m = round(quantile(Df()[,o$id], 0.5), 4)), aes(xintercept = m), lty = 1, lwd = 1, col = 'grey20') +
+        labs(title = paste0(o$id, ': ', o$label)) +
+        theme_minimal()
+      
+      ggplotly(p)
+    }
+  })
+  
+  
   ### Strat outputs -----------
   output$InData <- renderDT({
     Strat() %>% 
@@ -287,39 +331,6 @@ function(input, output){
     },
     contentType = "application/zip"
   )
-  
-  # ~~~~~~~~~~~~~ Output plots  ~~~~~~~~~~~~
-  # P4
-  output$P4 <- renderPlotly({
-    # Filter only outputs
-    o <- Graph$nodes %>% 
-      filter(type == 'Out')
-    
-    if(nrow(o) > 1){
-      PL <- lapply(1:nrow(o), function(x){
-        # x <- 1
-        p <- Df() %>% 
-          ggplot() +
-          geom_histogram(aes_string(o$id[x])) +
-          geom_vline(data = data.frame(m = round(quantile(Df()[,o$id[x]], 0.5), 4)), aes(xintercept = m), lty = 1, lwd = 1, col = 'grey20') +
-          labs(title = paste0(o$id[x], ': ', o$label[x])) +
-          theme_minimal()
-        
-        ggplotly(p)
-      })
-      
-      subplot(PL, nrows = 2)
-    }else{
-      p <- Df() %>% 
-        ggplot() +
-        geom_histogram(aes_string(o$id)) +
-        geom_vline(data = data.frame(m = round(quantile(Df()[,o$id], 0.5), 4)), aes(xintercept = m), lty = 1, lwd = 1, col = 'grey20') +
-        labs(title = paste0(o$id, ': ', o$label)) +
-        theme_minimal()
-      
-      ggplotly(p)
-    }
-  })
   
   ## Outcomes
   output$Outcomes <- renderUI({
