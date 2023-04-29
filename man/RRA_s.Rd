@@ -4,7 +4,7 @@
 \alias{RRA_s}
 \title{Function to calculate the stratified risk}
 \usage{
-RRA_s(M, Tbl, nsim)
+RRA_s(M, Tbl, nsim, full = F, simplify = T)
 }
 \arguments{
 \item{M}{Model file}
