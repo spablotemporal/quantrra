@@ -6,7 +6,7 @@
 
 whichDist <- function(x, distributions){
   y <- lapply(dists, function(d){
-    FitDist(x, d)
+    fitDist(x, d)
   }) %>% 
     do.call(rbind, .) %>% 
     data.frame() %>% 

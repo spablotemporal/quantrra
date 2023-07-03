@@ -31,5 +31,5 @@ RRA <- function(M, nsim){
       }
     }
   }
-  return(df) 
+  return(data.frame(df))
 }
