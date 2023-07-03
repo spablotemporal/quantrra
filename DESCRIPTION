@@ -1,13 +1,13 @@
 Package: QuantRRA
-Title: Tools for rapid risk assessment
+Title: A library for rapid risk assessment
 Version: 0.0.0.1
 Authors@R: 
     person(given = "Jose Pablo",
            family = "Gomez-Vazquez",
            role = c("aut", "cre"),
            email = "jpgo@ucdavis.edu",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: Tools for rapid risk assessment
+           comment = c(ORCID = "0000-0002-6712-0029"))
+Description: A library for rapid risk assessment
 License: What license it uses
 Encoding: UTF-8
 LazyData: true
