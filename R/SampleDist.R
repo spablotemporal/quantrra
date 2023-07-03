@@ -5,7 +5,7 @@
 #' @param full TRUE/FALSE. If TRUE a list with the samples, and distribution specified will be returned, Only a vector of the observations will be returned otherwise.
 #' @export
 
-SampleDist <- function(x, n, full = F){
+sampleDist <- function(x, n, full = F){
   if(rlang::is_string(x)){ # If input is a string, convert to list
     dist <- list()
     # identify distribution (first element of the list)

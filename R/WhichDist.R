@@ -4,7 +4,7 @@
 #' @param dist Distribution specification
 #' @export
 
-WhichDist <- function(x, distributions){
+whichDist <- function(x, distributions){
   y <- lapply(dists, function(d){
     FitDist(x, d)
   }) %>% 
