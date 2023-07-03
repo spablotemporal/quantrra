@@ -16,9 +16,9 @@ fitDist <- function(x, dist, full = F, bw = 0.2, digits = 2){
   dist <- toupper(dist)
   rss <- function(pars, x, distribution){
     # pars = c(4, 1); data = d; distribution = x
-    dist <- SampleDist(distribution, n = 1, T)[-3] # identify distribution
+    dist <- sampleDist(distribution, n = 1, T)[-3] # identify distribution
     dist$parameters <- pars # Set new parameters
-    out <- SampleDist(dist, n = length(x)) # Sample with new params
+    out <- sampleDist(dist, n = length(x)) # Sample with new params
     
     sum((sort(x) - sort(out))^2) # Estimate rss
   }
@@ -43,7 +43,7 @@ fitDist <- function(x, dist, full = F, bw = 0.2, digits = 2){
   Opt[,2] <- ifelse(Opt[,2] == 0, NA, Opt[,2])
   
   if(full){
-    y <- SampleDist(Opt[,1], n = 1000)
+    y <- sampleDist(Opt[,1], n = 1000)
     tb <- data.frame(min = min(x),
                      max = max(x),
                      mean = mean(x),
