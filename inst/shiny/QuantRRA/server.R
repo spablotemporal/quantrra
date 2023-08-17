@@ -108,7 +108,7 @@ function(input, output){
   SA <- eventReactive(input$RunSA, {
     f <- paste(input$DepVars, collapse = '+')
     f <- paste0(input$Outcomes, '~', f)
-    QuantRRA::RFCART(data = Df(), f = eval(parse(text = f)), tree = 'interactive')
+    QuantRRA::GSA(data = Df(), f = eval(parse(text = f)), tree = 'interactive')
   })
   
   observeEvent(SA(), {
@@ -144,7 +144,7 @@ function(input, output){
                     editable = T)
   })
   
-  ### Node table -----------
+  ### Output table -----------
   output$MTbl <- renderDT({
     Df() %>%
       data.frame() %>%
@@ -179,7 +179,7 @@ function(input, output){
                    formula = undf(input$ModelTree_graphChange$formula),
                    shape = 'box',
                    stringsAsFactors = F) %>% 
-          mutate(color = ifelse(type == 'In', "#8FFF91", '#FF918F'),
+          mutate(color = ifelse(type == 'In', "#50A051", '#FF918F'),
                  formula = ifelse(type == 'In', NA, formula),
                  distribution = ifelse(type == 'Out', NA, distribution))
       )

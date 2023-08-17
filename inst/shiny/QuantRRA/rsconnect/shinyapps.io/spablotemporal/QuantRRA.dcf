@@ -1,13 +1,13 @@
 name: QuantRRA
 title: QuantRRA
 username:
-account: jpablo91
+account: spablotemporal
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5647291
-bundleId: 6184622
+bundleId: 7424447
 url: https://spablotemporal.shinyapps.io/QuantRRA/
-when: 1660068477.94282
-lastSyncTime: 1660068477.94282
+when: 1688597729.93978
+lastSyncTime: 1688597729.9398
 asMultiple: FALSE
 asStatic: FALSE

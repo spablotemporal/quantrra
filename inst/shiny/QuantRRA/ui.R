@@ -1,4 +1,6 @@
 header <- dashboardHeader(title = 'QuantRRA')
+header$children[[2]]$children <-  tags$a(href='https://github.com/spablotemporal/QuantRRA',
+                                           tags$img(src='icon.png',height='50',width='50'))
 # Sidebar ---------
 sidebar <- dashboardSidebar(sidebarMenu(
   menuItem("Model", icon = icon("shield-virus"),
@@ -21,8 +23,9 @@ body <- dashboardBody(
     ## Model tab -----
     tabItem(tabName = "ModelTab",
             h1("QuantRRA: Quantitative rapid risk assesment"),
-            tags$i('This application is still under development, documentation will be shortly added, for any questions please contact the developer: '), tags$a("Jose Pablo Gomez", href = 'mailto:jpgo@ucdavis.edu. '),
-            hr(),
+            tags$i('This application is still under development, documentation is still in progress, for any questions please contact the developer: '), tags$a("Jose Pablo Gomez", href = 'mailto:jpgo@ucdavis.edu. '),
+            # hr(),
+            br(),
             # tags$em('Due to higher traffic than expected, we are experiencing some problems with the server. You can also download the R package and run the app locally using the QuantRRA::runQuantRRA() function, for more information visit: '),
             # tags$a('Project repository', href = 'https://github.com/jpablo91/QuantRRA'),
             'The following application was developed for the implementation of rapid risk assesment. A model tree file can be uploaded or specified in the app, and the risk is estimated using a stochastic probabilistic model.',
@@ -30,6 +33,7 @@ body <- dashboardBody(
             'Example model files can be found in the library of exmaples tab in this application',
             hr(),
             fluidRow(column(width = 12,
+                            ### Model table ---------
                             box(title = 'Model table', width = 12, collapsible = T,
                                 'To start, you need to specify the model. Models can be constructed directly from the app using the network tools in the following section, or can be uploaded from a model file previosly created.',
                                 fileInput("upload", "Upload a model file", accept = c('.zip')),
@@ -38,6 +42,7 @@ body <- dashboardBody(
                                 br(),
                                 downloadButton('downloadData', 'Download Table'),
                                 actionButton(inputId = 'reset', label = 'Clear Table', icon = icon("exclamation-triangle"))),
+                            ### Model Tree -------------
                             box(title = 'Model Tree', width = 12, 
                                 'To start building a model, click on the edit button and start adding the nodes and edges. You can edit the node attributes directly in the table above, and you can delete nodes from the tree below. ',
                                 'Depending on the type of node, the user has to specify different parameters that can be updated later from the table above. ',
@@ -47,12 +52,13 @@ body <- dashboardBody(
                                 tags$li('Outputs: These nodes will be calculated by the model based on the equation specified by the user.'),
                                 br(),
                                 visNetworkOutput("ModelTree", height = "400px")),
+                            ### Risk estimation ---------
                             box(title = 'Risk estimation', width = 12,
                                 'For every output defined, the model will estimate a distribution and the median is showed by the vertical line in each plot',
                                 numericInput('Nsim', 'Number of simulations',
                                              min = 1, value = 5000, width = '60%'),
                                 actionButton(inputId = 'Run', label = 'Run model'),
-                                DTOutput("MTbl"),
+                                # DTOutput("MTbl"),
                                 plotlyOutput('P4'))
             ))
     ),

@@ -7,43 +7,67 @@
 
 /* background color of header (logo part) */
 .skin-blue .main-header .logo {
-          background-color: #0e274e;
+          background-color: #223823;
         }
         
 /* change the background color of header (logo part) when mouse hover */
 .skin-blue .main-header .logo:hover {
-          background-color: #224376;
+          background-color: #0e472e;
         }
         
 /* background color for remaining part of the header */
 .skin-blue .main-header .navbar {
-                              background-color: #334485;
+                              background-color: #333F33;
                               } 
                               
 /* main sidebar */
         .skin-blue .main-sidebar {
-                              background-color: #374061;
+                              background-color: #333F33;
                               }
 
 /* active sidebar menu item */
         .skin-blue .main-sidebar .sidebar .sidebar-menu .active a{
-                              background-color: #334485;
-                              color:black;
+                              background-color: #28302E;
+                              color:#DDEDDD;
                               }
 
 /* sidebar menuitems */
         .skin-blue .main-sidebar .sidebar .sidebar-menu a{
-                              background-color: #695318;
+                              background-color: #283528;
                               color: white;
                               }
 
 /* sidebar menuitems when mouse hover */
          .skin-blue .main-sidebar .sidebar .sidebar-menu a:hover{
-                              background-color: black;
+                              background-color: #28393E;
                               color:white;
                               }
                               
 /* sidebar toggle button */           
 .skin-blue .main-header .navbar .sidebar-toggle:hover{
-                              background-color: #334485;
+                              background-color: #28393E;
 }
+
+
+/* body */
+.content-wrapper, .right-side {
+  background-color: #EEEEEE;
+  color:#333833;
+}
+
+/*
+.box.box-solid.box-primary>.box-header {
+  color:#fff;
+  background:#222d32
+}
+
+.box.box-solid.box-primary{
+  border-bottom-color:#222d32;
+  border-left-color:#222d32;
+  border-right-color:#222d32;
+  border-top-color:#222d32;
+  background:#222d32
+}
+TO change box also add: status = "primary", solidHeader = TRUE,  
+to the arguments in shiny ui
+*/
