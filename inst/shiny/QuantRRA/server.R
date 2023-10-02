@@ -20,8 +20,14 @@ function(input, output){
   })
   
   ## Run the model -------
+  observeEvent(input$Run,{
+    showModal(modalDialog("Runing the model...", footer = NULL))
+  })
   Df <- eventReactive(input$Run, {
     RRA(M = Graph$nodes, input$Nsim)
+  })
+  observeEvent(Df(),{
+    removeModal()
   })
   
   # We should add a message box here to show the process
@@ -88,8 +94,14 @@ function(input, output){
   
   
   ## Run strat model -----
+  observeEvent(input$RunStratified, {
+    showModal(modalDialog("Runing the model...", footer = NULL))
+  })
   DFs <- eventReactive(input$RunStratified, {
     QuantRRA::RRA_s(M = Graph$nodes, Tbl = Strat(), nsim = input$Nsim)
+  })
+  observeEvent(DFs(),{
+    removeModal()
   })
   
   output$Outcomes_s <- renderUI({
@@ -242,7 +254,7 @@ function(input, output){
         # x <- 1
         p <- Df() %>% 
           ggplot() +
-          geom_histogram(aes_string(o$id[x])) +
+          geom_histogram(aes_string(o$id[x]), fill = 'red4') +
           geom_vline(data = data.frame(m = round(quantile(Df()[,o$id[x]], 0.5), 4)), aes(xintercept = m), lty = 1, lwd = 1, col = 'grey20') +
           labs(title = paste0(o$id[x], ': ', o$label[x])) +
           theme_minimal()
@@ -254,8 +266,8 @@ function(input, output){
     }else{
       p <- Df() %>% 
         ggplot() +
-        geom_histogram(aes_string(o$id)) +
-        geom_vline(data = data.frame(m = round(quantile(Df()[,o$id], 0.5), 4)), aes(xintercept = m), lty = 1, lwd = 1, col = 'grey20') +
+        geom_histogram(aes_string(o$id), fill = 'red4') +
+        geom_vline(data = data.frame(m = round(quantile(Df()[,o$id], 0.5), 4)), aes(xintercept = m), lty = 1, lwd = 1, col = '#904444') +
         labs(title = paste0(o$id, ': ', o$label)) +
         theme_minimal()
       

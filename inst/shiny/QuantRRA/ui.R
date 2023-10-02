@@ -30,7 +30,7 @@ body <- dashboardBody(
             # tags$a('Project repository', href = 'https://github.com/jpablo91/QuantRRA'),
             'The following application was developed for the implementation of rapid risk assesment. A model tree file can be uploaded or specified in the app, and the risk is estimated using a stochastic probabilistic model.',
             br(),
-            'Example model files can be found in the library of exmaples tab in this application',
+            'Example model files can be found in the library of examples tab in this application',
             hr(),
             fluidRow(column(width = 12,
                             ### Model table ---------

@@ -74,7 +74,7 @@ In this vignette we will be using the library `QuantRRA`, which is specifically 
 n <- 100 # number of observations
 d <- 'Normal(5, 0.12)' # Distribution to sample
 
-x <- SampleDist(x = d, n = n) # Function to sample the distribution
+x <- sampleDist(x = d, n = n) # Function to sample the distribution
 
 # We can use the function plotDist() from the package QuantRRA to get a more familiar output:
 plotDist(x, # the values sampled
@@ -98,7 +98,7 @@ To represent the model we must identify the inputs and the outputs we want to ca
 Lets have a look of how we would represent this in R. This model was adapted and its contained in the package, to access the model file use the following code:
 
 ```{r Model file}
-QuantRRA::OIRSA_M[, 1:6]
+QuantRRA::OIRSA$nodes[, 1:6]
 ```
 
 The model file (**M**) must be a data.frame where each of the rows is a parameter and the columns are the following:
@@ -115,7 +115,7 @@ When we use the function `RRA()` on the model file, we will calculate the outcom
 
 ```{r Running the model}
 # Save the model file to an object
-M <- QuantRRA::OIRSA_M
+M <- QuantRRA::OIRSA$nodes
 # Run the model 5000 times
 Mo <- RRA(M = M, nsim = 5000)
 # Visualize the results:
@@ -131,7 +131,7 @@ sum(Mo$P > 1) / length(Mo$P)
 
 ## Sensitivity analysis
 
-We can perform sensitivity analysis on the model to identify the most relevant parameters and explore the parameters sample space, for this we can use the function  `RFCART()` from the `QuantRRA` package. The function uses random forest to estimate the relative importance of the parameters, and classification and regression trees to visualize the interactions between the parameters sampled. The function requires 3 main arguments:  
+We can perform sensitivity analysis on the model to identify the most relevant parameters and explore the parameters sample space, for this we can use the function  `GSA()` from the `QuantRRA` package. The function uses random forest to estimate the relative importance of the parameters, and classification and regression trees to visualize the interactions between the parameters sampled. The function requires 3 main arguments:  
   
   - *data*: Our results table from the model.  
   - *formula* A formula that contains the names of the outcome analyzed and the parameters.  
@@ -141,7 +141,7 @@ We can perform sensitivity analysis on the model to identify the most relevant p
 # First we specify the formula:
 f <- P ~ P1 + P2 + P3 + R1 + R2 + H1 + H2
 # Then we use the function with our results
-SA <- QuantRRA::RFCART(data = Mo, f = f, tree = 'interactive')
+SA <- QuantRRA::GSA(data = Mo, f = f, tree = 'interactive')
 # The results contain 3 objects:
 SA$VarianceExp # The variance explained by our parameters
 ```
@@ -350,7 +350,7 @@ sum(Mo$E > 1) / length(Mo$E)
 Now we will run the sensitivity analysis on the model results for the estimated number of transmission events
 
 ```{r SA Rabies}
-SA <- RFCART(data = Mo, f =  E ~ I1 + I2 + I3 + I4 + I5 + I6, tree = 'interactive')
+SA <- GSA(data = Mo, f =  E ~ I1 + I2 + I3 + I4 + I5 + I6, tree = 'interactive')
 
 SA$VarianceExp
 ```
