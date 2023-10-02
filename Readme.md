@@ -8,7 +8,7 @@ You can install `QuantRRA` development version from [GitHub](https://github.com/
 
 ```r
 # make sure you have the package devtools installed
-devtools::install_github("jpablo91/QuantRRA")
+devtools::install_github('spablotemporal/QuantRRA')
 ```
 
 # Getting started
