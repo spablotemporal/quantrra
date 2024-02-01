@@ -19,7 +19,7 @@ plotDist <- function(x, col = 'red4', main = ''){
     data.frame() %>% 
     ggplot() +
     geom_histogram(aes(x = .), fill = col, col = 'white', lwd = 0.1) +
-    labs(title = '') +
+    labs(title = main) +
     theme_minimal()
   
   ggarrange(p, tb, widths = c(3, 1)) 

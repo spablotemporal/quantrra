@@ -166,7 +166,10 @@ function(input, output){
   
   ### Render the graph.------------
   output$ModelTree <- renderVisNetwork({
-    visNetwork(Graph$nodes, Graph$edges) %>%
+    n <- Graph$nodes %>% 
+      mutate(title = paste0('ID: ', id, 
+                            "<br>Name: ", label))
+    visNetwork(n, Graph$edges) %>%
       visHierarchicalLayout(direction = "LR") %>%
       visOptions(manipulation = list(enabled = T,
                                      editNodeCols = c('id', 'label', 'type', 'level', 'distribution', 'formula'),
@@ -284,7 +287,7 @@ function(input, output){
   
   # Ranking plot
   output$Ranking_p <- renderPlotly({
-    RankingPlot(d = DFs(), var = 'O4')
+    RankingPlot(d = DFs(), var = 'Pf')
   })
   
   # Map
