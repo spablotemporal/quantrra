@@ -5,6 +5,6 @@
 #' @param Sp Test specificity
 #' @export
 #### pin ####
-pin <- function(p0, Se, Sp){
+ra_pin <- function(p0, Se, Sp){
   (p0 * (1 - Se)) / (p0 * (1 - Se) + (1 - p0) * Sp)
 }

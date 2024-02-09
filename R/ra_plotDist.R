@@ -4,7 +4,7 @@
 #' @export
 
 # Distribution plots (with min, max, mean, etc)
-plotDist <- function(x, col = 'red4', main = ''){
+ra_plotDist <- function(x, col = 'red4', main = ''){
   tb <- data.frame(min = min(x), 
                    max = max(x), 
                    mean = mean(x), 

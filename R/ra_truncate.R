@@ -6,7 +6,7 @@
 #' @export
 
 
-truncateDist <- function(x, range, method = 'ignore'){
+ra_truncate <- function(x, range, method = 'ignore'){
   if(method == 'ignore'){
     # Ignore values out of range
     x <- x[x >= range[1] & x <= range[2]]

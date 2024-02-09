@@ -6,7 +6,7 @@
 #' @param name name of the output file (not necessary to ad extension .zip)
 #' @export
 
-exportModel <- function(n, e, dir = 'model', name = 'model'){
+ra_export <- function(n, e, dir = 'model', name = 'model'){
   dir.create(dir) # Create the directory
   write.csv(n, file = paste(dir, 'nodes.csv', sep = '/'), row.names = F) # export nodes
   write.csv(e, file = paste(dir, 'edges.csv', sep = '/'), row.names = F) # export edges

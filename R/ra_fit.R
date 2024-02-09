@@ -5,7 +5,7 @@
 #' @export
 
 
-fitDist <- function(x, dist, full = F, bw = 0.2, digits = 2){
+ra_fit <- function(x, dist, full = F, bw = 0.2, digits = 2){
   # Function to get the mode (from https://www.tutorialspoint.com/r/r_mean_median_mode.htm)
   getmode <- function(v) {
     v <- x

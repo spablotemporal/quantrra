@@ -23,7 +23,7 @@ quantrra::run_quantrra()
 
 ## Main usage
 
-The main usage for quantrra is to simulate stochastic events using the function `RRA()`, which requires two arguments:  
+The main usage for quantrra is to simulate stochastic events using the function `rra()`, which requires two arguments:  
   
   - **M**, the model file
   - **n** number of simulations.  
@@ -38,7 +38,7 @@ The model file then can created in using the shiny interface, R or other softwar
 # Load a model file from the package
 M <- quantrra::OIRSA_M
 # Run the model 5000 times
-Mo <- RRA(M = M, nsim = 5000)
+Mo <- rra(M = M, nsim = 5000)
 # Visualize the results:
 plotDist(Mo$P)
 ```

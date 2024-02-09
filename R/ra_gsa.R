@@ -8,7 +8,7 @@
 #' @param tree Type of tree. options include: 'none' no tree, 'interactive' interactive visualization with visNetwork, and 'static' static plot with rpart.plot
 #' @export
  
-gsa <- function(data, f, main = '', seed = 1, palette  ='-RdYlGn', tree = 'none'){
+ra_gsa <- function(data, f, main = '', seed = 1, palette  ='-RdYlGn', tree = 'none'){
   # data = Mo; f = f; main = ''; seed = 1; palette  ='-RdYlGn'
   PL <- list()
   set.seed(seed)

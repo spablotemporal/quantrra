@@ -4,9 +4,9 @@
 #' @param dist Distribution specification
 #' @export
 
-whichDist <- function(x, distributions){
+ra_which <- function(x, distributions){
   y <- lapply(dists, function(d){
-    fitDist(x, d)
+    ra_fit(x, d)
   }) %>% 
     do.call(rbind, .) %>% 
     data.frame() %>% 

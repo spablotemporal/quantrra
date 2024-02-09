@@ -5,7 +5,7 @@
 #' @param shape shape of the nodes, options are the same from the DiagrammeR library: ellipse, oval, diamond, egg, plaintext, point, square, triangle
 #' @export
 
-modelTree <- function(M, fontColor = 'black', shape = 'rectangle'){
+ra_tree <- function(M, fontColor = 'black', shape = 'rectangle'){
   # If no color defined, add green for inputs, and red for outputs
   if(is.null(M$nodes$color)){
     M$nodes <- M$nodes %>% 

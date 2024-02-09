@@ -6,7 +6,7 @@
 #' @export
 
 # Outputs Table of mean, median and CIs
-rra_s <- function(M, Tbl, nsim, full = F, simplify = T){
+ra_run_strat <- function(M, Tbl, nsim, full = F, simplify = T){
   # M = M; Tbl = ct_s; nsim = 100
   Tbl <- data.frame(Tbl) # Make sure its a dataframe (not tibble or other format)
   # Reformat the strata data:
@@ -38,7 +38,7 @@ rra_s <- function(M, Tbl, nsim, full = F, simplify = T){
     # x = strata[1]
     Ms %>% 
       mutate(distribution = eval(parse(text = x))) %>% 
-      rra(M = ., nsim = nsim) %>% 
+      ra_run(M = ., nsim = nsim) %>% 
       select(o)  %>%
       mutate(IDs = x)
   })

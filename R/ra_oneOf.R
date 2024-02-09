@@ -6,7 +6,7 @@
 #' @export
 #' 
 
-one_of <- function(x, p = NA, n = 1){
+ra_oneOf <- function(x, p = NA, n = 1){
   if(is.na(p)){
     sample(x, size = n, replace = T)
   }else{
