@@ -1,5 +1,5 @@
 ---
-title: "QuantRRA: Quantitative Risk assessment with R"
+title: "quantrra: Quantitative Risk assessment with R"
 output: github_document
 always_allow_html: true
 ---
@@ -11,7 +11,7 @@ knitr::opts_chunk$set(warning = F, message = F)
 
 # Objectives
 
-In this vignette we will be using the library `QuantRRA` for rapid risk assessment (still under development).  Make sure you have installed the latest version of [R](https://cloud.r-project.org), [Rstudio](https://www.rstudio.com/products/rstudio/), and [QuantRRA](https://github.com/jpablo91/QuantRRA). If you don't want/can't install R and Rstudio in your local machine, you can create a free account of [Rstudio cloud](http://rstudio.cloud/) and use a cloud server to run the code. The objectives for this vignette are:  
+In this vignette we will be using the library `quantrra` for rapid risk assessment (still under development).  Make sure you have installed the latest version of [R](https://cloud.r-project.org), [Rstudio](https://www.rstudio.com/products/rstudio/), and [quantrra](https://github.com/jpablo91/quantrra). If you don't want/can't install R and Rstudio in your local machine, you can create a free account of [Rstudio cloud](http://rstudio.cloud/) and use a cloud server to run the code. The objectives for this vignette are:  
 
   - Familiarize with methods to develop risk assessment using R
   - Integrate qualitative and quantitative information for the development of RRA
@@ -40,7 +40,7 @@ package.check <- lapply(
 )
 
 
-devtools::install_github('jpablo91/QuantRRA', dependencies = T) # Install QuantRRA
+devtools::install_github('spablotemporal/quantrra', dependencies = T) # Install quantrra
 ```
 
 
@@ -48,7 +48,7 @@ devtools::install_github('jpablo91/QuantRRA', dependencies = T) # Install QuantR
 # Libraries we will use
 library(sf); library(dplyr)
 library(plotly)
-library(QuantRRA)
+library(quantrra)
 ```
 
 ## Sampling probability distributions
@@ -65,18 +65,18 @@ x <- rnorm(n = 100, # Number of observations to sample
 hist(x)
 ```
 
-In this vignette we will be using the library `QuantRRA`, which is specifically developed for rapid risk assessment in R. The function `SampleDist()` support multiple distributions such as: Normal, binomial, uniform, pert, among others. The function requires two arguments:  
+In this vignette we will be using the library `quantrra`, which is specifically developed for rapid risk assessment in R. The function `sampleDist()` support multiple distributions such as: Normal, binomial, uniform, pert, among others. The function requires two arguments:  
   
   - `x` which is a string (text) of the distribution and its parameters.  
   - `n` the number of observations we will sample.  
 
-```{r QuantRRA distribution sampling}
+```{r quantrra distribution sampling}
 n <- 100 # number of observations
 d <- 'Normal(5, 0.12)' # Distribution to sample
 
 x <- sampleDist(x = d, n = n) # Function to sample the distribution
 
-# We can use the function plotDist() from the package QuantRRA to get a more familiar output:
+# We can use the function plotDist() from the package quantrra to get a more familiar output:
 plotDist(x, # the values sampled
          main = 'Distribution of x') # A title for our plot
 ```
@@ -84,7 +84,7 @@ plotDist(x, # the values sampled
 
 ## The main function
 
-Now that we covered the basics of `QuantRRA`, we will create our first model. The main function `RRA()` requires two arguments:  
+Now that we covered the basics of `quantrra`, we will create our first model. The main function `rra()` requires two arguments:  
   
   - **M**, the model file
   - **n** number of simulations.  
@@ -98,7 +98,7 @@ To represent the model we must identify the inputs and the outputs we want to ca
 Lets have a look of how we would represent this in R. This model was adapted and its contained in the package, to access the model file use the following code:
 
 ```{r Model file}
-QuantRRA::OIRSA$nodes[, 1:6]
+quantrra::OIRSA$nodes[, 1:6]
 ```
 
 The model file (**M**) must be a data.frame where each of the rows is a parameter and the columns are the following:
@@ -107,17 +107,17 @@ The model file (**M**) must be a data.frame where each of the rows is a paramete
   - **label**  Name of the parameter.
   - **type**  If its an input (In) or output (Out) parameter. Input parameters must have a distribution specified, otherwise *NA*; Output parameters must have a formula specified, *NA* otherwise
   - **level**  Hierarchy level of the parameter, This will determine the order in which the output parameters will be calculated.
-  - **distribution** Distribution for the input parameters, must follow the specification of the `SampleDist()` function from `QuantRRA`, if the parameter is an output, must be *NA*.  
+  - **distribution** Distribution for the input parameters, must follow the specification of the `sampleDist()` function from `quantrra`, if the parameter is an output, must be *NA*.  
   - **formula** Formula used to calculate the Out parameters, the formula must include other parameters from lower hierarchy levels. The formula con use any operators such as multiplication (*), sum (+), substraction (-), exponential (^), division(/), etc...
 
 
-When we use the function `RRA()` on the model file, we will calculate the outcome *n* times based on the distributions specified:  
+When we use the function `rra`()` on the model file, we will calculate the outcome *n* times based on the distributions specified:  
 
 ```{r Running the model}
 # Save the model file to an object
-M <- QuantRRA::OIRSA$nodes
+M <- quantrra::OIRSA$nodes
 # Run the model 5000 times
-Mo <- RRA(M = M, nsim = 5000)
+Mo <- rra(M = M, nsim = 5000)
 # Visualize the results:
 plotDist(Mo$P)
 ```
@@ -131,7 +131,7 @@ sum(Mo$P > 1) / length(Mo$P)
 
 ## Sensitivity analysis
 
-We can perform sensitivity analysis on the model to identify the most relevant parameters and explore the parameters sample space, for this we can use the function  `GSA()` from the `QuantRRA` package. The function uses random forest to estimate the relative importance of the parameters, and classification and regression trees to visualize the interactions between the parameters sampled. The function requires 3 main arguments:  
+We can perform sensitivity analysis on the model to identify the most relevant parameters and explore the parameters sample space, for this we can use the function  `gsa()` from the `quantrra` package. The function uses random forest to estimate the relative importance of the parameters, and classification and regression trees to visualize the interactions between the parameters sampled. The function requires 3 main arguments:  
   
   - *data*: Our results table from the model.  
   - *formula* A formula that contains the names of the outcome analyzed and the parameters.  
@@ -141,7 +141,7 @@ We can perform sensitivity analysis on the model to identify the most relevant p
 # First we specify the formula:
 f <- P ~ P1 + P2 + P3 + R1 + R2 + H1 + H2
 # Then we use the function with our results
-SA <- QuantRRA::GSA(data = Mo, f = f, tree = 'interactive')
+SA <- quantrra::gsa(data = Mo, f = f, tree = 'interactive')
 # The results contain 3 objects:
 SA$VarianceExp # The variance explained by our parameters
 ```
@@ -165,7 +165,7 @@ Now we will be using a model to estimating the risk of rabies transmission from 
 
 ```{r load the data}
 # Load the rabies data set
-rb <- QuantRRA::.
+rb <- quantrra::.
 
 # lets have a look at the first observations
 head(rb)
@@ -314,7 +314,7 @@ M_Rabies <- M
 Now we will run 1000 simulations of the model and plot the distribution of the outputs calculated:
 
 ```{r Q1}
-Mo <- RRA(M = M, nsim = 1000)
+Mo <- rra(M = M, nsim = 1000)
 
 plotDist(Mo$O1, main = 'Contact probability') # Contact
 ```
@@ -350,7 +350,7 @@ sum(Mo$E > 1) / length(Mo$E)
 Now we will run the sensitivity analysis on the model results for the estimated number of transmission events
 
 ```{r SA Rabies}
-SA <- GSA(data = Mo, f =  E ~ I1 + I2 + I3 + I4 + I5 + I6, tree = 'interactive')
+SA <- gsa(data = Mo, f =  E ~ I1 + I2 + I3 + I4 + I5 + I6, tree = 'interactive')
 
 SA$VarianceExp
 ```
@@ -369,7 +369,7 @@ SA$RT
 
 ## Generating a risk map
 
-We can use the function `RRA_s()` to calculate a risk model stratified by a variable, in this case we will estimate the expected transmission events for the rest of the states in Mexico. The function `RRA_s()` requires 3 arguments:  
+We can use the function `rra_s()` to calculate a risk model stratified by a variable, in this case we will estimate the expected transmission events for the rest of the states in Mexico. The function `rra`_s()` requires 3 arguments:  
   
   - **M**, the model file  
   - **Tbl**, a table where each row represent a strata, and each column represent the name of strata and the input parameters.  
@@ -384,15 +384,15 @@ rbts <- rbt %>%
          I6 = 'Pert(0.1, 0.3, 0.5)')  # Transmission
 
 # Run the model for all the states
-rabRR <- QuantRRA::RRA_s(M = M, Tbl = rbts, nsim = 5000)
+rabRR <- quantrra::rra_s(M = M, Tbl = rbts, nsim = 5000)
 ```
 
 ### Ranking plot
 
-We can use the function `RankingPlot()` to obtain a ranking of the risk scores estimated.
+We can use the function `ranking_plot`()` to obtain a ranking of the risk scores estimated.
 
 ```{r Randking plot}
-RankingPlot(d = rabRR, var = 'E')
+ranking_plot(d = rabRR, var = 'E')
 ```
 
 
@@ -402,7 +402,7 @@ We can also represent these risk scores in a map
 
 ```{r}
 # Load the spatial shape file for the region
-MxSp <- st_read(system.file("data/MxSp.shp", package = "QuantRRA"), quiet = T)
+MxSp <- st_read(system.file("data/MxSp.shp", package = "quantrra"), quiet = T)
 
 # Plot the risk map
 MxSp %>%  # This is our spatial shape file
@@ -416,6 +416,6 @@ MxSp %>%  # This is our spatial shape file
 
 ----------------------------
 
-In this vignette we created a Model file from scratch, but there are other options if you don't feel comfortable with the user interface of Rstudio. One option is to create the Model table in excel, save it as a CSV and then import it into R. Another option is using the RRA interactive shiny interface that comes with this package (Currently under development), you can call the interactive app by typing in the R console: `QuantRRA::runQuantRRA()`, this will open a new window with a more user friendly interactive interface for creating and uploading model files.
+In this vignette we created a Model file from scratch, but there are other options if you don't feel comfortable with the user interface of Rstudio. One option is to create the Model table in excel, save it as a CSV and then import it into R. Another option is using the RRA interactive shiny interface that comes with this package (Currently under development), you can call the interactive app by typing in the R console: `quantrra::run_quantrra()`, this will open a new window with a more user friendly interactive interface for creating and uploading model files.
 
 ----------------------------
