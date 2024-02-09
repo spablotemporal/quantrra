@@ -14,7 +14,7 @@ ra_run <- function(M, nsim){
   }else{
     # Sample inputs from distribution
     df <- lapply(1:nrow(df), function(x){
-      x <- sampleDist(x = df[x,]$distribution, n = nsim)
+      x <- ra_sample(x = df[x,]$distribution, n = nsim)
     }) %>% 
       `names<-`(df$id) %>%  # assign names
       do.call(cbind, .) %>%  # add all columns
