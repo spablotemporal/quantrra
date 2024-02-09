@@ -5,7 +5,7 @@
 #' @export
 
 
-RRA <- function(M, nsim){
+rra <- function(M, nsim){
   # Filter only inputs
   df <- M %>% 
     filter(type == 'In')

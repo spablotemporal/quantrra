@@ -1,4 +1,4 @@
-#' Function to do the RF CART
+#' Function to do the global sensitivity analysis using random forest.
 #' 
 #' @param data data set for the analysis
 #' @param f formula
@@ -8,7 +8,7 @@
 #' @param tree Type of tree. options include: 'none' no tree, 'interactive' interactive visualization with visNetwork, and 'static' static plot with rpart.plot
 #' @export
  
-GSA <- function(data, f, main = '', seed = 1, palette  ='-RdYlGn', tree = 'none'){
+gsa <- function(data, f, main = '', seed = 1, palette  ='-RdYlGn', tree = 'none'){
   # data = Mo; f = f; main = ''; seed = 1; palette  ='-RdYlGn'
   PL <- list()
   set.seed(seed)
