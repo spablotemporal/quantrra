@@ -1,4 +1,4 @@
-# {quantrra} <img src="img/Icon.png" align="right" alt="" width="120" />
+# {quantrra} <img src="img/icon.png" align="right" alt="" width="120" />
 
 `{quantrra}` is a package for rapid risk assessment developed for the statistical software R.
 
