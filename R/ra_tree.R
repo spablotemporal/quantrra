@@ -1,6 +1,6 @@
-#' Function to plot a model tree from a QuantRRA table
+#' Function to plot a model tree from a quantrra table
 #' 
-#' @param M Model list with nodes and edges, see example QuantRRA::ASFm
+#' @param M Model list with nodes and edges, see example quantrra::ASFm
 #' @param fontColor Color of the text displayed in the figure
 #' @param shape shape of the nodes, options are the same from the DiagrammeR library: ellipse, oval, diamond, egg, plaintext, point, square, triangle
 #' @export

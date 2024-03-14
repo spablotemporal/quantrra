@@ -2,17 +2,17 @@
 % Please edit documentation in R/ra_tree.R
 \name{ra_tree}
 \alias{ra_tree}
-\title{Function to plot a model tree from a QuantRRA table}
+\title{Function to plot a model tree from a quantrra table}
 \usage{
 ra_tree(M, fontColor = "black", shape = "rectangle")
 }
 \arguments{
-\item{M}{Model list with nodes and edges, see example QuantRRA::ASFm}
+\item{M}{Model list with nodes and edges, see example quantrra::ASFm}
 
 \item{fontColor}{Color of the text displayed in the figure}
 
 \item{shape}{shape of the nodes, options are the same from the DiagrammeR library: ellipse, oval, diamond, egg, plaintext, point, square, triangle}
 }
 \description{
-Function to plot a model tree from a QuantRRA table
+Function to plot a model tree from a quantrra table
 }

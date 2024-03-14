@@ -2,7 +2,7 @@
 % Please edit documentation in R/ra_run.R
 \name{ra_run}
 \alias{ra_run}
-\title{Function to run the stochastic probabilistic model using a QuantRRA table}
+\title{Function to run the stochastic model using a quantrra table}
 \usage{
 ra_run(M, nsim)
 }
@@ -12,5 +12,5 @@ ra_run(M, nsim)
 \item{nsim}{Number of simulations}
 }
 \description{
-Function to run the stochastic probabilistic model using a QuantRRA table
+Function to run the stochastic model using a quantrra table
 }

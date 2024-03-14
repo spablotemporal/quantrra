@@ -1,4 +1,4 @@
-#' Function to run the stochastic probabilistic model using a QuantRRA table
+#' Function to run the stochastic model using a quantrra table
 #' 
 #' @param M Model file
 #' @param nsim Number of simulations
