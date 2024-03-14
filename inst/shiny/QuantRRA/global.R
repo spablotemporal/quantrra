@@ -23,7 +23,7 @@ library(dplyr)
 library(plotly)
 library(visNetwork)
 library(DT)
-library(QuantRRA)
+library(quantrra)
 library(sf)
 library(rgdal)
 

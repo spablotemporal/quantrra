@@ -5,6 +5,7 @@
 #' @param brks breaks for the risk thresholds
 #' @export
 
+
 ra_plotScore <- function(x, main = "", brks = NULL){
   m <- x %>% quantile()
   

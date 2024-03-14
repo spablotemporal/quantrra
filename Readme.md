@@ -4,7 +4,7 @@
 
 # Installing quantrra
 
-You can install `quantrra` development version from [GitHub](https://github.com/jpablo91/quantrra) using the following code in your R console (make sure you have R > 3.5):
+You can install `quantrra` development version from [GitHub](https://github.com/spablotemporal/quantrra) using the following code in your R console (make sure you have R > 3.5):
 
 ```r
 # make sure you have the package devtools installed
@@ -13,7 +13,7 @@ devtools::install_github('spablotemporal/quantrra')
 
 # Getting started
 
-`quantrra` was developed for the implementation of stochastic probabilistic risk assessment models as an open access alternative to software such as [@Risk](https://www.palisade.com/risk/). `quantrra` provides a set of functions to be used in R, and also offers a more user friendly interface trough shiny that can be accessed using:
+`quantrra` was developed for the implementation of stochastic risk assessment models as an open access alternative to software such as [@Risk](https://www.palisade.com/risk/). `quantrra` provides a set of functions to be used in R, and also offers a more user friendly interface trough shiny that can be accessed using:
 
 ```r
 quantrra::run_quantrra()

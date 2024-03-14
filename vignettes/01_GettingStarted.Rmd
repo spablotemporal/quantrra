@@ -11,7 +11,7 @@ knitr::opts_chunk$set(warning = F, message = F)
 
 # Objectives
 
-In this vignette we will be using the library `quantrra` for rapid risk assessment (still under development).  Make sure you have installed the latest version of [R](https://cloud.r-project.org), [Rstudio](https://www.rstudio.com/products/rstudio/), and [quantrra](https://github.com/jpablo91/quantrra). If you don't want/can't install R and Rstudio in your local machine, you can create a free account of [Rstudio cloud](http://rstudio.cloud/) and use a cloud server to run the code. The objectives for this vignette are:  
+In this vignette we will be using the library `quantrra` for rapid risk assessment (still under development).  Make sure you have installed the latest version of [R](https://cloud.r-project.org), [Rstudio](https://www.rstudio.com/products/rstudio/), and [quantrra](https://github.com/spablotemporal/quantrra). If you don't want/can't install R and Rstudio in your local machine, you can create a free account of [Rstudio cloud](http://rstudio.cloud/) and use a cloud server to run the code. The objectives for this vignette are:  
 
   - Familiarize with methods to develop risk assessment using R
   - Integrate qualitative and quantitative information for the development of RRA
