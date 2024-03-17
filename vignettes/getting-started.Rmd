@@ -1,19 +1,21 @@
 ---
-title: "Risk assesment with quantrra"
-author: "Pablo Gomez"
-date: "`r Sys.Date()`"
+title: "getting-started"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Risk assesment with quantrra}
+  %\VignetteIndexEntry{getting-started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
+```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+```
+
+```{r setup}
+library(quantrra)
 ```
 
 
@@ -23,7 +25,6 @@ knitr::opts_chunk$set(
 ```{r loading packages}
 # Libraries we will use
 library(sf); library(dplyr)
-library(quantrra)
 ```
 
 ## Sampling probability distributions
@@ -55,6 +56,4 @@ x <- ra_sample(x = d, n = n) # Function to sample the distribution
 ra_plotDist(x, # the values sampled
          main = 'Distribution of x') # A title for our plot
 ```
-
-
 
