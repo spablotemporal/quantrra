@@ -1,0 +1,60 @@
+---
+title: "Risk assesment with quantrra"
+author: "Pablo Gomez"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Risk assesment with quantrra}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+
+# Basics
+
+```{r loading packages}
+# Libraries we will use
+library(sf); library(dplyr)
+library(quantrra)
+```
+
+## Sampling probability distributions
+
+By default, R has several functions to sample a distribution and plot the results. For example, if we would like to sample a normal distribution with a mean of 5 and standard deviation of 0.12, we can use the following code:
+
+```{r distribution sampling}
+# sample the distribution and save it to an object
+x <- rnorm(n = 100, # Number of observations to sample
+           mean = 5, # Mean 
+           sd = 0.12) # Standard deviation
+
+# Plot the observations
+hist(x)
+```
+
+In this lab we will be using the package `QuantRRA`, which is specifically developed for rapid risk assessment in R. The function `ra_sample()` support multiple distributions such as: Normal, binomial, uniform, pert, among others. The function requires two arguments:  
+  
+  - `x` which is a string (text) of the distribution and its parameters.  
+  - `n` the number of observations we will sample.  
+
+```{r QuantRRA distribution sampling}
+n <- 100 # number of observations
+d <- 'Normal(5, 0.12)' # Distribution to sample
+
+x <- ra_sample(x = d, n = n) # Function to sample the distribution
+
+# We can use the function plotDist() from the package QuantRRA to get a more familiar output:
+ra_plotDist(x, # the values sampled
+         main = 'Distribution of x') # A title for our plot
+```
+
+
+

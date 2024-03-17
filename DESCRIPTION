@@ -12,4 +12,6 @@ License: What license it uses
 Encoding: UTF-8
 LazyData: true
 Depends: dplyr, ggplot2, randomForest, rpart, rpart.plot, visNetwork, rlang, mc2d, invgamma, shiny, ggpubr, DiagrammeR, plotly, sparkline
+VignetteBuilder: knitr
+Suggests: knitr, rmarkdown
 RoxygenNote: 7.2.3
