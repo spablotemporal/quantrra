@@ -2,19 +2,24 @@
 % Please edit documentation in R/ra_sample.R
 \name{ra_sample}
 \alias{ra_sample}
-\title{Function to sample from different distributions}
+\title{Sample from different distributions}
 \usage{
 ra_sample(x, n, full = F)
 }
 \arguments{
-\item{x}{Distribution specification, must specify the name of the distribution and parameters, e.g. Normal (10, 0.4) .Current distributions supported include: uniform, binomial, triangle, poisson, normal and pert.}
+\item{x}{Distribution specification, must specify the name of the distribution and parameters, e.g. Normal (10, 0.4) .Current distributions supported include: uniform, binomial, triangle, poisson, normal and pert. If no distribution specified. the value will be assumed to be fixed.}
 
 \item{n}{Number of observations to be sampled from the distribution}
 
 \item{full}{TRUE/FALSE. If TRUE a list with the samples, and distribution specified will be returned, Only a vector of the observations will be returned otherwise.}
 }
+\value{
+A numeric vector containing values sampled from the distribution specified.
+}
 \description{
-Function to sample from different distributions
+This function samples random values from probability distributions. 
+The function, conveniently, wraps other functions to provide multiple distributions under a single function.
+Some of the distributions currently supported includes: normal, poisson, triangular, uniform, gamma, inverse gamma, log normal, pert.
 }
 \examples{
 ra_sample(x = 'pert(0.01,  0.03, 0.64)', n = 10)

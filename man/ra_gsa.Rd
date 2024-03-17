@@ -2,7 +2,7 @@
 % Please edit documentation in R/ra_gsa.R
 \name{ra_gsa}
 \alias{ra_gsa}
-\title{Function to do the global sensitivity analysis using random forest.}
+\title{Function to perform a  global sensitivity analysis using random forest.}
 \usage{
 ra_gsa(data, f, main = "", seed = 1, palette = "-RdYlGn", tree = "none")
 }
@@ -20,5 +20,6 @@ ra_gsa(data, f, main = "", seed = 1, palette = "-RdYlGn", tree = "none")
 \item{mainMain}{title for the plots}
 }
 \description{
-Function to do the global sensitivity analysis using random forest.
+This function is based on the publication: Global sensitivity analysis for complex ecological models: a case study of riparian cottonwood population dynamics by Harper et. al 2011.
+This method combines Random Forest and CART to rank the most influential parameters in the main outcome and provide a graphic representation of the interaction between the parameters in the outcom.
 }

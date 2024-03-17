@@ -2,7 +2,7 @@
 % Please edit documentation in R/ra_export.R
 \name{ra_export}
 \alias{ra_export}
-\title{Function to export a model file}
+\title{Export a model file to a zip file for external use}
 \usage{
 ra_export(n, e, dir = "model", name = "model")
 }
@@ -16,5 +16,6 @@ ra_export(n, e, dir = "model", name = "model")
 \item{name}{name of the output file (not necessary to ad extension .zip)}
 }
 \description{
-Function to export a model file
+This function conveniently exports a set of nodes and edges into a zip file for external use.
+The zip file exported can be used in the shiny interactive interface of quantrra or imported back into an R session.
 }

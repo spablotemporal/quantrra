@@ -1,4 +1,8 @@
-#' Function to export a model file
+#' Export a model file to a zip file for external use
+#' 
+#' @description
+#' This function conveniently exports a set of nodes and edges into a zip file for external use.
+#' The zip file exported can be used in the shiny interactive interface of quantrra or imported back into an R session.
 #' 
 #' @param n table of nodes
 #' @param e table of edges
