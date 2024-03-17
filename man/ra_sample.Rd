@@ -16,3 +16,6 @@ ra_sample(x, n, full = F)
 \description{
 Function to sample from different distributions
 }
+\examples{
+ra_sample(x = 'pert(0.01,  0.03, 0.64)', n = 10)
+}
