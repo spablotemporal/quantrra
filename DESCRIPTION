@@ -1,17 +1,17 @@
 Package: quantrra
-Title: A library for rapid risk assessment
-Version: 0.0.1
+Title: A library for Rapid risk Assessment
+Version: 0.0.2⁄
 Authors@R: 
     person(given = "Jose Pablo",
            family = "Gomez-Vazquez",
            role = c("aut", "cre"),
            email = "jpgo@ucdavis.edu",
            comment = c(ORCID = "0000-0002-6712-0029"))
-Description: A library for rapid risk assessment
+Description: A library for Risk Assessment
 License: What license it uses
 Encoding: UTF-8
 LazyData: true
-Depends: dplyr, ggplot2, randomForest, rpart, rpart.plot, visNetwork, rlang, mc2d, invgamma, shiny, ggpubr, DiagrammeR, plotly, sparkline
+Depends: dplyr, ggplot2, randomForest, rpart, rpart.plot, visNetwork, rlang, mc2d, invgamma, shiny, ggpubr, DiagrammeR, plotly, sparkline, openxlsx
 VignetteBuilder: knitr
 Suggests: knitr, rmarkdown
 RoxygenNote: 7.2.3

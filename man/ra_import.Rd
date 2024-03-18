@@ -2,7 +2,7 @@
 % Please edit documentation in R/ra_import.R
 \name{ra_import}
 \alias{ra_import}
-\title{Function to calculate the risk}
+\title{Import a model file from zip or xlsx}
 \usage{
 ra_import(p)
 }
@@ -10,5 +10,5 @@ ra_import(p)
 \item{p}{Path to the model file}
 }
 \description{
-Function to calculate the risk
+A short description...
 }
