@@ -1,10 +1,9 @@
 #' Import a model file from zip or xlsx
 #' @description
-#' A short description...
+#' This function imports a previously created model file. This can be either a zip or xlsx file.
 #' 
-#' @param p Path to the model file
+#' @param p Path to the model file created in the format from ra_export, which can be either a zip file or a xlsx
 #' @export
-
 
 ra_import <- function(p){
   # identify file type
@@ -13,17 +12,24 @@ ra_import <- function(p){
   # depending on the file type, read it with the appropiate method
   m <- switch (ft,
     # read the zip file           
-    zip = "This is a zip file",
+    zip = {
+      # Extract files from the zip archive
+      fs <- unzip(p, exdir = tempdir())
+      
+      # read the files into a list
+      m <- lapply(fs, function(x){
+        read.csv(x)
+      }) %>% 
+        `names<-`(gsub(".csv$", "", basename(fs)))
+    },
     # read the xlsx file
-    # xlsx = "This is a xlsx file",
-    xlsx = xlsx::getSheets(p),
+    xlsx = {
+      openxlsx::getSheetNames(p) %>% 
+        lapply(., function(x) openxlsx::read.xlsx(p, sheet = x)) %>% 
+        `names<-`(openxlsx::getSheetNames(p))
+    },
     # if none of above, return error message
     "Unsupported file type"
   )
-  
-  # M <- list(
-  #   nodes = read.csv(unz(p, 'nodes.csv')),
-  #   edges = read.csv(unz(p, 'edges.csv'))[-1,]
-  # )
   return(m)
 }

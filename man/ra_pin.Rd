@@ -2,7 +2,7 @@
 % Please edit documentation in R/ra_pin.R
 \name{ra_pin}
 \alias{ra_pin}
-\title{Function to estimate the probability of an animal not being detected with a diagnostic test}
+\title{Estimate the probability of an animal not being detected with a diagnostic test}
 \usage{
 ra_pin(p0, Se, Sp)
 }
@@ -14,5 +14,5 @@ ra_pin(p0, Se, Sp)
 \item{Sp}{Test specificity}
 }
 \description{
-Function to estimate the probability of an animal not being detected with a diagnostic test
+Estimate the probability of an animal not being detected with a diagnostic test
 }

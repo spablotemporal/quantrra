@@ -2,7 +2,7 @@
 % Please edit documentation in R/ra_fit.R
 \name{ra_fit}
 \alias{ra_fit}
-\title{(experimental) fit a distribution}
+\title{(experimental) fit a set of observations to a specific distribution}
 \usage{
 ra_fit(x, dist, full = F, bw = 0.2, digits = 2)
 }

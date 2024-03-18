@@ -1,4 +1,4 @@
-#' Function to estimate the probability of an animal not being detected with a diagnostic test
+#' Estimate the probability of an animal not being detected with a diagnostic test
 #' 
 #' @param p0 estimated prevalence
 #' @param Se Test sensitivity

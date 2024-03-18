@@ -1,19 +1,20 @@
-#' Function to plot a distribution with descriptive statistics
+#' Plot a distribution with descriptive statistics
 #' 
-#' @param x Vector of the distribution
+#' @param x Vector of the sampled values
+#' @param col color used for the fill
+#' @param main Main text used as a title for the plot
 #' @export
 
 # Distribution plots (with min, max, mean, etc)
-ra_plotDist <- function(x, col = 'red4', main = ''){
+ra_plot_dist <- function(x, col = "red4", main = ""){
   tb <- data.frame(min = min(x), 
                    max = max(x), 
                    mean = mean(x), 
                    StdDev = sd(x)
-                   # N = length(x)
   ) %>%
     t() %>% data.frame() %>% 
     format(., digits = 3, scientific = F) %>%
-    ggtexttable(cols = 'Value', theme = ttheme('light'))
+    ggtexttable(cols = "Value", theme = ttheme('light'))
   
   p <- x %>% 
     data.frame() %>% 

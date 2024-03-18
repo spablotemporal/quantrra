@@ -30,10 +30,10 @@ ra_export <- function(m, dir = 'model', file = 'model', format = "xlsx"){
       to,
       # When object type is list:
       list = {lapply(names(m), function(x){
-        write.csv(x = m[[x]], file = paste0(dir, "/", x, ".csv"))
+        write.csv(x = m[[x]], file = paste0(dir, "/", x, ".csv"), row.names = F)
       })},
       # When is not (data.frame, data table, etc...)
-      write.csv(x = m, file = paste0(dir, "/", file, ".csv"))
+      write.csv(x = m, file = paste0(dir, "/", file, ".csv"), row.names = F)
     )
     zip(zipfile = file, files = dir) # create zip file
     unlink(dir, recursive = T) # delete directory used for zip file

@@ -7,8 +7,8 @@
 ra_import(p)
 }
 \arguments{
-\item{p}{Path to the model file}
+\item{p}{Path to the model file created in the format from ra_export, which can be either a zip file or a xlsx}
 }
 \description{
-A short description...
+This function imports a previously created model file. This can be either a zip or xlsx file.
 }

@@ -6,7 +6,7 @@
 #' @param col color of the plot
 #' @export
 #' 
-ra_ranking_plot <- function(d, var, id = 'IDs', col = 'red4'){
+ra_plot_ranking <- function(d, var, id = 'IDs', col = 'red4'){
   # Ranking plot
   x <- pull(d, 'IDs')
   y <- pull(d, paste0(var, '_m'))

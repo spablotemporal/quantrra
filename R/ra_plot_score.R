@@ -6,7 +6,7 @@
 #' @export
 
 
-ra_plotScore <- function(x, main = "", brks = NULL){
+ra_plot_score <- function(x, main = "", brks = NULL){
   m <- x %>% quantile()
   
   fig <- plot_ly(

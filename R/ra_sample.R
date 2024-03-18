@@ -37,7 +37,7 @@ ra_sample <- function(x, n, full = F){
                 GAMMA = rgamma(n = n, shape = dist$parameters[1], scale = dist$parameters[2]),
                 `INVERSE-GAMMA` =, `INV-GAMMA` =, `INVERSE GAMMA` = {invgamma::rinvgamma(n = n, shape = dist$parameters[1], rate =  dist$parameters[2])},
                 BETA = {rbeta(n = n, shape1 = dist$parameters[1], shape2 = dist$parameters[2])},
-                MULT =, MULTINOMIAL = one_of(n = n, x = dist$parameters), 
+                MULT =, MULTINOMIAL = ra_one_of(n = n, x = dist$parameters), 
                 FIXED = {rep(x = dist$parameters[1], n)},
                 `LOG_NORMAL` =, LOGN =, LNORM =, LNORMAL = {mc2d::rlnormb(n = n, mean = dist$parameters[1], sd = dist$parameters[2])},
                 "Error: Distribution not recognized/supported. Distributions supported include: Pert, Normal, Binomial, Triangle, Poisson, Uniform, and Inverse-gamma. If youre interested in support for particular distributions, please contact jpgo@ucdavis.edu"

@@ -1,4 +1,4 @@
-#' (experimental) fit a distribution 
+#' (experimental) fit a set of observations to a specific distribution 
 #' 
 #' @description
 #' Experimental: This function fits a vector of values to a specified distribution. 
