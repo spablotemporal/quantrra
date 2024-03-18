@@ -19,7 +19,26 @@ ra_gsa(data, f, main = "", seed = 1, palette = "-RdYlGn", tree = "none")
 
 \item{mainMain}{title for the plots}
 }
+\value{
+A list with the following elements: $VarianceExp The variance explained by the GSA, $RelImport a plot ranking the variables by their relative importance
+}
 \description{
 This function is based on the publication: Global sensitivity analysis for complex ecological models: a case study of riparian cottonwood population dynamics by Harper et. al 2011.
 This method combines Random Forest and CART to rank the most influential parameters in the main outcome and provide a graphic representation of the interaction between the parameters in the outcom.
+}
+\examples{
+set.seed(1)
+
+# use one of the example models
+m <- quantrra::OIRSA
+
+# run the model
+output <- ra_run(M = m$nodes, nsim = 1000)
+
+# Run the GSA on the model output
+ra_gsa(
+  data = output,
+  f = P ~ P1 + P2 + P3 + R1 + R2
+)
+
 }

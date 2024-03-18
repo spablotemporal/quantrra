@@ -2,7 +2,7 @@
 % Please edit documentation in R/ra_export.R
 \name{ra_export}
 \alias{ra_export}
-\title{Export a model file to a zip file for external use}
+\title{Export a model file to a file for external use}
 \usage{
 ra_export(n, e = NULL, dir = "model", name = "model", format = "zip")
 }
@@ -16,6 +16,9 @@ ra_export(n, e = NULL, dir = "model", name = "model", format = "zip")
 \item{name}{name of the output file (not necessary to add extension)}
 
 \item{format}{the format used to export the model file, can be: "zip" or "xlsx"}
+}
+\value{
+Function will export a file to the specified location on the operating system.
 }
 \description{
 This function conveniently exports a set of nodes and edges into a xlsx or zip file for external use.

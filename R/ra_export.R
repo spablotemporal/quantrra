@@ -1,4 +1,4 @@
-#' Export a model file to a zip file for external use
+#' Export a model file to a file for external use
 #' 
 #' @description
 #' This function conveniently exports a set of nodes and edges into a xlsx or zip file for external use.
@@ -9,6 +9,7 @@
 #' @param dir directory path for the file
 #' @param name name of the output file (not necessary to add extension)
 #' @param format the format used to export the model file, can be: "zip" or "xlsx"
+#' @return Function will export a file to the specified location on the operating system.
 #' @examples
 #' m <- quantrra::ASFm # use one of the included example model files
 #' 

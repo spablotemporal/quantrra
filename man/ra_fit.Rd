@@ -2,7 +2,7 @@
 % Please edit documentation in R/ra_fit.R
 \name{ra_fit}
 \alias{ra_fit}
-\title{Function to Fit a distribution}
+\title{(experimental) fit a distribution}
 \usage{
 ra_fit(x, dist, full = F, bw = 0.2, digits = 2)
 }
@@ -12,5 +12,7 @@ ra_fit(x, dist, full = F, bw = 0.2, digits = 2)
 \item{dist}{Distribution specification}
 }
 \description{
-Function to Fit a distribution
+Experimental: This function fits a vector of values to a specified distribution. 
+The distribution is fitted based on an optimization of the residual sum of squares (rss).
+Currently, the function supports only a few distributions, including: NORMAL, POISSON, PERT, TRIANGLE, and UNIFORM
 }

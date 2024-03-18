@@ -10,6 +10,22 @@
 #' @param seed seed used for replication purposes
 #' @param palette Color palette for the static tree
 #' @param tree Type of tree. options include: 'none' no tree, 'interactive' interactive visualization with visNetwork, and 'static' static plot with rpart.plot
+#' @return A list with the following elements: $VarianceExp The variance explained by the GSA, $RelImport a plot ranking the variables by their relative importance
+#' @examples
+#' set.seed(1)
+#' 
+#' # use one of the example models
+#' m <- quantrra::OIRSA
+#' 
+#' # run the model
+#' output <- ra_run(M = m$nodes, nsim = 1000)
+#' 
+#' # Run the GSA on the model output
+#' ra_gsa(
+#'   data = output,
+#'   f = P ~ P1 + P2 + P3 + R1 + R2
+#' )
+#' 
 #' @export
  
 ra_gsa <- function(data, f, main = '', seed = 1, palette  ='-RdYlGn', tree = 'none'){

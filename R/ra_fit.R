@@ -1,4 +1,10 @@
-#' Function to Fit a distribution
+#' (experimental) fit a distribution 
+#' 
+#' @description
+#' Experimental: This function fits a vector of values to a specified distribution. 
+#' The distribution is fitted based on an optimization of the residual sum of squares (rss).
+#' Currently, the function supports only a few distributions, including: NORMAL, POISSON, PERT, TRIANGLE, and UNIFORM
+#' 
 #' 
 #' @param x Data to fit
 #' @param dist Distribution specification
@@ -17,9 +23,9 @@ ra_fit <- function(x, dist, full = F, bw = 0.2, digits = 2){
   
   rss <- function(pars, x, distribution){
     # pars = c(4, 1); data = d; distribution = x
-    dist <- sampleDist(distribution, n = 1, T)[-3] # identify distribution
+    dist <- quantrra::ra_sample(distribution, n = 1, T)[-3] # identify distribution
     dist$parameters <- pars # Set new parameters
-    out <- sampleDist(dist, n = length(x)) # Sample with new params
+    out <- quantrra::ra_sample(dist, n = length(x)) # Sample with new params
     
     sum((sort(x) - sort(out))^2) # Estimate rss
   }
