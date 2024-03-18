@@ -4,18 +4,30 @@
 \alias{ra_export}
 \title{Export a model file to a zip file for external use}
 \usage{
-ra_export(n, e, dir = "model", name = "model")
+ra_export(n, e = NULL, dir = "model", name = "model", format = "zip")
 }
 \arguments{
-\item{n}{table of nodes}
+\item{n}{Model table}
 
-\item{e}{table of edges}
+\item{e}{optional table of edges that defines the connections between the nodes. Used for visualization purposes}
 
 \item{dir}{directory path for the file}
 
-\item{name}{name of the output file (not necessary to ad extension .zip)}
+\item{name}{name of the output file (not necessary to add extension)}
+
+\item{format}{the format used to export the model file, can be: "zip" or "xlsx"}
 }
 \description{
-This function conveniently exports a set of nodes and edges into a zip file for external use.
-The zip file exported can be used in the shiny interactive interface of quantrra or imported back into an R session.
+This function conveniently exports a set of nodes and edges into a xlsx or zip file for external use.
+The file exported can be used for editing outside R, for the shiny interactive interface of quantrra or imported back into an R session.
+}
+\examples{
+m <- quantrra::ASFm # use one of the included example model files
+
+# This will export only the nodes (model table)
+ra_export(n = m$nodes, format = "zip")
+
+# We can also add an edge table, used for visualization purposes
+ra_export(n = m$nodes, e = m$edges, format = "xlsx")
+
 }
