@@ -4,18 +4,16 @@
 \alias{ra_export}
 \title{Export a model file to a file for external use}
 \usage{
-ra_export(n, e = NULL, dir = "model", name = "model", format = "zip")
+ra_export(m, dir = "model", file = "model", format = "xlsx")
 }
 \arguments{
-\item{n}{Model table}
-
-\item{e}{optional table of edges that defines the connections between the nodes. Used for visualization purposes}
+\item{m}{Model table, can be a single data frame or a list}
 
 \item{dir}{directory path for the file}
 
-\item{name}{name of the output file (not necessary to add extension)}
-
 \item{format}{the format used to export the model file, can be: "zip" or "xlsx"}
+
+\item{name}{name of the output file (not necessary to add extension)}
 }
 \value{
 Function will export a file to the specified location on the operating system.
@@ -28,9 +26,9 @@ The file exported can be used for editing outside R, for the shiny interactive i
 m <- quantrra::ASFm # use one of the included example model files
 
 # This will export only the nodes (model table)
-ra_export(n = m$nodes, format = "zip")
+ra_export(m = m$nodes, format = "zip")
 
 # We can also add an edge table, used for visualization purposes
-ra_export(n = m$nodes, e = m$edges, format = "xlsx")
+ra_export(m = m, format = "xlsx")
 
 }
