@@ -13,12 +13,6 @@ ra_run(M, nsim)
 }
 \value{
 A data frame with the values for each of the inputs and outputs
-#' @examples
-# define a model table using one of th eprovided examples
-m <- quantrra::OIRSA
-
-# Run the model 
-ra_run(M = m$ndoes, nsim = 10)
 }
 \description{
 Run the stochastic model using a quantrra model table. 
@@ -29,4 +23,11 @@ There are two types of nodes in quantrra: inputs and outputs.
 The input nodes are nodes that require the user specification of a probability distribution and the parameters associated.
 Output nodes are nodes that require the user to specify a formula or R function that will be executed using other nodes of lower hierarchy.
 A example model table is provided inside the package and can be accessed using `quantrra::OIRSA`.
+}
+\examples{
+# define a model table using one of the provided examples
+m <- quantrra::OIRSA
+
+ra_run(M = m$nodes, nsim = 10) # Run the model 
+
 }
