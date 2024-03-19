@@ -33,7 +33,7 @@ set.seed(1)
 m <- quantrra::OIRSA
 
 # run the model
-output <- ra_run(M = m$nodes, nsim = 1000)
+output <- ra_run(m = m$nodes, nsim = 1000)
 
 # Run the GSA on the model output
 ra_gsa(
