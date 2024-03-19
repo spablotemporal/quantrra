@@ -20,3 +20,10 @@ data frame with median, and 95% percentiles for each of the output nodes
 The stratified model uses a different set of parameters for each starta with the intention to account for population heterogeneity. 
 A strata represents different ways of grouping the target population. I.e. estimate the risk for different age groups, regions, or other groups to account for the population heterogeneity.
 }
+\examples{
+# use one of the examples
+m <- quantrra::asf_products
+# next part takes around 1 min to run:
+ra_run_strat(m = m$nodes, tbl = m$stratified, nsim = 500)
+
+}
