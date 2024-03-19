@@ -1,8 +1,19 @@
-#' Function to Fit a distribution
+#' Plot the distribution using a gauge plot
+#' 
+#' @description
+#' This function uses plotly to generate a gauge plot using a vector of numbers. Gauge plots provide a visual representation of a numeric magnitude 
 #' 
 #' @param x vector of numbers 
 #' @param main Main title for the figure
 #' @param brks breaks for the risk thresholds
+#' @return A plotly gauge figure 
+#' @examples
+#' # use one of the example models
+#' m <- quantrra::OIRSA
+#' 
+#' ra_run(m = m$nodes, nsim = 100) %>% # run the model
+#'   pull(P) %>% # extract the final probability
+#'   ra_plot_score() # plot the score as a gauge plot
 #' @export
 
 

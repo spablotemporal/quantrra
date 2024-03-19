@@ -2,7 +2,7 @@
 % Please edit documentation in R/ra_plot_score.R
 \name{ra_plot_score}
 \alias{ra_plot_score}
-\title{Function to Fit a distribution}
+\title{Plot the distribution using a gauge plot}
 \usage{
 ra_plot_score(x, main = "", brks = NULL)
 }
@@ -13,6 +13,17 @@ ra_plot_score(x, main = "", brks = NULL)
 
 \item{brks}{breaks for the risk thresholds}
 }
+\value{
+A plotly gauge figure
+}
 \description{
-Function to Fit a distribution
+This function uses plotly to generate a gauge plot using a vector of numbers. Gauge plots provide a visual representation of a numeric magnitude
+}
+\examples{
+# use one of the example models
+m <- quantrra::OIRSA
+
+ra_run(m = m$nodes, nsim = 100) \%>\% # run the model
+  pull(P) \%>\% # extract the final probability
+  ra_plot_score() # plot the score as a gauge plot
 }

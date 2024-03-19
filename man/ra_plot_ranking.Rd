@@ -39,7 +39,7 @@ A barplot arranged in descending order is plotted for the estimates and 95% perc
 # use one of the examples
 m <- quantrra::asf_products
 # run the stratified analysis
-os <- ra_run_strat(m = m$nodes, tbl = m$stratified, nsim = 10e3)
+os <- ra_run_strat(m = m$nodes, tbl = m$stratified, nsim = 5e3)
 # Plot the ranking
 ra_plot_ranking(x = os, var = "Pf")
 
