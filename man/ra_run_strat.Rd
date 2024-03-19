@@ -21,9 +21,8 @@ The stratified model uses a different set of parameters for each starta with the
 A strata represents different ways of grouping the target population. I.e. estimate the risk for different age groups, regions, or other groups to account for the population heterogeneity.
 }
 \examples{
-# use one of the examples
+# use one of the example models
 m <- quantrra::asf_products
-# next part takes around 1 min to run:
-ra_run_strat(m = m$nodes, tbl = m$stratified, nsim = 500)
+ra_run_strat(m = m$nodes, tbl = m$stratified, nsim = 10e3)
 
 }

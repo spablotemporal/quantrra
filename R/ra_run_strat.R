@@ -8,10 +8,9 @@
 #' @param nsim Number of simulations
 #' @return data frame with median, and 95% percentiles for each of the output nodes
 #' @examples
-#' # use one of the examples
+#' # use one of the example models
 #' m <- quantrra::asf_products
-#' # next part takes around 1 min to run:
-#' ra_run_strat(m = m$nodes, tbl = m$stratified, nsim = 500)
+#' ra_run_strat(m = m$nodes, tbl = m$stratified, nsim = 10e3)
 #' 
 #' @export
 

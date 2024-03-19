@@ -10,6 +10,15 @@
 #' @param format whether the figure is static (using ggplot) or interactive (using plotly)
 #' @param xlab label used for the x axis
 #' @param ylab label used for the y axis
+#' @return if type = static, a ggplot figure with the ranked strata will be returned, otherwise the a plotly figure will be returned
+#' @examples
+#' # use one of the examples
+#' m <- quantrra::asf_products
+#' # run the stratified analysis
+#' os <- ra_run_strat(m = m$nodes, tbl = m$stratified, nsim = 10e3)
+#' # Plot the ranking
+#' ra_plot_ranking(x = os, var = "Pf")
+#' 
 #' @export
 #' 
 ra_plot_ranking <- function(x, var, id = "ids", col = "red4", format = "static", xlab = "", ylab = ""){

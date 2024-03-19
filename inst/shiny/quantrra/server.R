@@ -24,7 +24,7 @@ function(input, output){
     showModal(modalDialog("Runing the model...", footer = NULL))
   })
   Df <- eventReactive(input$Run, {
-    RRA(M = Graph$nodes, input$Nsim)
+    ra_run(M = Graph$nodes, input$Nsim)
   })
   observeEvent(Df(),{
     removeModal()
@@ -98,7 +98,7 @@ function(input, output){
     showModal(modalDialog("Runing the model...", footer = NULL))
   })
   DFs <- eventReactive(input$RunStratified, {
-    QuantRRA::RRA_s(M = Graph$nodes, Tbl = Strat(), nsim = input$Nsim)
+    quantrra::ra_run_strat(M = Graph$nodes, Tbl = Strat(), nsim = input$Nsim)
   })
   observeEvent(DFs(),{
     removeModal()
@@ -120,7 +120,7 @@ function(input, output){
   SA <- eventReactive(input$RunSA, {
     f <- paste(input$DepVars, collapse = '+')
     f <- paste0(input$Outcomes, '~', f)
-    QuantRRA::GSA(data = Df(), f = eval(parse(text = f)), tree = 'interactive')
+    quantrra::ra_gsa(data = Df(), f = eval(parse(text = f)), tree = 'interactive')
   })
   
   observeEvent(SA(), {
@@ -287,7 +287,7 @@ function(input, output){
   
   # Ranking plot
   output$Ranking_p <- renderPlotly({
-    RankingPlot(d = DFs(), var = 'Pf')
+    ra_plot_ranking(d = DFs(), var = 'Pf')
   })
   
   # Map

@@ -29,6 +29,18 @@ ra_plot_ranking(
 
 \item{ylab}{label used for the y axis}
 }
+\value{
+if type = static, a ggplot figure with the ranked strata will be returned, otherwise the a plotly figure will be returned
+}
 \description{
 A barplot arranged in descending order is plotted for the estimates and 95% percentiles obtained from a stratified analysis.
+}
+\examples{
+# use one of the examples
+m <- quantrra::asf_products
+# run the stratified analysis
+os <- ra_run_strat(m = m$nodes, tbl = m$stratified, nsim = 10e3)
+# Plot the ranking
+ra_plot_ranking(x = os, var = "Pf")
+
 }

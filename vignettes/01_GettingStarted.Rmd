@@ -77,7 +77,7 @@ d <- 'Normal(5, 0.12)' # Distribution to sample
 x <- ra_sample(x = d, n = n) # Function to sample the distribution
 
 # We can use the function plotDist() from the package quantrra to get a more familiar output:
-ra_plotDist(x, # the values sampled
+ra_plot_dist(x, # the values sampled
          main = 'Distribution of x') # A title for our plot
 ```
 
@@ -119,7 +119,7 @@ M <- quantrra::OIRSA$nodes
 # Run the model 5000 times
 Mo <- ra_run(M = M, nsim = 5000)
 # Visualize the results:
-ra_plotDist(Mo$P)
+ra_plot_dist(Mo$P)
 ```
 
 The result of this is a table with the distributions sampled for the inputs, and the ones calculated for the outputs. Based on the results, we can estimate the probability that the number of introduction events will be more than 1:
@@ -316,15 +316,15 @@ Now we will run 1000 simulations of the model and plot the distribution of the o
 ```{r Q1}
 Mo <- ra_run(M = M, nsim = 1000)
 
-ra_plotDist(Mo$O1, main = 'Contact probability') # Contact
+ra_plot_dist(Mo$O1, main = 'Contact probability') # Contact
 ```
 
 
 ```{r}
-ra_plotDist(Mo$O2, main = 'Bite probability') # Bite
-ra_plotDist(Mo$O3, main = 'Infected dog probability') # Infected
-ra_plotDist(Mo$O4, main = 'Transmission probability') # Transmission
-ra_plotDist(Mo$E, main = 'Expected number of cases') # Expected number of transmission events
+ra_plot_dist(Mo$O2, main = 'Bite probability') # Bite
+ra_plot_dist(Mo$O3, main = 'Infected dog probability') # Infected
+ra_plot_dist(Mo$O4, main = 'Transmission probability') # Transmission
+ra_plot_dist(Mo$E, main = 'Expected number of cases') # Expected number of transmission events
 ```
 
 
@@ -392,7 +392,8 @@ rabRR <- quantrra::ra_run_strat(M = M, Tbl = rbts, nsim = 5000)
 We can use the function `ranking_plot`()` to obtain a ranking of the risk scores estimated.
 
 ```{r Randking plot}
-ra_ranking_plot(d = rabRR, var = 'E')
+ra_plot_ranking(x = rabRR, var = 'E', format = "interactive")
+ra_plot_ranking(x = rabRR, var = 'E')
 ```
 
 
