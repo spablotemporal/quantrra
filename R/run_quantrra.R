@@ -9,7 +9,7 @@
 run_quantrra <- function() {
   appDir <- system.file("shiny", "quantrra", package = "quantrra")
   if (appDir == "") {
-    stop("Could not find example directory. Try re-installing `quantrra` or contact jpgo@ucdavis.edu for support.", call. = FALSE)
+    stop("Could not find directory. Try re-installing `quantrra` or contact jpgo@ucdavis.edu for support.", call. = FALSE)
   }
   
   shiny::runApp(appDir, display.mode = "normal")

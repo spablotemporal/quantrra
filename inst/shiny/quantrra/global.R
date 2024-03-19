@@ -25,7 +25,7 @@ library(visNetwork)
 library(DT)
 library(quantrra)
 library(sf)
-library(rgdal)
+# library(rgdal)
 
 DFs <- NULL
 

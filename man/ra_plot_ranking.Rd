@@ -2,19 +2,33 @@
 % Please edit documentation in R/ra_plot_ranking.R
 \name{ra_plot_ranking}
 \alias{ra_plot_ranking}
-\title{Function to plot the ranking}
+\title{Barplot used to rank the estimate and 95 percentile of the output}
 \usage{
-ra_plot_ranking(d, var, id = "IDs", col = "red4")
+ra_plot_ranking(
+  x,
+  var,
+  id = "IDs",
+  col = "red4",
+  format = "static",
+  xlab = "",
+  ylab = ""
+)
 }
 \arguments{
+\item{x}{output from a stratified analysis obtained by the function ra_run_strat}
+
 \item{var}{variable to plot}
 
-\item{id}{Name of IDs}
+\item{id}{Name given to the unique identifier of the stratified var. defaul is id = "IDs"}
 
 \item{col}{color of the plot}
 
-\item{M}{Model outputs}
+\item{format}{whether the figure is static (using ggplot) or interactive (using plotly)}
+
+\item{xlab}{label used for the x axis}
+
+\item{ylab}{label used for the y axis}
 }
 \description{
-Function to plot the ranking
+A barplot arranged in descending order is plotted for the estimates and 95% percentiles obtained from a stratified analysis.
 }

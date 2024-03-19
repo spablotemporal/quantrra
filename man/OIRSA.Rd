@@ -6,7 +6,7 @@
 \title{Risk of ASF introduction via live products}
 \format{
 ## List with two data frames
-A list with the nodes and edges to use by the QuantRRA library
+A list with the nodes and edges to use by the quantrra library
 \describe{
   \item{nodes}{node table}
   \item{edges}{edges}
