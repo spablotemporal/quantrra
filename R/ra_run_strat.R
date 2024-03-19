@@ -1,27 +1,31 @@
 #' Function to calculate the stratified risk
+#' @description
+#' This function runs a stratified model 
 #' 
-#' @param M Model file
-#' @param Tbl Table with parameters per strata
+#' 
+#' @param m Model file
+#' @param tbl Table with parameters per strata
 #' @param nsim Number of simulations
+#' @return data frame with median, and 95% percentiles for each of the output nodes
 #' @export
 
-# Outputs Table of mean, median and CIs
-ra_run_strat <- function(M, Tbl, nsim, full = F, simplify = T){
-  # M = M; Tbl = ct_s; nsim = 100
-  Tbl <- data.frame(Tbl) # Make sure its a dataframe (not tibble or other format)
+ra_run_strat <- function(m, tbl, nsim, full = F, simplify = T){
+  # m = m; Tbl = ct_s; nsim = 100
+  
+  tbl <- data.frame(tbl) # Make sure its a dataframe (not tibble or other format)
   # Reformat the strata data:
-  Tbl_t <- Tbl[,-1] %>% 
+  tbl_t <- tbl[,-1] %>% 
     t() %>%
     data.frame() %>% 
-    `colnames<-`(Tbl[,1]) %>% 
+    `colnames<-`(tbl[,1]) %>% 
     mutate(id = rownames(.))
   
   # Join data
-  Ms <- M %>% 
-    left_join(Tbl_t, by = 'id')
+  ms <- m %>% 
+    left_join(tbl_t, by = 'id')
   
   # Get strata names
-  strata <- Tbl[,1]
+  strata <- tbl[,1]
   
   if(full){
     varsOut <- c("In", "Out")
@@ -30,22 +34,23 @@ ra_run_strat <- function(M, Tbl, nsim, full = F, simplify = T){
   }
 
   # get outputs names
-  o <- Ms %>% 
+  o <- ms %>% 
     filter(type %in% varsOut) %>% 
     pull(id)
   
   Out <- lapply(strata, function(x){
     # x = strata[1]
-    Ms %>% 
+    ms %>% 
       mutate(distribution = eval(parse(text = x))) %>% 
-      ra_run(M = ., nsim = nsim) %>% 
+      ra_run(m = ., nsim = nsim) %>% 
       select(o)  %>%
-      mutate(IDs = x)
+      mutate(ids = x)
   })
+  
   if(simplify){
     Out <- Out %>% 
       do.call(rbind,.) %>% 
-      group_by(IDs) %>% 
+      group_by(ids) %>% 
       summarise_at(.vars = o, .funs = c(m = ~mean(., na.rm = T), q05 = ~quantile(., 0.05), q95 = ~quantile(., 0.95))) 
   }
   

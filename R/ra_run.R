@@ -9,7 +9,7 @@
 #' Output nodes are nodes that require the user to specify a formula or R function that will be executed using other nodes of lower hierarchy.
 #' A example model table is provided inside the package and can be accessed using `quantrra::OIRSA`.
 #' 
-#' @param M Model file
+#' @param m Model file
 #' @param nsim Number of simulations
 #' @return A data frame with the values for each of the inputs and outputs
 #' @examples
@@ -20,20 +20,20 @@
 #' 
 #' @export
 
-ra_run <- function(M, nsim){
+ra_run <- function(m, nsim){
   ## Make sure a valid variables area provided
   cn <- c("id", "label", "type", "distribution", "formula")
-  if (any(!cn %in% colnames(M))){
+  if (any(!cn %in% colnames(m))){
     stop("Provide valid variable names. Model file must include variables that specify the id, lable, type, distribution and formula see examples")
   }
   # Standardize the notation used for the type of node (i.e. convert input, Input, to just in) ####
-  M <- M %>% 
+  m <- m %>% 
     mutate(
       type = tolower(type),
       type = recode(type, input = "in", output = "out")
     )
   # Filter only inputs
-  df <- M %>% 
+  df <- m %>% 
     filter(type == 'in')
   # Check if at least one input was provided
   if(nrow(df) == 0){ 

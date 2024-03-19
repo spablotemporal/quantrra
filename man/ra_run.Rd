@@ -4,10 +4,10 @@
 \alias{ra_run}
 \title{Run the stochastic model using a quantrra model table}
 \usage{
-ra_run(M, nsim)
+ra_run(m, nsim)
 }
 \arguments{
-\item{M}{Model file}
+\item{m}{Model file}
 
 \item{nsim}{Number of simulations}
 }

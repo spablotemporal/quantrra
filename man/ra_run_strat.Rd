@@ -4,15 +4,18 @@
 \alias{ra_run_strat}
 \title{Function to calculate the stratified risk}
 \usage{
-ra_run_strat(M, Tbl, nsim, full = F, simplify = T)
+ra_run_strat(m, tbl, nsim, full = F, simplify = T)
 }
 \arguments{
-\item{M}{Model file}
+\item{m}{Model file}
 
-\item{Tbl}{Table with parameters per strata}
+\item{tbl}{Table with parameters per strata}
 
 \item{nsim}{Number of simulations}
 }
+\value{
+data frame with median, and 95% percentiles for each of the output nodes
+}
 \description{
-Function to calculate the stratified risk
+This function runs a stratified model
 }
