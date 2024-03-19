@@ -9,7 +9,7 @@
 #'   \item{edges}{This table contains the information of the connections between the nodes of the risk assessment tree. The table is used for visualization purposes with the function quantrra::ra_plot_tree()}
 #'   ...
 #' }
-#' #' @source {OIRSA. 2020. Análisis de riesgo sobre la probabilidad de ingreso, establecimiento y diseminación de la PPA en la porcicultura de los países de la región del OIRSA.} \doi{https://www.oirsa.org/contenido/2020/AR_PPA_Edición%20revisada%2001_07_20.pdf}
+#' #' @source {OIRSA. 2020. Análisis de riesgo sobre la probabilidad de ingreso, establecimiento y diseminación de la PPA en la porcicultura de los países de la región del OIRSA.}\doi{https://www.oirsa.org/contenido/2020/AR_PPA_Edición\%20revisada\%2001_07_20.pdf}
 "OIRSA"
 
 #' Risk of ASF introduction via live products
