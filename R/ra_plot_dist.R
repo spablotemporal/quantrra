@@ -1,8 +1,17 @@
 #' Plot a distribution with descriptive statistics
+#' @description
+#' A vector of numeric values is plotted as a histogram with descriptive statistics: min, max, standard deviation and mean
 #' 
 #' @param x Vector of the sampled values
 #' @param col color used for the fill
 #' @param main Main text used as a title for the plot
+#' @return Returns a ggplot histogram and ggtable arranged with ggarrange
+#' 
+#' @examples
+#' # sample a distribution
+#' x <- ra_sample(x = "Normal(100, 0.3)", 100)
+#' ra_plot_dist(x)
+#' 
 #' @export
 
 # Distribution plots (with min, max, mean, etc)

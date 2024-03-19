@@ -13,6 +13,15 @@ ra_plot_dist(x, col = "red4", main = "")
 
 \item{main}{Main text used as a title for the plot}
 }
+\value{
+Returns a ggplot histogram and ggtable arranged with ggarrange
+}
 \description{
-Plot a distribution with descriptive statistics
+A vector of numeric values is plotted as a histogram with descriptive statistics: min, max, standard deviation and mean
+}
+\examples{
+# sample a distribution
+x <- ra_sample(x = "Normal(100, 0.3)", 100)
+ra_plot_dist(x)
+
 }
