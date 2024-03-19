@@ -1,7 +1,7 @@
-#' Function to calculate the stratified risk
+#' Run a stratified model.
 #' @description
-#' This function runs a stratified model 
-#' 
+#' The stratified model uses a different set of parameters for each starta with the intention to account for population heterogeneity. 
+#' A strata represents different ways of grouping the target population. I.e. estimate the risk for different age groups, regions, or other groups to account for the population heterogeneity.
 #' 
 #' @param m Model file
 #' @param tbl Table with parameters per strata

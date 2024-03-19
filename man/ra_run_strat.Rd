@@ -2,7 +2,7 @@
 % Please edit documentation in R/ra_run_strat.R
 \name{ra_run_strat}
 \alias{ra_run_strat}
-\title{Function to calculate the stratified risk}
+\title{Run a stratified model.}
 \usage{
 ra_run_strat(m, tbl, nsim, full = F, simplify = T)
 }
@@ -17,5 +17,6 @@ ra_run_strat(m, tbl, nsim, full = F, simplify = T)
 data frame with median, and 95% percentiles for each of the output nodes
 }
 \description{
-This function runs a stratified model
+The stratified model uses a different set of parameters for each starta with the intention to account for population heterogeneity. 
+A strata represents different ways of grouping the target population. I.e. estimate the risk for different age groups, regions, or other groups to account for the population heterogeneity.
 }
