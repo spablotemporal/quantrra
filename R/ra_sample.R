@@ -24,7 +24,7 @@ ra_sample <- function(x, n, full = F){
   if(!is.na(suppressWarnings(as.numeric(dist$distribution)))){ 
     dist <- list()
     dist[["distribution"]] <- "fixed"
-    dist[["parameters"]] <- x 
+    dist[["parameters"]] <- as.numeric(x)
   }
   # Sample from distribution
   xi <- switch (dist$distribution,
