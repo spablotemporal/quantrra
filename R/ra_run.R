@@ -12,18 +12,18 @@
 #' @param M Model file
 #' @param nsim Number of simulations
 #' @return A data frame with the values for each of the inputs and outputs
-#' #' @examples
+#' @examples
 #' # define a model table using one of the provided examples
 #' m <- quantrra::OIRSA
 #' 
-#' # Run the model 
-#' ra_run(M = m$nodes, nsim = 10)
+#' ra_run(M = m$nodes, nsim = 10) # Run the model 
+#' 
 #' @export
 
 ra_run <- function(M, nsim){
   ## Make sure a valid variables area provided
   cn <- c("id", "label", "type", "distribution", "formula")
-  if (any(!cn %in% colnames(n))){
+  if (any(!cn %in% colnames(M))){
     stop("Provide valid variable names. Model file must include variables that specify the id, lable, type, distribution and formula see examples")
   }
   # Standardize the notation used for the type of node (i.e. convert input, Input, to just in) ####
