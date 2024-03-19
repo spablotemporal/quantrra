@@ -5,12 +5,12 @@
 \alias{asf_products}
 \title{Risk of ASF introduction via sub products}
 \format{
-## List with three data frames
+List with three data frames
 A list with the nodes, edges and stratified values to use by the quantrra library to perform risk assessment in R
 \describe{
-  \item{nodes}{node table}
-  \item{edges}{edges}
-  \item{stratified}{}
+  \item{nodes}{This table contains the nodes form the risk assessment scenario tree and its asociated parameters. The table is used for runing the model with the function quantrra::ra_run()}
+  \item{edges}{This table contains the information of the connections between the nodes of the risk assessment tree. The table is used for visualization purposes with the function quantrra::ra_plot_tree()}
+  \item{stratified}{This table contains the parameters used to run a stratified analysis with the function ra_run_stratified(). Each row represents one strata and the columns represent the parameters from the model for that strata.}
   ...
 }
 }

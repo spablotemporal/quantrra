@@ -5,11 +5,11 @@
 \alias{ASFm}
 \title{Risk of ASF introduction via live products}
 \format{
-## List with two data frames
+List with two data frames
 A list with the nodes and edges to use by the quantrra library
 \describe{
-  \item{nodes}{node table}
-  \item{edges}{edges}
+  \item{nodes}{This table contains the nodes form the risk assessment scenario tree and its asociated parameters. The table is used for runing the model with the function quantrra::ra_run()}
+  \item{edges}{This table contains the information of the connections between the nodes of the risk assessment tree. The table is used for visualization purposes with the function quantrra::ra_plot_tree()}
   ...
 }
 }
@@ -20,7 +20,6 @@ A list with the nodes and edges to use by the quantrra library
 ASFm
 }
 \description{
-Model adapted from the publication by Hernandez-Ibata el. al 2017. 
-Report ...
+Model adapted from the publication by Hernandez-Ibata el. al 2017.
 }
 \keyword{datasets}
