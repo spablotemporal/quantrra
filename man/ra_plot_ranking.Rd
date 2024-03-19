@@ -7,7 +7,7 @@
 ra_plot_ranking(
   x,
   var,
-  id = "IDs",
+  id = "ids",
   col = "red4",
   format = "static",
   xlab = "",

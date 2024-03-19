@@ -14,17 +14,17 @@
 #' ra_sample(x = 'pert(0.01,  0.03, 0.64)', n = 10)
 
 ra_sample <- function(x, n, full = F){
-  if(rlang::is_string(x)){ # If input is a string, convert to list
-    dist <- list()
-    # identify distribution (first element of the list)
-    dist[['distribution']] <- sub(pattern = '\\(.*', replacement = '', x = x) %>% tolower()
-    # Extract parameters
-    dist[['parameters']] <- sub(".*(?:\\((.*)\\)).*|.*", "\\1",x) %>% 
-      stringr::str_split(string = ., pattern = ',') %>% unlist() %>% as.numeric() 
-  }else{ # else, assume is a fixed value
+  dist <- list()
+  # identify distribution (first element of the list)
+  dist[['distribution']] <- sub(pattern = '\\(.*', replacement = '', x = x) %>% tolower()
+  # Extract parameters
+  dist[['parameters']] <- sub(".*(?:\\((.*)\\)).*|.*", "\\1",x) %>% 
+    stringr::str_split(string = ., pattern = ',') %>% unlist() %>% as.numeric()
+  # If no distribution is specified, interpret as a fixed value
+  if(!is.na(suppressWarnings(as.numeric(dist$distribution)))){ 
     dist <- list()
     dist[["distribution"]] <- "fixed"
-    dist[["parameters"]] <- x
+    dist[["parameters"]] <- x 
   }
   # Sample from distribution
   xi <- switch (dist$distribution,

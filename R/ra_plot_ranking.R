@@ -12,9 +12,9 @@
 #' @param ylab label used for the y axis
 #' @export
 #' 
-ra_plot_ranking <- function(x, var, id = "IDs", col = "red4", format = "static", xlab = "", ylab = ""){
+ra_plot_ranking <- function(x, var, id = "ids", col = "red4", format = "static", xlab = "", ylab = ""){
   # Ranking plot
-  px <- pull(x, "IDs")
+  px <- pull(x, "ids")
   py <- pull(x, paste0(var, "_m"))
   lb <- pull(x, paste0(var, "_q05"))
   ub <- pull(x, paste0(var, "_q95"))
@@ -53,13 +53,4 @@ ra_plot_ranking <- function(x, var, id = "IDs", col = "red4", format = "static",
   )
   
   return(p)
-  
-  # plotly::plot_ly(x = px,
-  #         y = y, type = 'bar', color = I(col), 
-  #         error_y = ~list(symmetric = F,
-  #                         arrayminus = lb,
-  #                         array = ub,
-  #                         color = '#000000')
-  # ) %>% 
-  #   plotly::layout(xaxis = list(categoryorder = "total descending"))
 }
