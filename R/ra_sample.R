@@ -17,30 +17,30 @@ ra_sample <- function(x, n, full = F){
   if(rlang::is_string(x)){ # If input is a string, convert to list
     dist <- list()
     # identify distribution (first element of the list)
-    dist[['distribution']] <- sub(pattern = '\\(.*', replacement = '', x = x) %>% toupper()
+    dist[['distribution']] <- sub(pattern = '\\(.*', replacement = '', x = x) %>% tolower()
     # Extract parameters
     dist[['parameters']] <- sub(".*(?:\\((.*)\\)).*|.*", "\\1",x) %>% 
       stringr::str_split(string = ., pattern = ',') %>% unlist() %>% as.numeric() 
   }else{ # else, assume is a fixed value
     dist <- list()
-    dist[["distribution"]] <- "FIXED"
+    dist[["distribution"]] <- "fixed"
     dist[["parameters"]] <- x
   }
   # Sample from distribution
   xi <- switch (dist$distribution,
-                PERT = {mc2d::rpert(n = n, min = dist$parameters[1], mode = dist$parameters[2], max = dist$parameters[3])},
-                BINOM = ,BINOMIAL = {rbinom(n = n, size = dist$parameters[1], prob = dist$parameters[2])},
-                TRI =, TRIANGLE =, TRIANG = { mc2d::rtriang(n = n, min = dist$parameters[1], mode = dist$parameters[2], max = dist$parameters[3])},
-                POI =, POISSON = {rpois(n = n, lambda = dist$parameters[1])},
-                NORMAL =, N =, GAUSS =, GAUSSIAN = {rnorm(n = n, mean = dist$parameters[1], sd = dist$parameters[2])},
-                UNIFORM =, UNIF =, U = {runif(n = n, min = dist$parameters[1], max = dist$parameters[2])},
-                GAMMA = rgamma(n = n, shape = dist$parameters[1], scale = dist$parameters[2]),
-                `INVERSE-GAMMA` =, `INV-GAMMA` =, `INVERSE GAMMA` = {invgamma::rinvgamma(n = n, shape = dist$parameters[1], rate =  dist$parameters[2])},
-                BETA = {rbeta(n = n, shape1 = dist$parameters[1], shape2 = dist$parameters[2])},
-                MULT =, MULTINOMIAL = ra_one_of(n = n, x = dist$parameters), 
-                FIXED = {rep(x = dist$parameters[1], n)},
-                `LOG_NORMAL` =, LOGN =, LNORM =, LNORMAL = {mc2d::rlnormb(n = n, mean = dist$parameters[1], sd = dist$parameters[2])},
-                "Error: Distribution not recognized/supported. Distributions supported include: Pert, Normal, Binomial, Triangle, Poisson, Uniform, and Inverse-gamma. If youre interested in support for particular distributions, please contact jpgo@ucdavis.edu"
+                pert = {mc2d::rpert(n = n, min = dist$parameters[1], mode = dist$parameters[2], max = dist$parameters[3])},
+                binom = ,binomial = {rbinom(n = n, size = dist$parameters[1], prob = dist$parameters[2])},
+                tri =, triangle =, triang = { mc2d::rtriang(n = n, min = dist$parameters[1], mode = dist$parameters[2], max = dist$parameters[3])},
+                poi =, poisson = {rpois(n = n, lambda = dist$parameters[1])},
+                normal =, n =, gauss =, gaussian = {rnorm(n = n, mean = dist$parameters[1], sd = dist$parameters[2])},
+                uniform =, unif =, u = {runif(n = n, min = dist$parameters[1], max = dist$parameters[2])},
+                gamma = rgamma(n = n, shape = dist$parameters[1], scale = dist$parameters[2]),
+                `inverse-gamma` =, `inv-gamma` =, `invgamma` =, `inverse gamma` = {invgamma::rinvgamma(n = n, shape = dist$parameters[1], rate =  dist$parameters[2])},
+                beta = {rbeta(n = n, shape1 = dist$parameters[1], shape2 = dist$parameters[2])},
+                mult =, multinomial = ra_one_of(n = n, x = dist$parameters), 
+                fixed = {rep(x = dist$parameters[1], n)},
+                `log normal` =, logn =, lnorm =, lnormal = {mc2d::rlnormb(n = n, mean = dist$parameters[1], sd = dist$parameters[2])},
+                stop("Distribution not recognized/supported. Distributions supported include: Pert, Normal, Binomial, Triangle, Poisson, Uniform, and Inverse-gamma. If youre interested in support for particular distributions, please contact jpgo@ucdavis.edu")
   )
   if(full == T){
     dist[['x']] <- xi
