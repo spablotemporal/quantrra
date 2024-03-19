@@ -14,7 +14,7 @@ A list with the nodes and edges to use by the quantrra library
 }
 }
 \source{
-{OIRSA. 2020. Análisis de riesgo sobre la probabilidad de ingreso, establecimiento y diseminación de la PPA en la porcicultura de los países de la región del OIRSA.} \doi{https://www.oirsa.org/contenido/2020/AR_PPA_Edición\%20revisada\%2001_07_20.pdf}
+{OIRSA. 2020. Análisis de riesgo sobre la probabilidad de ingreso, establecimiento y diseminación de la PPA en la porcicultura de los países de la región del OIRSA. https://www.oirsa.org/contenido/2020/AR_PPA_Edición\%20revisada\%2001_07_20.pdf}
 }
 \usage{
 OIRSA
