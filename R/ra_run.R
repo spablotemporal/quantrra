@@ -21,6 +21,7 @@
 #' @export
 
 ra_run <- function(m, nsim){
+  m = M; nsim = 50
   ## Make sure a valid variables area provided
   cn <- c("id", "label", "type", "distribution", "formula")
   if (any(!cn %in% colnames(m))){
