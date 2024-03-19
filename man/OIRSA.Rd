@@ -5,16 +5,7 @@
 \alias{OIRSA}
 \title{Risk of ASF introduction via live products}
 \format{
-List with two data frames
-A list with the nodes and edges to use by the quantrra library
-\describe{
-  \item{nodes}{This table contains the nodes form the risk assessment scenario tree and its asociated parameters. The table is used for runing the model with the function quantrra::ra_run()}
-  \item{edges}{This table contains the information of the connections between the nodes of the risk assessment tree. The table is used for visualization purposes with the function quantrra::ra_plot_tree()}
-  ...
-}
-}
-\source{
-<https://www.oirsa.org/contenido/2020/AR_PPA_Edición%20revisada%2001_07_20.pdf>
+
 }
 \usage{
 OIRSA

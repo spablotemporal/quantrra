@@ -15,12 +15,12 @@ A list with the nodes, edges and stratified values to use by the quantrra librar
 }
 }
 \source{
-<https://doi.org/10.1016/j.rvsc.2023.104990>
+{Muñoz-Pérez, Carolina, Beatriz Martínez-López, José Pablo Gómez-Vázquez, Cecilia Aguilar-Vega, Jaime Bosch, Satoshi Ito, Marta Martínez-Avilés, and José Manuel Sánchez-Vizcaíno. 2023. “Quantitative Risk Assessment of African Swine Fever Introduction into Spain by Legal Import of Swine Products.” Research in Veterinary Science, August, 104990.} \doi{https://doi.org/10.1016/j.rvsc.2023.104990}
 }
 \usage{
 asf_products
 }
 \description{
-Risk of ASF introduction via sub products
+Model used for the publication: “Quantitative Risk Assessment of African Swine Fever Introduction into Spain by Legal Import of Swine Products.” This model evaluates the risk of introduction of African Swine Fever into Spain via legal product imports.
 }
 \keyword{datasets}

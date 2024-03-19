@@ -14,7 +14,7 @@ A list with the nodes and edges to use by the quantrra library
 }
 }
 \source{
-<https://dx.plos.org/10.1371/journal.pone.0182850>
+{Herrera-Ibatá, Diana María, Beatriz Martínez-López, Darla Quijada, Kenneth Burton, and Lina Mur. 2017. “Quantitative Approach for the Risk Assessment of African Swine Fever and Classical Swine Fever Introduction into the United States Through Legal Imports of Pigs and Swine Products.” Edited by Shuo Su. PLOS ONE 12 (8): e0182850.} \doi{https://doi.org/10.1371/journal.pone.0182850}
 }
 \usage{
 ASFm
