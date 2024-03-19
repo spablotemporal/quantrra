@@ -2,10 +2,19 @@
 % Please edit documentation in R/run_quantrra.R
 \name{run_quantrra}
 \alias{run_quantrra}
-\title{Function to open the quantrra interactive platform}
+\title{Function to open the quantrra interactive platform
+ @description
+ This function runs the quantrra dashboard shiny application. Which serves as a GUI for Risk Assessment and model building}
 \usage{
 run_quantrra()
 }
 \description{
 Function to open the quantrra interactive platform
+ @description
+ This function runs the quantrra dashboard shiny application. Which serves as a GUI for Risk Assessment and model building
+}
+\examples{
+## NOT RUN
+run_quantrra()
+
 }

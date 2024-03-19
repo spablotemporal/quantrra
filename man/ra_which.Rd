@@ -2,7 +2,7 @@
 % Please edit documentation in R/ra_which.R
 \name{ra_which}
 \alias{ra_which}
-\title{Function to sample from different distributions}
+\title{(experimental) Fit data to multiple distributions to see which one represents it best}
 \usage{
 ra_which(x, distributions)
 }
@@ -12,5 +12,5 @@ ra_which(x, distributions)
 \item{dist}{Distribution specification}
 }
 \description{
-Function to sample from different distributions
+This function fits a vector of numbers to multiple distributions and provides test statistics on the fit.
 }
