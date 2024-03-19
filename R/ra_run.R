@@ -47,7 +47,7 @@ ra_run <- function(m, nsim){
     do.call(cbind, .) %>%  # add all columns
     data.frame() # format as data frame
   # Filter only outputs
-  o <- M %>% 
+  o <- m %>% 
     filter(type == 'out')
   
   # Check if at least one input was provided
