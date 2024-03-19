@@ -2,7 +2,7 @@
 % Please edit documentation in R/ra_run.R
 \name{ra_run}
 \alias{ra_run}
-\title{Function to run the stochastic model using a quantrra table}
+\title{Run the stochastic model using a quantrra model table}
 \usage{
 ra_run(M, nsim)
 }
@@ -11,6 +11,22 @@ ra_run(M, nsim)
 
 \item{nsim}{Number of simulations}
 }
+\value{
+A data frame with the values for each of the inputs and outputs
+#' @examples
+# define a model table using one of th eprovided examples
+m <- quantrra::OIRSA
+
+# Run the model 
+ra_run(M = m$ndoes, nsim = 10)
+}
 \description{
-Function to run the stochastic model using a quantrra table
+Run the stochastic model using a quantrra model table. 
+In the model table in quantrra, each row represents a node in the scenario tree, with it's associated id, label, level of hierarchy, distribution and formula.
+Each node requires an id which is the short name used in the formulas, and a a label which is meant to provide a more detailed description of the node.
+The hierarchy level of the nodes will specify the order in which the nodes will be executed in the calculation of the risk; multiple nodes can be in the same hierarchy level.
+There are two types of nodes in quantrra: inputs and outputs.
+The input nodes are nodes that require the user specification of a probability distribution and the parameters associated.
+Output nodes are nodes that require the user to specify a formula or R function that will be executed using other nodes of lower hierarchy.
+A example model table is provided inside the package and can be accessed using `quantrra::OIRSA`.
 }
