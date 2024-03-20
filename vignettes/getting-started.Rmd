@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-In this lab we will be using R, which is an open access software developed for statistical analysis (but can do some data manipulation, simulation and modeling). We will be using the package `quantrra` for risk assessment.  Make sure you have installed the latest version [quantrra](https://github.com/spablotemporal/quantrra). The objectives for this lab are:  
+In this exercise we will be using the package `quantrra` for risk assessment.  Make sure you have installed the latest version [quantrra](https://github.com/spablotemporal/quantrra). The objectives for this lab are:  
 
   - Familiarize with methods to develop risk assessment using R
   - Integrate qualitative and quantitative information for the development of RRA
@@ -24,7 +24,7 @@ In this lab we will be using R, which is an open access software developed for s
   - Use random forest and regression trees to evaluate the sensitivity of the model
   - Use the model to evaluate the risk stratified for multiple countries.
 
-```{r}
+```{r loading the libraries, message=F, warning=F}
 # Libraries we will use
 library(sf); library(dplyr)
 library(quantrra)
@@ -129,7 +129,7 @@ We can perform sensitivity analysis on the model to identify the most relevant p
   - *formula* A formula that contains the names of the outcome analyzed and the parameters.  
   - *tree*: we can specify if we want an *interactive* or *static* visualization for our tree. 
 
-```{r SA}
+```{r sensitivity analysis}
 # First we specify the formula:
 f <- P ~ P1 + P2 + P3 + R1 + R2 + H1 + H2
 # Then we use the function with our results
@@ -152,7 +152,7 @@ sa$RT # The classification and regression tree
 
 Now let's try a different model. We will load a model used in the publication: [Quantitative risk assessment of African swine fever introduction into Spain by legal import of swine products](https://linkinghub.elsevier.com/retrieve/pii/S0034528823002412). You can see more information of the parameters in the model by looking at the publication. The model is contained in the `quantrra` library and we can access to it by using:
 
-```{r}
+```{r loading the model asfp}
 # save the model to a new object
 m2 <- quantrra::asf_products
 
@@ -165,16 +165,52 @@ ra_plot_tree(m2)
 
 You will notice that this model has 3 elements inside the list, we already covered the first two elements (nodes and edges). The third element is a stratified table, which is meant to provide different parametrization for each of the importing countries.
 
-```{r}
-m2$stratified
+Similarly than with the previous example, we can run our model using the function `ra_run()`:
+
+```{r runing the model asp}
+ra_run(m = m2$nodes, nsim = 10e3) %>% # run the model
+  pull(Pf) %>% # get the main output
+  ra_plot_dist() # plot the distribution
 ```
 
+But since we also have a stratified table, we can run the model stratified to estimate the risk of introduction for each of it's partner countries:
 
-```{r}
-m2$stratified %>% 
-  select(Countries, P1a1:Hp) %>% 
-  ra_run_strat(m = m2$nodes, tbl = ., nsim = 1000)
+```{r run stratified}
+# Run the stratified model
 mos <- ra_run_strat(m = m2$nodes, tbl = m2$stratified, nsim = 1000)
 
+# The output will be a data frame with the mean and 95 percentiles for each of the outputs form our model:
+head(mos)
+```
+
+As you notice, by default the function already computes the mean and 95 percentiles for us. If you want to keep all the results, we can use the argument `simplify = F`, but we wont do it here.
+
+The function `ra_plot_ranking()` can be used to represent visually the estimates for each of the strata:
+
+```{r visualizing the stratified results}
 ra_plot_ranking(x = mos, var = "Pf")
+```
+
+```{r map visualization}
+w <- quantrra::wm %>% 
+  left_join(mos, by = c("name" = "ids")) 
+
+ggplot() +
+  geom_sf(data = w, aes(fill = Pf_m), col = "black") +
+  theme(
+    legend.position = "bottom",
+    legend.text = element_text(angle = 25),
+    panel.background = element_blank()
+  ) +
+  scale_fill_gradient(low = "#200000", high = "red")
+```
+
+# Using `quantrra` outside R
+
+So far we covered how to use the functions in models that are already defined. One of the objectives of `quantrra` is to simplify the process of model sharing for reproducibility purposes. There are multiple ways to interact with `quantrra` outside R, this might be useful to facilitate the risk assessment and parametrization for people that does not feels as confortable using programming languages.
+
+```{r exporting outside R}
+ra_export(m = m2, dir = "model")
+ra_export(m = m2, dir = "model", format = "zip")
+
 ```
