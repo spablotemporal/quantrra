@@ -10,8 +10,11 @@ function(input, output){
   
   # read from zip
   observeEvent(input$upload, {
-    Graph$nodes <- read.csv(unz(input$upload$datapath, 'nodes.csv'))
-    Graph$edges <- read.csv(unz(input$upload$datapath, 'edges.csv'))
+    im <- ra_import(input$upload$datapath)
+    Graph$nodes <- im$nodes
+    Graph$edges <- im$edges
+    # Graph$nodes <- read.csv(unz(input$upload$datapath, 'nodes.csv'))
+    # Graph$edges <- read.csv(unz(input$upload$datapath, 'edges.csv'))
   })
   
   # Make the edits to the data
@@ -24,7 +27,7 @@ function(input, output){
     showModal(modalDialog("Runing the model...", footer = NULL))
   })
   Df <- eventReactive(input$Run, {
-    ra_run(M = Graph$nodes, input$Nsim)
+    ra_run(m = Graph$nodes, input$Nsim)
   })
   observeEvent(Df(),{
     removeModal()
@@ -44,14 +47,8 @@ function(input, output){
   
   ## Read Data for strat -------
   Strat <- reactive({
-    input$uploadData$datapath %>% 
-      read.csv()
+    im <- ra_import(input$upload$datapath)$stratified
   })
-  
-  # SpStrat <- reactive({
-  #   input$uploadSp$datapath %>% 
-  #     st_read(., quiet = T)
-  # })
   
   # in server()
   map <- reactive({
@@ -98,7 +95,7 @@ function(input, output){
     showModal(modalDialog("Runing the model...", footer = NULL))
   })
   DFs <- eventReactive(input$RunStratified, {
-    quantrra::ra_run_strat(M = Graph$nodes, Tbl = Strat(), nsim = input$Nsim)
+    quantrra::ra_run_strat(m = Graph$nodes, tbl = Strat(), nsim = input$Nsim)
   })
   observeEvent(DFs(),{
     removeModal()
@@ -287,7 +284,7 @@ function(input, output){
   
   # Ranking plot
   output$Ranking_p <- renderPlotly({
-    ra_plot_ranking(d = DFs(), var = 'Pf')
+    ra_plot_ranking(x = DFs(), var = 'Pf')
   })
   
   # Map

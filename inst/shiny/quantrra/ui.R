@@ -1,13 +1,13 @@
-header <- dashboardHeader(title = 'QuantRRA')
-header$children[[2]]$children <-  tags$a(href='https://github.com/spablotemporal/QuantRRA',
+header <- dashboardHeader(title = 'quantrra')
+header$children[[2]]$children <-  tags$a(href='https://github.com/spablotemporal/quantrra',
                                            tags$img(src='icon.png',height='50',width='50'))
 # Sidebar ---------
 sidebar <- dashboardSidebar(sidebarMenu(
   menuItem("Model", icon = icon("shield-virus"),
            menuSubItem(text = 'Model', tabName = "ModelTab"),
            menuSubItem(text = 'Stratified Model', tabName = 'StratifiedTab'),
-           menuSubItem(text = 'Sensitivity Analysis', tabName = 'SATab'),
-           menuSubItem(text = 'Distribution Fitting', tabName = 'DFTab')
+           menuSubItem(text = 'Sensitivity Analysis', tabName = 'SATab')
+           # menuSubItem(text = 'Distribution Fitting', tabName = 'DFTab')
            ),
   
   menuItem("Documentation", tabName = "t2", icon = icon("book")),
@@ -36,7 +36,7 @@ body <- dashboardBody(
                             ### Model table ---------
                             box(title = 'Model table', width = 12, collapsible = T,
                                 'To start, you need to specify the model. Models can be constructed directly from the app using the network tools in the following section, or can be uploaded from a model file previosly created.',
-                                fileInput("upload", "Upload a model file", accept = c('.zip')),
+                                fileInput("upload", "Upload a model file", accept = c(".zip", "xlsx")),
                                 DTOutput("nodes"),
                                 'If you want to save your model to continue working on it later or to share it, you can download the file here:',
                                 br(),
@@ -96,7 +96,7 @@ body <- dashboardBody(
             fluidRow(
               tabBox(width = 12,
                      tabPanel(title = 'Data',
-                              fileInput("uploadData", "Upload Data", accept = '.csv'),
+                              # fileInput("uploadData", "Upload Data", accept = '.csv'),
                               DTOutput('InData')),
                      tabPanel(title = 'Spatial features', 
                               # fileInput("uploadSp", "Upload Shapefile"),
