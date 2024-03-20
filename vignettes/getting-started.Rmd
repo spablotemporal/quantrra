@@ -166,6 +166,14 @@ ra_plot_tree(m2)
 You will notice that this model has 3 elements inside the list, we already covered the first two elements (nodes and edges). The third element is a stratified table, which is meant to provide different parametrization for each of the importing countries.
 
 ```{r}
+m2$stratified
+```
+
+
+```{r}
+m2$stratified %>% 
+  select(Countries, P1a1:Hp) %>% 
+  ra_run_strat(m = m2$nodes, tbl = ., nsim = 1000)
 mos <- ra_run_strat(m = m2$nodes, tbl = m2$stratified, nsim = 1000)
 
 ra_plot_ranking(x = mos, var = "Pf")
