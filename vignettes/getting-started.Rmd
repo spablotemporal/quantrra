@@ -212,5 +212,11 @@ So far we covered how to use the functions in models that are already defined. O
 ```{r exporting outside R}
 ra_export(m = m2, dir = "model")
 ra_export(m = m2, dir = "model", format = "zip")
-
+ra_import("model.xlsx")
 ```
+
+```{r}
+quantrra::OIRSA %>% 
+  ra_export(., file = "OIRSA", format = "zip")
+```
+

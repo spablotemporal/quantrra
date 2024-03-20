@@ -333,13 +333,26 @@ function(input, output){
     contentType = "application/zip"
   )
   # Example files ------------------------
+  ## OIRSA ----------
   output$downloadOIRSA <- downloadHandler(
     filename <- function() {
-      paste("OIRSA_PPA", "zip", sep=".")
+      paste("OIRSA", "zip", sep=".")
     },
     
     content <- function(file) {
-      file.copy("www/OIRSA_PPA.zip", file)
+      file.copy("www/OIRSA.zip", file)
+    },
+    contentType = "application/zip"
+  )
+  
+  ## ASF Products -----------
+  output$downloadASFP <- downloadHandler(
+    filename <- function() {
+      paste("asf_products", "zip", sep=".")
+    },
+    
+    content <- function(file) {
+      file.copy("www/asf_products.zip", file)
     },
     contentType = "application/zip"
   )

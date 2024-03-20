@@ -22,7 +22,7 @@ body <- dashboardBody(
   tabItems(
     ## Model tab -----
     tabItem(tabName = "ModelTab",
-            h1("QuantRRA: Quantitative rapid risk assesment"),
+            h1("quantrra: Quantitative risk assesment"),
             tags$i('This application is still under development, documentation is still in progress, for any questions please contact the developer: '), tags$a("Jose Pablo Gomez", href = 'mailto:jpgo@ucdavis.edu. '),
             # hr(),
             br(),
@@ -97,21 +97,21 @@ body <- dashboardBody(
               tabBox(width = 12,
                      tabPanel(title = 'Data',
                               # fileInput("uploadData", "Upload Data", accept = '.csv'),
-                              DTOutput('InData')),
-                     tabPanel(title = 'Spatial features', 
-                              # fileInput("uploadSp", "Upload Shapefile"),
-                              fileInput(inputId = "filemap",
-                                        label = "Upload map. Choose shapefile",
-                                        multiple = TRUE,
-                                        accept = c('.shp','.dbf','.sbn','.sbx','.shx','.prj'))
-                              )
+                              DTOutput('InData'))
+                     # tabPanel(title = 'Spatial features', 
+                     #          # fileInput("uploadSp", "Upload Shapefile"),
+                     #          fileInput(inputId = "filemap",
+                     #                    label = "Upload map. Choose shapefile",
+                     #                    multiple = TRUE,
+                     #                    accept = c('.shp','.dbf','.sbn','.sbx','.shx','.prj'))
+                     #          )
                      ),
               actionButton(inputId = 'RunStratified', label = 'Run stratified model'),
               uiOutput(outputId = 'Outcomes_s'),
               hr(),
               tabBox(width = 12,
-                     tabPanel(title = 'Ranking', plotlyOutput(outputId = 'Ranking_p')),
-                     tabPanel(title = 'Map', plotOutput(outputId = 'Map_p'))
+                     tabPanel(title = 'Ranking', plotlyOutput(outputId = 'Ranking_p'))
+                     # tabPanel(title = 'Map', plotOutput(outputId = 'Map_p'))
               )
             )
             ### Select which variable (risk or uncertainty a.k.a variance?)

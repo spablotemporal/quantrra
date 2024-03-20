@@ -1,6 +1,6 @@
 Package: quantrra
 Title: A library for Rapid risk Assessment
-Version: 0.0.8
+Version: 0.0.9
 Authors@R: 
     person(given = "Jose Pablo",
            family = "Gomez-Vazquez",
