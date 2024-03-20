@@ -41,3 +41,15 @@
 #' @source {Muñoz-Pérez, Carolina, Beatriz Martínez-López, José Pablo Gómez-Vázquez, Cecilia Aguilar-Vega, Jaime Bosch, Satoshi Ito, Marta Martínez-Avilés, and José Manuel Sánchez-Vizcaíno. 2023. “Quantitative Risk Assessment of African Swine Fever Introduction into Spain by Legal Import of Swine Products.” Research in Veterinary Science, August, 104990.} \doi{https://doi.org/10.1016/j.rvsc.2023.104990}
 "asf_products"
 
+#' World map
+#'
+#' World map in simple feature format. adapted from the rnaturalearth library for visualization purposes
+#'
+#' @format simple features MULTIPOLIGON
+#' 
+#' \describe{
+#'   \item{name}{Name of the country}
+#'   ...
+#' }
+"wm"
+
