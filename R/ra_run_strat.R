@@ -6,7 +6,7 @@
 #' @param m Model file
 #' @param tbl Table with parameters per strata
 #' @param nsim Number of simulations
-#' @return data frame with median, and 95% percentiles for each of the output nodes
+#' @return data frame with mean, and 95% percentiles for each of the output nodes
 #' @examples
 #' # use one of the example models
 #' m <- quantrra::asf_products
@@ -56,7 +56,7 @@ ra_run_strat <- function(m, tbl, nsim, full = F, simplify = T){
     Out <- Out %>% 
       do.call(rbind,.) %>% 
       group_by(ids) %>% 
-      summarise_at(.vars = o, .funs = c(m = ~median(., na.rm = T), q05 = ~quantile(., 0.05), q95 = ~quantile(., 0.95))) 
+      summarise_at(.vars = o, .funs = c(m = ~mean(., na.rm = T), q05 = ~quantile(., 0.05), q95 = ~quantile(., 0.95))) 
   }
   
   
