@@ -28,6 +28,6 @@ A example model table is provided inside the package and can be accessed using `
 # define a model table using one of the provided examples
 m <- quantrra::OIRSA
 
-ra_run(M = m$nodes, nsim = 10) # Run the model 
+ra_run(m = m$nodes, nsim = 10) # Run the model 
 
 }
