@@ -14,7 +14,7 @@ ra_run_strat(m, tbl, nsim, full = F, simplify = T)
 \item{nsim}{Number of simulations}
 }
 \value{
-data frame with median, and 95% percentiles for each of the output nodes
+data frame with mean, and 95% percentiles for each of the output nodes
 }
 \description{
 The stratified model uses a different set of parameters for each starta with the intention to account for population heterogeneity. 
