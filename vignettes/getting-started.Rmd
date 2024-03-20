@@ -1,5 +1,5 @@
 ---
-title: "getting-started"
+title: "Risk Assessment with quantrra"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{getting-started}
@@ -14,18 +14,25 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+# Introduction
+
+In this lab we will be using R, which is an open access software developed for statistical analysis (but can do some data manipulation, simulation and modeling). We will be using the package `quantrra` for risk assessment.  Make sure you have installed the latest version [quantrra](https://github.com/spablotemporal/quantrra). The objectives for this lab are:  
+
+  - Familiarize with methods to develop risk assessment using R
+  - Integrate qualitative and quantitative information for the development of RRA
+  - Develop a system that can be easily updated and re-parametrized
+  - Use random forest and regression trees to evaluate the sensitivity of the model
+  - Use the model to evaluate the risk stratified for multiple countries.
+
+```{r}
+# Libraries we will use
+library(sf); library(dplyr)
 library(quantrra)
 ```
 
 # Basics
 
-```{r loading packages}
-# Libraries we will use
-library(sf); library(dplyr)
-```
-
-## Sampling probability distributions
+## Sampling distributions
 
 By default, R has several functions to sample a distribution and plot the results. For example, if we would like to sample a normal distribution with a mean of 5 and standard deviation of 0.12, we can use the following code:
 
@@ -39,19 +46,127 @@ x <- rnorm(n = 100, # Number of observations to sample
 hist(x)
 ```
 
-In this lab we will be using the package `QuantRRA`, which is specifically developed for rapid risk assessment in R. The function `ra_sample()` support multiple distributions such as: Normal, binomial, uniform, pert, among others. The function requires two arguments:  
-  
-  - `x` which is a string (text) of the distribution and its parameters.  
-  - `n` the number of observations we will sample.  
+In this lab we will be using the package `quantrra`, which is specifically developed for risk assessment in R. The function `ra_sample()` conveniently wraps functions to sample multiple distributions such as: Normal, binomial, uniform, pert, among others. The function requires two arguments:
 
-```{r QuantRRA distribution sampling}
+-   `x` which is a string (text) of the distribution and its parameters.\
+-   `n` the number of observations we will sample.
+
+```{r quantrra distribution sampling}
 n <- 100 # number of observations
 d <- 'Normal(5, 0.12)' # Distribution to sample
 
 x <- ra_sample(x = d, n = n) # Function to sample the distribution
 
-# We can use the function plotDist() from the package QuantRRA to get a more familiar output:
-ra_plotDist(x, # the values sampled
+# We can use the function ra_plot_dist() from the package quantrra to get a more familiar output:
+ra_plot_dist(x, # the values sampled
          main = 'Distribution of x') # A title for our plot
 ```
 
+## The model file
+
+Now we will create our first model. The main function `ra_run()` requires two arguments:
+
+-   **m** the model file
+-   **nsim** number of simulations.
+
+Lets see an example of a pre-made model file. The following model was based on a risk assessment performed by the OIRSA (*Organismo Internacional Regional de Sanidad Agropecuaria*) for the introduction of ASF into the countries that are part of OIRSA, you can read more about this report in [this link](https://www.oirsa.org/contenido/2020/AR_PPA_Edición%20revisada%2001_07_20.pdf). The model estimates the number of introduction events from imported animal products swill feeding in a given year.
+
+To represent the model we must identify the inputs and the outputs we want to calculate. The following figure was adapted from the report by OIRSA
+
+![](../docs/img/m1.png) 
+
+Lets have a look of how we would represent this in R. This model was adapted and its contained in the package, to access the model file use the following code:
+
+```{r Model file}
+# lets save the model to a new object:
+m1 <- quantrra::OIRSA
+
+# now we will examine the object
+m1
+```
+
+The first data.frame (nodes) is what we call a node table, where each row represents a node in our risk assessment tree. The node table contains the following columns:
+  
+  - **id**, Unique identifier for the parameter. Use short names with no special characters or spaces starting with a letter, i.e. *I1*, *P3*, etc...
+  - **label**  Name of the parameter.
+  - **type**  If its an input (In) or output (Out) parameter. Input parameters must have a distribution specified, otherwise *NA*; Output parameters must have a formula specified, *NA* otherwise
+  - **level**  Hierarchy level of the parameter, This will determine the order in which the output parameters will be calculated.
+  - **distribution** Distribution for the input parameters, must follow the specification of the `ra_sample()` function from `quantrra`, if the parameter is an output, must be *NA*.  
+  - **formula** Formula used to calculate the Out parameters, the formula must include other parameters from lower hierarchy levels. The formula con use any operators such as multiplication (*), sum (+), substraction (-), exponential (^), division(/), etc...
+
+The second table in our list is an edge table, which is used for visualization purposes. 
+
+We can obtain a visual representation of our model using the function `ra_plot_tree()`. This function takes a list with named elements for the nodes and edges. Let's give it a try:
+
+```{r oirsa tree}
+ra_plot_tree(m1)
+```
+
+## Running the model
+
+Let's run the model now. We use the function `ra_run()` on the object containing our model. The function only uses the node table, so we will specify to use only that
+
+```{r Running the model}
+m1 <- OIRSA
+# Run the model 5000 times
+mo <- ra_run(m = m1$nodes, nsim = 5000)
+# Visualize the results:
+ra_plot_dist(mo$P)
+```
+
+The result of this is a table with the distributions sampled for the inputs, and the ones calculated for the outputs. Based on the results, we can estimate the probability that the number of introduction events will be more than 1:
+
+
+```{r P introduction}
+sum(mo$P > 1) / length(mo$P)
+```
+
+## Sensitivity analysis
+
+We can perform sensitivity analysis on the model to identify the most relevant parameters and explore the parameters sample space, for this we can use the function  `ra_gsa()` from the `quantrra` package. The function uses random forest to estimate the relative importance of the parameters, and classification and regression trees to visualize the interactions between the parameters sampled. The function requires 3 main arguments:  
+  
+  - *data*: Our results table from the model.  
+  - *formula* A formula that contains the names of the outcome analyzed and the parameters.  
+  - *tree*: we can specify if we want an *interactive* or *static* visualization for our tree. 
+
+```{r SA}
+# First we specify the formula:
+f <- P ~ P1 + P2 + P3 + R1 + R2 + H1 + H2
+# Then we use the function with our results
+sa <- ra_gsa(data = mo, f = f, tree = 'interactive')
+# The results contain 3 objects:
+sa$VarianceExp # The variance explained by our parameters
+```
+
+
+```{r Relative Importance}
+sa$RelImport # The relative importance of our parameters
+```
+
+
+```{r CART}
+sa$RT # The classification and regression tree
+```
+
+# Case study: ASF
+
+Now let's try a different model. We will load a model used in the publication: [Quantitative risk assessment of African swine fever introduction into Spain by legal import of swine products](https://linkinghub.elsevier.com/retrieve/pii/S0034528823002412). You can see more information of the parameters in the model by looking at the publication. The model is contained in the `quantrra` library and we can access to it by using:
+
+```{r}
+# save the model to a new object
+m2 <- quantrra::asf_products
+
+# examine the model
+m2
+
+# Obtain a visual representation of the model
+ra_plot_tree(m2)
+```
+
+You will notice that this model has 3 elements inside the list, we already covered the first two elements (nodes and edges). The third element is a stratified table, which is meant to provide different parametrization for each of the importing countries.
+
+```{r}
+mos <- ra_run_strat(m = m2$nodes, tbl = m2$stratified, nsim = 1000)
+
+ra_plot_ranking(x = mos, var = "Pf")
+```
