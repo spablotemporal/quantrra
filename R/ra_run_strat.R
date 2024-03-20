@@ -56,7 +56,7 @@ ra_run_strat <- function(m, tbl, nsim, full = F, simplify = T){
     Out <- Out %>% 
       do.call(rbind,.) %>% 
       group_by(ids) %>% 
-      summarise_at(.vars = o, .funs = c(m = ~mean(., na.rm = T), q05 = ~quantile(., 0.05), q95 = ~quantile(., 0.95))) 
+      summarise_at(.vars = o, .funs = c(m = ~median(., na.rm = T), q05 = ~quantile(., 0.05), q95 = ~quantile(., 0.95))) 
   }
   
   
