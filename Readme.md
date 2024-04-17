@@ -1,6 +1,6 @@
 # {quantrra} <img src="img/icon.png" align="right" alt="" width="120" />
 
-`{quantrra}` is a package for rapid risk assessment developed for the statistical software R.
+`{quantrra}` is a package for reproducible risk assessment developed for the statistical software R.
 
 # Installing quantrra
 
@@ -23,9 +23,9 @@ quantrra::run_quantrra()
 
 ## Main usage
 
-The main usage for quantrra is to simulate stochastic events using the function `rra()`, which requires two arguments:  
+The main usage for quantrra is to simulate stochastic events using the function `ra_run()`, which requires two arguments:  
   
-  - **M**, the model file
+  - **m**, the model file
   - **n** number of simulations.  
   
 A model file is just a data.frame with rows that represent inputs and outputs of the model. The columns include ID, label, whether the event is input or output, a distribution (for inputs), and a formula (for outputs).  
@@ -38,9 +38,9 @@ The model file then can created in using the shiny interface, R or other softwar
 # Load a model file from the package
 M <- quantrra::OIRSA_M
 # Run the model 5000 times
-Mo <- rra(M = M, nsim = 5000)
+Mo <- ra_run(m = M, nsim = 5000)
 # Visualize the results:
-plotDist(Mo$P)
+ra_plot_dist(Mo$P)
 ```
 
 <img src="img/eventsOut.png" alt="" width="500" />

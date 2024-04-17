@@ -189,6 +189,10 @@ The function `ra_plot_ranking()` can be used to represent visually the estimates
 
 ```{r visualizing the stratified results}
 ra_plot_ranking(x = mos, var = "Pf")
+ra_plot_ranking(x = mos, var = "Pf", format = "interactive")
+
+mos %>% 
+  
 ```
 
 ```{r map visualization}
@@ -210,13 +214,16 @@ ggplot() +
 So far we covered how to use the functions in models that are already defined. One of the objectives of `quantrra` is to simplify the process of model sharing for reproducibility purposes. There are multiple ways to interact with `quantrra` outside R, this might be useful to facilitate the risk assessment and parametrization for people that does not feels as confortable using programming languages.
 
 ```{r exporting outside R}
+# default export method is in a xlsx
 ra_export(m = m2, dir = "model")
+# model can also be exported as a zip
 ra_export(m = m2, dir = "model", format = "zip")
-ra_import("model.xlsx")
 ```
 
-```{r}
-quantrra::OIRSA %>% 
-  ra_export(., file = "OIRSA", format = "zip")
+When model is created outside R, can be imported using the function `ra_import()` this function automatically identified if a model is in xlsx or zip format
+
+```{r importing models}
+ra_import("model.xlsx") %>% 
+  ra_plot_tree()
 ```
 
