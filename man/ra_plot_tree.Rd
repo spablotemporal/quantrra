@@ -4,10 +4,10 @@
 \alias{ra_plot_tree}
 \title{Plot a model tree from a quantrra table}
 \usage{
-ra_plot_tree(M, fontColor = "black", shape = "rectangle")
+ra_plot_tree(m, fontColor = "black", shape = "rectangle")
 }
 \arguments{
-\item{M}{Model list with nodes and edges, see example quantrra::OIRSA}
+\item{m}{Node table with columns id, label, type, distribution and formula see examples}
 
 \item{fontColor}{Color of the text displayed in the figure}
 
