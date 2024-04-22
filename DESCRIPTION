@@ -1,5 +1,5 @@
 Package: quantrra
-Title: A library for Rapid risk Assessment
+Title: A library for Reproducible Risk Assessment with R
 Version: 0.1.1
 Authors@R: 
     person(given = "Jose Pablo",
