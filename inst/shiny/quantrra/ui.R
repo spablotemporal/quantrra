@@ -36,7 +36,7 @@ body <- dashboardBody(
                             ### Model table ---------
                             box(title = 'Model table', width = 12, collapsible = T,
                                 'To start, you need to specify the model. Models can be constructed directly from the app using the network tools in the following section, or can be uploaded from a model file previosly created.',
-                                fileInput("upload", "Upload a model file", accept = c(".zip", "xlsx")),
+                                fileInput("upload", "Upload a model file", accept = c(".zip", ".xlsx")),
                                 DTOutput("nodes"),
                                 'If you want to save your model to continue working on it later or to share it, you can download the file here:',
                                 br(),

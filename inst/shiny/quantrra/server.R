@@ -3,7 +3,7 @@ function(input, output){
   # Create empty reactive values
   Graph <- reactiveValues(
     nodes = init_nodes,
-    edges = init_edges
+    edges = ra_plot_tree(init_nodes, edgetbl = T)
   )
   
   proxy = dataTableProxy('nodes')
