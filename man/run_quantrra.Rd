@@ -14,7 +14,7 @@ Function to open the quantrra interactive platform
  This function runs the quantrra dashboard shiny application. Which serves as a GUI for Risk Assessment and model building
 }
 \examples{
-## NOT RUN
+## DO NOT RUN
 run_quantrra()
 
 }

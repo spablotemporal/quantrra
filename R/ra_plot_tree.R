@@ -4,9 +4,10 @@
 #' This function expects as an input a list object with named elements as nodes and edges, corresponding to the tables specifying the nodes of the tree and connections between them
 #' Shape and Color for the nodes are obtained directly from variables in the nodes table. If missing, default colors and shape are used
 #' 
-#' @param m Node table with columns id, label, type, distribution and formula see examples
+#' @param m Model table with columns id, label, type, distribution and formula see examples.
 #' @param fontColor Color of the text displayed in the figure
 #' @param shape shape of the nodes, options are the same from the DiagrammeR library: ellipse, oval, diamond, egg, plaintext, point, square, triangle
+#' @param static if TRUE, the figure will be created with DiagrammeR for a static visualization. When FALSE, visNetwork is used for a dynamic visualization
 #' @return a grViz/htmlwidget figure representing the risk assessment tree
 #' @examples
 #' # Use one of the examples from the library
@@ -15,7 +16,16 @@
 #' 
 #' @export
 
-ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle'){
+ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T){
+  # if a list provided, extract the first element (model table)
+  if(class(m) == "list"){
+    # if provided a list, make sure it has the correct names for elements
+    if(!"model" %in% names(m)){
+      stop("When providing a list, make sure to include the elements correctly named")
+    }else{
+      m <- m$model
+    }
+  }
   # Make sure a valid variables area provided
   cn <- c("id", "label", "type", "distribution", "formula")
   if (any(!cn %in% colnames(m))){
@@ -40,8 +50,8 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle'){
     "[label = '", m$id, '\n', m$label, "' , fillcolor = '", m$color, "']"
   ) %>% paste(., collapse = '\n ')
   # Define edges
-  ## v0.2 -------------------
-  # In version 0.2, the edge table is generated from the nodes, no need to specify edge table
+  ## v0.1.1 -------------------
+  # After version 0.1.1, the edge table is generated from the nodes, no need to specify edge table
   # First we get a list of the nodes involved in each out calculation
   es <- m %>% 
     mutate(type = tolower(type)) %>% 
@@ -63,20 +73,30 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle'){
     distinct() %>% 
     filter(from %in% m$id) # make sure that use only the ids in nodes table
   
-  es <- paste0(es$from, ' -> ', es$to, ';\n ') %>% paste(., collapse = '\n ')
-  
-  # Make the figure
-  DiagrammeR::grViz(diagram = paste0(
-    "digraph flowchart {
+  # Make the figure -----------
+  ## Static figure ------------
+  if(static){
+    es <- paste0(es$from, ' -> ', es$to, ';\n ') %>% paste(., collapse = '\n ')
+    
+    DiagrammeR::grViz(diagram = paste0(
+      "digraph flowchart {
     node [
       fontname = arial,", 
-    "shape =", shape, 
-    ",style = filled, 
+      "shape =", shape, 
+      ",style = filled, 
       fontcolor =", fontColor,
-    "]\n ",
-    vs,
-    es,
-    "}",
-    sep = '\n'
-  ))
+      "]\n ",
+      vs,
+      es,
+      "}",
+      sep = '\n'
+    ))
+  }else{
+    visNetwork::visNetwork(m, es) %>% 
+      visNetwork::visHierarchicalLayout(direction = "LR") %>% 
+      visNetwork::visOptions(manipulation = list(enabled = T,
+                                                 editNodeCols = c('id', 'label', 'type', 'level', 'distribution', 'formula'),
+                                                 addNodeCols = c('id', 'label', 'type', 'level', 'distribution', 'formula')))
+  }
+  
 }
