@@ -8,6 +8,7 @@
 #' @param fontColor Color of the text displayed in the figure
 #' @param shape shape of the nodes, options are the same from the DiagrammeR library: ellipse, oval, diamond, egg, plaintext, point, square, triangle
 #' @param static if TRUE, the figure will be created with DiagrammeR for a static visualization. When FALSE, visNetwork is used for a dynamic visualization
+#' @param edgetbl if TRUE, return a table of edges for visualization purposes
 #' @return a grViz/htmlwidget figure representing the risk assessment tree
 #' @examples
 #' # Use one of the examples from the library
@@ -16,7 +17,7 @@
 #' 
 #' @export
 
-ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T){
+ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T, edit = F, edgetbl = F){
   # if a list provided, extract the first element (model table)
   if(class(m) == "list"){
     # if provided a list, make sure it has the correct names for elements
@@ -42,7 +43,7 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T
   }
   
   if(is.null(m$shape)){
-    m$shape <- 'rectangle'
+    m$shape <- shape
   }
   # Define nodes
   vs <- paste0(
@@ -72,31 +73,39 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T
     do.call(rbind,.) %>% 
     distinct() %>% 
     filter(from %in% m$id) # make sure that use only the ids in nodes table
-  
-  # Make the figure -----------
-  ## Static figure ------------
-  if(static){
-    es <- paste0(es$from, ' -> ', es$to, ';\n ') %>% paste(., collapse = '\n ')
     
-    DiagrammeR::grViz(diagram = paste0(
-      "digraph flowchart {
+  if(edgetbl){
+    return(es)
+  }else{
+    # Make the figure -----------
+    ## Static figure ------------
+    if(static){
+      es <- paste0(es$from, ' -> ', es$to, ';\n ') %>% paste(., collapse = '\n ')
+      # TODO: add warning if no shape matches the options
+      # if(!shape %in% c("box", "diamond", "plaintext", "Mrecord", "point", "house", "invtriangle", "doublecircle")){
+      #   warning("Specified shape not part of the options, options include: 'box', 'diamond', 'plaintext', 'Mrecord', 'point', 'house', 'invtriangle', 'doublecircle'")
+      # }
+      DiagrammeR::grViz(diagram = paste0(
+        "digraph flowchart {
     node [
       fontname = arial,", 
-      "shape =", shape, 
-      ",style = filled, 
+        "shape =", shape, 
+        ",style = filled, 
       fontcolor =", fontColor,
-      "]\n ",
-      vs,
-      es,
-      "}",
-      sep = '\n'
-    ))
-  }else{
-    visNetwork::visNetwork(m, es) %>% 
-      visNetwork::visHierarchicalLayout(direction = "LR") %>% 
-      visNetwork::visOptions(manipulation = list(enabled = T,
-                                                 editNodeCols = c('id', 'label', 'type', 'level', 'distribution', 'formula'),
-                                                 addNodeCols = c('id', 'label', 'type', 'level', 'distribution', 'formula')))
+        "]\n ",
+        vs,
+        es,
+        "}",
+        sep = '\n'
+      ))
+    }else{
+      # TODO: add warning if no shape matches the options
+      visNetwork::visNetwork(m, es) %>% 
+        visNetwork::visHierarchicalLayout(direction = "LR") %>% 
+        visNetwork::visOptions(manipulation = list(enabled = edit,
+                                                   editNodeCols = c('id', 'label', 'type', 'level', 'distribution', 'formula'),
+                                                   addNodeCols = c('id', 'label', 'type', 'level', 'distribution', 'formula')))
+    }
   }
   
 }

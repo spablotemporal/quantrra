@@ -4,7 +4,14 @@
 \alias{ra_plot_tree}
 \title{Plot a model tree from a quantrra table}
 \usage{
-ra_plot_tree(m, fontColor = "black", shape = "rectangle", static = T)
+ra_plot_tree(
+  m,
+  fontColor = "black",
+  shape = "rectangle",
+  static = T,
+  edit = F,
+  edgetbl = F
+)
 }
 \arguments{
 \item{m}{Model table with columns id, label, type, distribution and formula see examples.}
@@ -14,6 +21,8 @@ ra_plot_tree(m, fontColor = "black", shape = "rectangle", static = T)
 \item{shape}{shape of the nodes, options are the same from the DiagrammeR library: ellipse, oval, diamond, egg, plaintext, point, square, triangle}
 
 \item{static}{if TRUE, the figure will be created with DiagrammeR for a static visualization. When FALSE, visNetwork is used for a dynamic visualization}
+
+\item{edgetbl}{if TRUE, return a table of edges for visualization purposes}
 }
 \value{
 a grViz/htmlwidget figure representing the risk assessment tree
