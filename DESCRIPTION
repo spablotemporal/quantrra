@@ -1,6 +1,6 @@
 Package: quantrra
 Title: A library for Reproducible Risk Assessment with R
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     person(given = "Jose Pablo",
            family = "Gomez-Vazquez",
