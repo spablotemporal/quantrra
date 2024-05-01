@@ -4,12 +4,12 @@
 \alias{ra_run_strat}
 \title{Run a stratified model.}
 \usage{
-ra_run_strat(m, tbl, nsim, full = F, simplify = T)
+ra_run_strat(m, tbl = NULL, nsim, full = F, simplify = T)
 }
 \arguments{
-\item{m}{Model file}
+\item{m}{Model file. If model file provided as a list, must contain named elements for the 'model' and 'stratified' tables. else a data frame containing a mode table can be provided, if this is the case, the argument tbl must include a data.frame that represents the stratified table}
 
-\item{tbl}{Table with parameters per strata}
+\item{tbl}{Table with parameters per strata, if model provided as named list, this is not required}
 
 \item{nsim}{Number of simulations}
 }

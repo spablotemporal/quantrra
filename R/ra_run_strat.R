@@ -3,8 +3,8 @@
 #' The stratified model uses a different set of parameters for each starta with the intention to account for population heterogeneity. 
 #' A strata represents different ways of grouping the target population. I.e. estimate the risk for different age groups, regions, or other groups to account for the population heterogeneity.
 #' 
-#' @param m Model file
-#' @param tbl Table with parameters per strata
+#' @param m Model file. If model file provided as a list, must contain named elements for the 'model' and 'stratified' tables. else a data frame containing a mode table can be provided, if this is the case, the argument tbl must include a data.frame that represents the stratified table
+#' @param tbl Table with parameters per strata, if model provided as named list, this is not required
 #' @param nsim Number of simulations
 #' @return data frame with mean, and 95% percentiles for each of the output nodes
 #' @examples
@@ -14,10 +14,18 @@
 #' 
 #' @export
 
-ra_run_strat <- function(m, tbl, nsim, full = F, simplify = T){
+ra_run_strat <- function(m, tbl = NULL, nsim, full = F, simplify = T){
   # m = m; Tbl = ct_s; nsim = 100
-  
-  tbl <- data.frame(tbl) # Make sure its a dataframe (not tibble or other format)
+  if(!is.null(tbl)){
+    tbl <- data.frame(tbl) # Make sure its a dataframe (not tibble or other format) 
+  }else{
+    if(!("stratified" %in% names(m))){
+      stop("Make sure to provide the model file in the correct format. Must be a list that includes the model table and the stratified table with specified names")
+    }else{
+      tbl <- m$stratified
+      m <- m$model
+    }
+  }
   # Reformat the strata data:
   tbl_t <- tbl[,-1] %>% 
     t() %>%
