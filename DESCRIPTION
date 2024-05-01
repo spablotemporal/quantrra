@@ -11,7 +11,7 @@ Description: A library for Risk Assessment
 License: What license it uses
 Encoding: UTF-8
 LazyData: true
-Depends: dplyr, DiagrammeR, ggplot2, ggpubr, invgamma, mc2d, openxlsx, plotly, randomForest, rlang, rpart, rpart.plot, shiny, sparkline, visNetwork, writexl
+Depends: dplyr, DiagrammeR, ggplot2, ggpubr, invgamma, mc2d, openxlsx, plotly, randomForest, rlang, rpart, rpart.plot, shiny, shinyWidgets, sparkline, visNetwork, writexl
 VignetteBuilder: knitr
 Suggests: knitr, rmarkdown
 RoxygenNote: 7.2.3

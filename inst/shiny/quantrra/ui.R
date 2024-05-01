@@ -82,7 +82,7 @@ body <- dashboardBody(
                                 DTOutput("nodes"),
                                 'If you want to save your model to continue working on it later or to share it, you can download the file here:',
                                 br(),
-                                downloadButton('downloadData', 'Download Table'),
+                                # downloadButton('downloadData', 'Download Table'),
                                 downloadButton("dl", "Download"),
                                 actionButton(inputId = 'reset', label = 'Clear Table', icon = icon("exclamation-triangle"))),
                             ### Model Tree -------------
