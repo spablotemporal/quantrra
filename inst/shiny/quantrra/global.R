@@ -25,13 +25,16 @@ library(visNetwork)
 library(DT)
 library(quantrra)
 library(sf)
+library(shinyWidgets)
+library(writexl)
+# library(openxlsx)
 # library(rgdal)
 
 DFs <- NULL
 
 source('Documentation.R')
 init_nodes <- read.csv(unz('www/M_1.zip', 'nodes.csv'))
-init_edges <- read.csv(unz('www/M_1.zip', 'edges.csv'))
+# init_edges <- read.csv(unz('www/M_1.zip', 'edges.csv'))
 
 # functions ----------
 # Function for undefined fields

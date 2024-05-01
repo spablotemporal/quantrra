@@ -1,53 +1,68 @@
 # Server --------
-function(input, output){
-  # Create empty reactive values
-  Graph <- reactiveValues(
-    nodes = init_nodes,
-    edges = ra_plot_tree(init_nodes, edgetbl = T)
+function(input, output, session){
+  # Create empty reactive values -----------
+  rv <- reactiveValues(
+    model = init_nodes, # Nodes
+    edges = ra_plot_tree(init_nodes, edgetbl = T), # Edges
+    stratified = NULL,
+    res = NULL # Empty table for results
   )
   
-  proxy = dataTableProxy('nodes')
   
-  # read from zip
+  proxy = dataTableProxy('modelTbl')
+  
+  # read from file -----------
   observeEvent(input$upload, {
     im <- ra_import(input$upload$datapath)
-    Graph$nodes <- im$nodes
-    Graph$edges <- im$edges
-    # Graph$nodes <- read.csv(unz(input$upload$datapath, 'nodes.csv'))
-    # Graph$edges <- read.csv(unz(input$upload$datapath, 'edges.csv'))
+    rv$model <- im$model
+    rv$stratified <- im$stratified
+    rv$edges <- ra_plot_tree(im$model, edgetbl = T)
   })
   
-  # Make the edits to the data
+  ## Make the edits to the table -------------
   observeEvent(input$nodes_cell_edit,{
-    Graph$nodes <- editData(Graph$nodes, input$nodes_cell_edit, 'nodes')
+    rv$model <- editData(rv$model, input$nodes_cell_edit, 'modelTbl')
+  })
+  
+  ## Add a row ------------
+  observeEvent(input$newAdd,{
+    nn <- data.frame(
+      id = input$newid,
+      label = input$newLab,
+      type = input$newType,
+      level = max(rv$model$level),
+      distribution = ifelse(input$newType == "In", input$newDist, NA),
+      formula = ifelse(input$newType == "Out", input$newFormula, NA),
+      shape = 'box',
+      stringsAsFactors = F
+    ) %>% 
+      mutate(
+        type = tolower(type),
+        color = ifelse(type == 'in', "#A0F0A0", '#F0A0A0'),
+      )
+    
+    rv$model <- rbind(rv$model, nn)
+    
+    updateTextInput(inputId = "newid", value = "")
+    updateTextInput(inputId = "newLab", value = "")
+    updateSelectInput(inputId = "newType", selected = "In")
+    updateTextInput(inputId = "newDist", value = "")
+    updateTextInput(inputId = "newFormula", value = "")
+    
+    sendSweetAlert(
+      session = session,
+      title = "Node added",
+      # text = "All in order",
+      type = "success"
+    )
   })
   
   ## Run the model -------
   observeEvent(input$Run,{
     showModal(modalDialog("Runing the model...", footer = NULL))
-  })
-  Df <- eventReactive(input$Run, {
-    ra_run(m = Graph$nodes, input$Nsim)
-  })
-  observeEvent(Df(),{
+    rv$res <- ra_run(m = rv$model, input$Nsim)
+    
     removeModal()
-  })
-  
-  # We should add a message box here to show the process
-  # observeEvent(input$Run, {
-  #   showModal(modalDialog("Running model...", footer=NULL, easyClose = F))
-  #   RRA(M = Graph$nodes, input$Nsim)
-  # })
-  # 
-  # observeEvent(Df(), {
-  #   removeModal()
-  # })
-  
-  
-  
-  ## Read Data for strat -------
-  Strat <- reactive({
-    im <- ra_import(input$upload$datapath)$stratified
   })
   
   # in server()
@@ -95,14 +110,14 @@ function(input, output){
     showModal(modalDialog("Runing the model...", footer = NULL))
   })
   DFs <- eventReactive(input$RunStratified, {
-    quantrra::ra_run_strat(m = Graph$nodes, tbl = Strat(), nsim = input$Nsim)
+    quantrra::ra_run_strat(m = rv$model, tbl = rv$stratified, nsim = input$Nsim)
   })
   observeEvent(DFs(),{
     removeModal()
   })
   
   output$Outcomes_s <- renderUI({
-    opts <- Graph$nodes %>% 
+    opts <- rv$model %>% 
       filter(type == 'Out') %>% 
       pull(id)
     
@@ -117,7 +132,7 @@ function(input, output){
   SA <- eventReactive(input$RunSA, {
     f <- paste(input$DepVars, collapse = '+')
     f <- paste0(input$Outcomes, '~', f)
-    quantrra::ra_gsa(data = Df(), f = eval(parse(text = f)), tree = 'interactive')
+    quantrra::ra_gsa(data = rv$res, f = eval(parse(text = f)), tree = 'interactive')
   })
   
   observeEvent(SA(), {
@@ -126,27 +141,26 @@ function(input, output){
   
   ## Clear table -------
   observeEvent(input$reset,{
-    Graph$nodes = data.frame(id = "N1",
-                             label = "Node 1",
-                             type = 'In',
-                             level = 0,
-                             distribution = 'Pert(0.1, 0.01, 0.5)',
-                             formula = 'x',
-                             shape = 'box',
-                             color = 'lightgrey',
-                             stringsAsFactors = F)
+    rv$model = data.frame(
+      id = c("I1", "O1"),
+      label = c("Input 1", "Output 1"),
+      type = c("In", "Out"),
+      level = c(0, 1),
+      distribution = c("Pert(0.1, 0.15, 0.5)", NA),
+      formula = c(NA, "I1"),
+      shape = 'box',
+      color = c("#A0F0A0", "#F0A0A0"),
+      stringsAsFactors = F
+    )
     
-    Graph$edges = data.frame(id = "Edge",
-                             from = "N1", 
-                             to = "N2",
-                             stringsAsFactors = F)
+    rv$edges = ra_plot_tree(rv$model, edgetbl = T)
   })
   
   ## Outputs --------
   ### Nodes ---------
   # Render the table showing all the nodes in the graph.
   output$nodes <- renderDT({
-    Graph$nodes %>% 
+    rv$model %>% 
       select(c('id', 'label', 'type', 'level', 'distribution', 'formula')) %>%
       DT::datatable(data = .,
                     # rownames = F,
@@ -155,7 +169,7 @@ function(input, output){
   
   ### Output table -----------
   output$MTbl <- renderDT({
-    Df() %>%
+    rv$res %>%
       data.frame() %>%
       DT::datatable(data = .,
                     rownames = F)
@@ -163,122 +177,56 @@ function(input, output){
   
   ### Render the graph.------------
   output$ModelTree <- renderVisNetwork({
-    n <- Graph$nodes %>% 
+    n <- rv$model %>% 
       mutate(title = paste0('ID: ', id, 
                             "<br>Name: ", label))
-    visNetwork(n, Graph$edges) %>%
-      visHierarchicalLayout(direction = "LR") %>%
-      visOptions(manipulation = list(enabled = T,
-                                     editNodeCols = c('id', 'label', 'type', 'level', 'distribution', 'formula'),
-                                     addNodeCols = c('id', 'label', 'type', 'level', 'distribution', 'formula')))
     
-  })
-  
-  # If the user edits the graph, this shows up in
-  # `input$[name_of_the_graph_output]_graphChange`.  This is a list whose
-  # members depend on whether the user added a node or an edge.  The "cmd"
-  # element tells us what the user did.
-  observeEvent(input$ModelTree_graphChange, {
-    # If the user added a node, add it to the data frame of nodes.
-    if(input$ModelTree_graphChange$cmd == "addNode") {
-      temp = bind_rows(
-        Graph$nodes,
-        data.frame(id = input$ModelTree_graphChange$id,
-                   label = input$ModelTree_graphChange$label,
-                   type = undf(input$ModelTree_graphChange$type),
-                   level = undf(as.numeric(input$ModelTree_graphChange$level), 0),
-                   distribution = undf(input$ModelTree_graphChange$distribution),
-                   formula = undf(input$ModelTree_graphChange$formula),
-                   shape = 'box',
-                   stringsAsFactors = F) %>% 
-          mutate(color = ifelse(type == 'In', "#50A051", '#FF918F'),
-                 formula = ifelse(type == 'In', NA, formula),
-                 distribution = ifelse(type == 'Out', NA, distribution))
-      )
-      Graph$nodes = temp %>% 
-        arrange(level)
-    }
-    # If the user added an edge, add it to the data frame of edges.
-    else if(input$ModelTree_graphChange$cmd == "addEdge") {
-      temp = bind_rows(
-        Graph$edges,
-        data.frame(id = input$ModelTree_graphChange$id,
-                   from = input$ModelTree_graphChange$from,
-                   to = input$ModelTree_graphChange$to,
-                   stringsAsFactors = F)
-      )
-      Graph$edges = temp
-    }
-    # If the user edited a node, update that record.
-    else if(input$ModelTree_graphChange$cmd == "editNode") {
-      temp = Graph$nodes
-      temp$label[temp$id == input$ModelTree_graphChange$id] = input$ModelTree_graphChange$label
-      temp$type[temp$id == input$ModelTree_graphChange$id] = input$ModelTree_graphChange$type
-      temp$level[temp$id == input$ModelTree_graphChange$id] = input$ModelTree_graphChange$level
-      temp$distribution[temp$id == input$ModelTree_graphChange$id] = input$ModelTree_graphChange$distribution
-      temp$formula[temp$id == input$ModelTree_graphChange$id] = input$ModelTree_graphChange$formula
-      Graph$nodes = temp %>% 
-        arrange(level)
-    }
-    # If the user edited an edge, update that record.
-    else if(input$ModelTree_graphChange$cmd == "editEdge") {
-      temp = Graph$edges
-      temp$from[temp$id == input$ModelTree_graphChange$id] = input$ModelTree_graphChange$from
-      temp$to[temp$id == input$ModelTree_graphChange$id] = input$ModelTree_graphChange$to
-      Graph$edges = temp
-    }
-    # If the user deleted something, remove those records.
-    else if(input$ModelTree_graphChange$cmd == "deleteElements") {
-      for(node.id in input$ModelTree_graphChange$nodes) {
-        temp = Graph$nodes
-        temp = temp[temp$id != node.id,]
-        Graph$nodes = temp %>% 
-          arrange(level)
-      }
-      for(edge.id in input$ModelTree_graphChange$edges) {
-        temp = Graph$edges
-        temp = temp[temp$id != edge.id,]
-        Graph$edges = temp
-      }
-    }
+    e <- ra_plot_tree(n, edgetbl = T)
+    
+    visNetwork(n, e) %>%
+      visHierarchicalLayout(direction = "LR")
+    
   })
   
   ### P4 -----------
   output$P4 <- renderPlotly({
-    # Filter only outputs
-    o <- Graph$nodes %>% 
-      filter(type == 'Out')
-    
-    if(nrow(o) > 1){
-      PL <- lapply(1:nrow(o), function(x){
-        # x <- 1
-        p <- Df() %>% 
+    if(!is.null(rv$res)){
+      # Filter only outputs
+      o <- rv$model %>% 
+        filter(type == 'Out')
+      
+      if(nrow(o) > 1){
+        PL <- lapply(1:nrow(o), function(x){
+          # x <- 1
+          p <- rv$res %>% 
+            ggplot() +
+            geom_histogram(aes_string(o$id[x]), fill = 'red4') +
+            geom_vline(data = data.frame(m = round(quantile(rv$res[,o$id[x]], 0.5), 4)), aes(xintercept = m), lty = 1, lwd = 1, col = 'grey20') +
+            labs(title = paste0(o$id[x], ': ', o$label[x])) +
+            theme_minimal()
+          
+          ggplotly(p)
+        })
+        
+        subplot(PL, nrows = 2)
+      }else{
+        p <- rv$res %>% 
           ggplot() +
-          geom_histogram(aes_string(o$id[x]), fill = 'red4') +
-          geom_vline(data = data.frame(m = round(quantile(Df()[,o$id[x]], 0.5), 4)), aes(xintercept = m), lty = 1, lwd = 1, col = 'grey20') +
-          labs(title = paste0(o$id[x], ': ', o$label[x])) +
+          geom_histogram(aes_string(o$id), fill = 'red4') +
+          geom_vline(data = data.frame(m = round(quantile(rv$res[,o$id], 0.5), 4)), aes(xintercept = m), lty = 1, lwd = 1, col = '#904444') +
+          labs(title = paste0(o$id, ': ', o$label)) +
           theme_minimal()
         
         ggplotly(p)
-      })
-      
-      subplot(PL, nrows = 2)
-    }else{
-      p <- Df() %>% 
-        ggplot() +
-        geom_histogram(aes_string(o$id), fill = 'red4') +
-        geom_vline(data = data.frame(m = round(quantile(Df()[,o$id], 0.5), 4)), aes(xintercept = m), lty = 1, lwd = 1, col = '#904444') +
-        labs(title = paste0(o$id, ': ', o$label)) +
-        theme_minimal()
-      
-      ggplotly(p)
+      }
     }
+    
   })
   
   
   ### Strat outputs -----------
   output$InData <- renderDT({
-    Strat() %>% 
+    rv$stratified %>% 
       DT::datatable(data = ., options = list(pageLength = 5))
   })
   
@@ -313,25 +261,13 @@ function(input, output){
   })
   
   ## Downloads -------
-  # Download the tree
-  output$downloadData <- downloadHandler(
-    filename = function() {'Model.zip'},
-    content = function(file) {
-      tmpdir <- tempdir()
-      setwd(tempdir())
-      print(tempdir())
-      
-      fs <- c('nodes.csv', 'edges.csv')
-      write.csv(data.frame(Graph$nodes), file = 'nodes.csv', row.names = FALSE)
-      write.csv(data.frame(Graph$edges[-1,]), file = 'edges.csv', row.names = FALSE)
-      print(fs)
-      
-      zip(zipfile=file, files=fs)
-      if(file.exists(paste0(file, ".zip"))) {file.rename(paste0(file, ".zip"), file)}
-      
-    },
-    contentType = "application/zip"
+  ### In xlsx
+  
+  output$dl <- downloadHandler(
+    filename = function() { "model.xlsx"},
+    content = function(file) {write_xlsx(list(model = rv$model), path = file)}
   )
+  
   # Example files ------------------------
   ## OIRSA ----------
   output$downloadOIRSA <- downloadHandler(
@@ -359,12 +295,12 @@ function(input, output){
   
   ## Outcomes
   output$Outcomes <- renderUI({
-    opts <- colnames(Df())
+    opts <- colnames(rv$res)
     selectInput(inputId = 'Outcomes', label = 'Outcomes', opts, selected = opts[length(opts)])
   })
   ## Dependent vars
   output$DepVar <- renderUI({
-    opts <- colnames(Df())
+    opts <- colnames(rv$res)
     selectInput('DepVars', 'Dependent Variables', opts, multiple = T, selected = opts[1:(length(opts) - 1)])
   })
 } %>% shinyServer() 

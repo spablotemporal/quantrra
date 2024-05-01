@@ -37,10 +37,53 @@ body <- dashboardBody(
                             box(title = 'Model table', width = 12, collapsible = T,
                                 'To start, you need to specify the model. Models can be constructed directly from the app using the network tools in the following section, or can be uploaded from a model file previosly created.',
                                 fileInput("upload", "Upload a model file", accept = c(".zip", ".xlsx")),
+                                # add dropdown button ----------
+                                dropdownButton(
+                                  tags$h3("Add node"), size = "sm",
+                                  textInput(
+                                    inputId = "newid",
+                                    label = "Id"
+                                  ),
+                                  textInput(
+                                    inputId = "newLab",
+                                    label = "Label"
+                                  ),
+                                  selectInput(
+                                    inputId = "newType",
+                                    label = "Type",
+                                    choices = c("In", "Out")
+                                  ),
+                                  conditionalPanel(
+                                    condition = "input.newType == 'In'",
+                                    textInput(
+                                      inputId = "newDist",
+                                      label = "Distribution"
+                                    )
+                                  ),
+                                  conditionalPanel(
+                                    condition = "input.newType == 'Out'",
+                                    textInput(
+                                      inputId = "newFormula",
+                                      label = "Formula"
+                                    )
+                                  ),
+                                  shinyWidgets::actionBttn(
+                                    inputId = "newAdd",
+                                    label = "Add node",
+                                    color = "success"
+                                  ),
+                                  
+                                  circle = TRUE, status = "success",
+                                  icon = icon("plus"), width = "150px",
+                                  
+                                  tooltip = tooltipOptions(title = "Click to add nodes")
+                                ),
+                                # Add the model table ------------
                                 DTOutput("nodes"),
                                 'If you want to save your model to continue working on it later or to share it, you can download the file here:',
                                 br(),
                                 downloadButton('downloadData', 'Download Table'),
+                                downloadButton("dl", "Download"),
                                 actionButton(inputId = 'reset', label = 'Clear Table', icon = icon("exclamation-triangle"))),
                             ### Model Tree -------------
                             box(title = 'Model Tree', width = 12, 
@@ -58,8 +101,9 @@ body <- dashboardBody(
                                 numericInput('Nsim', 'Number of simulations',
                                              min = 1, value = 5000, width = '60%'),
                                 actionButton(inputId = 'Run', label = 'Run model'),
-                                # DTOutput("MTbl"),
-                                plotlyOutput('P4'))
+                                # DTOutput("MTbl")
+                                plotlyOutput('P4')
+                                )
             ))
     ),
     ## Sensitivity analysis tab -------
