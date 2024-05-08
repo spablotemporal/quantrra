@@ -39,6 +39,9 @@ ra_export <- function(m, dir = 'model', file = 'model', format = "xlsx"){
     unlink(dir, recursive = T) # delete directory used for zip file
   }else if(format == "xlsx"){
     # Export to xlsx format -----------
+    if(!is.list(m)){
+      m <- list(model = m)
+    }
     openxlsx::write.xlsx(x = m, file = paste0(file, ".xlsx"))
   }
 }
