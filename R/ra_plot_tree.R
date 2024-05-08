@@ -9,6 +9,8 @@
 #' @param shape shape of the nodes, options are the same from the DiagrammeR library: ellipse, oval, diamond, egg, plaintext, point, square, triangle
 #' @param static if TRUE, the figure will be created with DiagrammeR for a static visualization. When FALSE, visNetwork is used for a dynamic visualization
 #' @param edgetbl if TRUE, return a table of edges for visualization purposes
+#' @param fitlabels if TRUE, automatically add breaks to fit the label bsed on the maxchar argument
+#' @param maxchar when fitlables = TRUE, maximum number of characters before the breaks
 #' @return a grViz/htmlwidget figure representing the risk assessment tree
 #' @examples
 #' # Use one of the examples from the library
@@ -17,7 +19,7 @@
 #' 
 #' @export
 
-ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T, edit = F, edgetbl = F){
+ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T, edit = F, edgetbl = F, fitlabels = T, maxchar = 10){
   # if a list provided, extract the first element (model table)
   if(class(m) == "list"){
     # if provided a list, make sure it has the correct names for elements
@@ -44,6 +46,13 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T
   
   if(is.null(m$shape)){
     m$shape <- shape
+  }
+  # If name is too long, automatically create the breaks
+  if(fitlabels){
+    m <- m %>% 
+      mutate(
+        label = sapply(strwrap(label, maxchar, simplify=FALSE), paste, collapse="\n" )
+      )
   }
   # Define nodes
   vs <- paste0(

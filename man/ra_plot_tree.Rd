@@ -10,7 +10,9 @@ ra_plot_tree(
   shape = "rectangle",
   static = T,
   edit = F,
-  edgetbl = F
+  edgetbl = F,
+  fitlabels = T,
+  maxchar = 10
 )
 }
 \arguments{
@@ -23,6 +25,10 @@ ra_plot_tree(
 \item{static}{if TRUE, the figure will be created with DiagrammeR for a static visualization. When FALSE, visNetwork is used for a dynamic visualization}
 
 \item{edgetbl}{if TRUE, return a table of edges for visualization purposes}
+
+\item{fitlabels}{if TRUE, automatically add breaks to fit the label bsed on the maxchar argument}
+
+\item{maxchar}{when fitlables = TRUE, maximum number of characters before the breaks}
 }
 \value{
 a grViz/htmlwidget figure representing the risk assessment tree
