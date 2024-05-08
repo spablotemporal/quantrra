@@ -101,8 +101,8 @@ body <- dashboardBody(
                                   radioGroupButtons(
                                     inputId = "gdir",
                                     label = "Direction: ",
-                                    choices = c("Left-right" = "LR", "Right-Left" = "RL", "Up-down" = "UD", "Down-Up" = "DU"),
-                                    selected = "Left-Right",
+                                    choices = c("Left-Right" = "LR", "Right-Left" = "RL", "Up-down" = "UD", "Down-Up" = "DU"),
+                                    selected = "LR",
                                     direction = "vertical"
                                   ),
                                   circle = TRUE, status = "success",
