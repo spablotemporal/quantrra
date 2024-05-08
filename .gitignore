@@ -8,3 +8,6 @@ misc/
 inst/doc
 /doc/
 /Meta/
+
+# exclude the cpp files for now
+cpp/ 
