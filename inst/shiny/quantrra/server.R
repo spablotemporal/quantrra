@@ -185,7 +185,7 @@ function(input, output, session){
       mutate(title = paste0('ID: ', id, 
                             "<br>Name: ", label))
     
-    ra_plot_tree(n, static = F)
+    ra_plot_tree(n, static = F, direction = input$gdir)
   })
   
   ### P4 -----------

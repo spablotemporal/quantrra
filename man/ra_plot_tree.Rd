@@ -12,7 +12,8 @@ ra_plot_tree(
   edit = F,
   edgetbl = F,
   fitlabels = T,
-  maxchar = 10
+  maxchar = 10,
+  direction = "LR"
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ ra_plot_tree(
 \item{fitlabels}{if TRUE, automatically add breaks to fit the label bsed on the maxchar argument}
 
 \item{maxchar}{when fitlables = TRUE, maximum number of characters before the breaks}
+
+\item{direction}{direction for the visualization when using visNetwork interactive, options include: UD, DU, LR, RL; corresponding to: up-down, down-up, left-right, and right-left, respectively}
 }
 \value{
 a grViz/htmlwidget figure representing the risk assessment tree

@@ -37,7 +37,7 @@ body <- dashboardBody(
                             box(title = 'Model table', width = 12, collapsible = T,
                                 'To start, you need to specify the model. Models can be constructed directly from the app using the network tools in the following section, or can be uploaded from a model file previosly created.',
                                 fileInput("upload", "Upload a model file", accept = c(".zip", ".xlsx")),
-                                # add dropdown button ----------
+                                # dropdown for new nodes ----------
                                 dropdownButton(
                                   tags$h3("Add node"), size = "sm",
                                   textInput(
@@ -94,6 +94,22 @@ body <- dashboardBody(
                                 tags$li('Inputs: These nodes represent a distribution specified by the user. To specify a distribution, write the name of the distribution and its parameters, i.e. Pert(0.1, 0.01, 0.2). Current distributions supported include Normal, Binomial, Poisson and Pert'),
                                 tags$li('Outputs: These nodes will be calculated by the model based on the equation specified by the user.'),
                                 br(),
+                                # dropdown for graph options ----------
+                                dropdownButton(
+                                  tags$h3("Options"), size = "sm",
+                                  
+                                  radioGroupButtons(
+                                    inputId = "gdir",
+                                    label = "Direction: ",
+                                    choices = c("Left-right" = "LR", "Right-Left" = "RL", "Up-down" = "UD", "Down-Up" = "DU"),
+                                    selected = "Left-Right",
+                                    direction = "vertical"
+                                  ),
+                                  circle = TRUE, status = "success",
+                                  icon = icon("gear"), width = "150px",
+                                  
+                                  tooltip = tooltipOptions(title = "Click to see options")
+                                ),
                                 visNetworkOutput("ModelTree", height = "400px")),
                             ### Risk estimation ---------
                             box(title = 'Risk estimation', width = 12,

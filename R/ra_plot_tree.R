@@ -11,6 +11,7 @@
 #' @param edgetbl if TRUE, return a table of edges for visualization purposes
 #' @param fitlabels if TRUE, automatically add breaks to fit the label bsed on the maxchar argument
 #' @param maxchar when fitlables = TRUE, maximum number of characters before the breaks
+#' @param direction direction for the visualization when using visNetwork interactive, options include: UD, DU, LR, RL; corresponding to: up-down, down-up, left-right, and right-left, respectively
 #' @return a grViz/htmlwidget figure representing the risk assessment tree
 #' @examples
 #' # Use one of the examples from the library
@@ -19,7 +20,7 @@
 #' 
 #' @export
 
-ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T, edit = F, edgetbl = F, fitlabels = T, maxchar = 10){
+ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T, edit = F, edgetbl = F, fitlabels = T, maxchar = 10, direction = "LR"){
   # if a list provided, extract the first element (model table)
   if(class(m) == "list"){
     # if provided a list, make sure it has the correct names for elements
@@ -110,7 +111,7 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T
     }else{
       # TODO: add warning if no shape matches the options
       visNetwork::visNetwork(m, es) %>% 
-        visNetwork::visHierarchicalLayout(direction = "LR") %>% 
+        visNetwork::visHierarchicalLayout(direction = direction) %>% 
         visNetwork::visOptions(manipulation = list(enabled = edit,
                                                    editNodeCols = c('id', 'label', 'type', 'level', 'distribution', 'formula'),
                                                    addNodeCols = c('id', 'label', 'type', 'level', 'distribution', 'formula')))
