@@ -3,7 +3,7 @@ function(input, output, session){
   # Create empty reactive values -----------
   rv <- reactiveValues(
     model = init_nodes, # Nodes
-    edges = ra_plot_tree(init_nodes, edgetbl = T), # Edges
+    # edges = ra_plot_tree(init_nodes, edgetbl = T), # Edges
     stratified = NULL,
     res = NULL # Empty table for results
   )
@@ -16,12 +16,16 @@ function(input, output, session){
     im <- ra_import(input$upload$datapath)
     rv$model <- im$model
     rv$stratified <- im$stratified
-    rv$edges <- ra_plot_tree(im$model, edgetbl = T)
+    # rv$edges <- ra_plot_tree(im$model, edgetbl = T)
   })
   
   ## Make the edits to the table -------------
   observeEvent(input$nodes_cell_edit,{
-    rv$model <- editData(rv$model, input$nodes_cell_edit, 'modelTbl')
+    rv$model <- editData(rv$model, input$nodes_cell_edit, 'modelTbl') %>% 
+      mutate(
+        type = tolower(type),
+        color = ifelse(type == 'in', "#A0F0A0", '#F0A0A0'),
+      )
   })
   
   ## Add a row ------------
@@ -153,7 +157,7 @@ function(input, output, session){
       stringsAsFactors = F
     )
     
-    rv$edges = ra_plot_tree(rv$model, edgetbl = T)
+    # rv$edges = ra_plot_tree(rv$model, edgetbl = T)
   })
   
   ## Outputs --------
@@ -181,11 +185,7 @@ function(input, output, session){
       mutate(title = paste0('ID: ', id, 
                             "<br>Name: ", label))
     
-    e <- ra_plot_tree(n, edgetbl = T)
-    
-    visNetwork(n, e) %>%
-      visHierarchicalLayout(direction = "LR")
-    
+    ra_plot_tree(n, static = F)
   })
   
   ### P4 -----------
