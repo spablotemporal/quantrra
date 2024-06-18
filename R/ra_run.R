@@ -59,7 +59,10 @@ ra_run <- function(m, nsim){
   for (x in 1:nrow(o)) {
     df <-  df %>% 
       rowwise() %>% # Make sure operations are made per row
-      mutate(!!o$id[x] := !!parse_quo(o$formula[x], env = caller_env()))
+      mutate(
+        !!o$id[x] := !!parse_quo(o$formula[x], env = caller_env()),
+        sim = 1:n()
+      )
   }
   
   return(data.frame(df))

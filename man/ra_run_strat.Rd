@@ -12,6 +12,8 @@ ra_run_strat(m, tbl = NULL, nsim, full = F, simplify = T)
 \item{tbl}{Table with parameters per strata, if model provided as named list, this is not required}
 
 \item{nsim}{Number of simulations}
+
+\item{simplify}{Whether or not the output will be simplified. When simplify = T, the function will return a data.frame with the median and 95 quantiles of the results. When simplify = F, the output will return a list of data.frames corresponding to each of the strata in the model}
 }
 \value{
 data frame with mean, and 95% percentiles for each of the output nodes

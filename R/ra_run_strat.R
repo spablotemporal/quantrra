@@ -6,6 +6,7 @@
 #' @param m Model file. If model file provided as a list, must contain named elements for the 'model' and 'stratified' tables. else a data frame containing a mode table can be provided, if this is the case, the argument tbl must include a data.frame that represents the stratified table
 #' @param tbl Table with parameters per strata, if model provided as named list, this is not required
 #' @param nsim Number of simulations
+#' @param simplify Whether or not the output will be simplified. When simplify = T, the function will return a data.frame with the median and 95 quantiles of the results. When simplify = F, the output will return a list of data.frames corresponding to each of the strata in the model
 #' @return data frame with mean, and 95% percentiles for each of the output nodes
 #' @examples
 #' # use one of the example models
