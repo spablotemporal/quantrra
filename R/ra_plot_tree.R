@@ -31,7 +31,7 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T
     }
   }
   # Make sure a valid variables area provided
-  cn <- c("id", "label", "type", "distribution", "formula")
+  cn <- c("id", "label", "type", "formula")
   if (any(!cn %in% colnames(m))){
     stop("Provide valid variable names. Model file must include variables that specify the id, label, type, distribution and formula see examples")
   }
