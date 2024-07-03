@@ -13,6 +13,8 @@
 #' @examples
 #' ra_sample(x = 'pert(0.01,  0.03, 0.64)', n = 10)
 
+# TODO: Add an option for a 4th value on the pert distribution for the shape of dist
+
 ra_sample <- function(x, n, full = F){
   dist <- list()
   # identify distribution (first element of the list)
@@ -28,7 +30,7 @@ ra_sample <- function(x, n, full = F){
   }
   # Sample from distribution
   xi <- switch (dist$distribution,
-                pert = {mc2d::rpert(n = n, min = dist$parameters[1], mode = dist$parameters[2], max = dist$parameters[3])},
+                pert = {mc2d::rpert(n = n, min = dist$parameters[1], mode = dist$parameters[2], max = dist$parameters[3], shape = ifelse(is.na(dist$parameters[4]), 4, dist$parameters[4]))},
                 binom = ,binomial = {rbinom(n = n, size = dist$parameters[1], prob = dist$parameters[2])},
                 tri =, triangle =, triang = { mc2d::rtriang(n = n, min = dist$parameters[1], mode = dist$parameters[2], max = dist$parameters[3])},
                 poi =, poisson = {rpois(n = n, lambda = dist$parameters[1])},
