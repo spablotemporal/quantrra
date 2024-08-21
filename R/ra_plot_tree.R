@@ -70,7 +70,7 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T
     select(id, formula) %>% 
     pull(formula, id) %>% 
     lapply(., function(x){
-      strsplit(x, "[^[:alnum:]]+") %>% 
+      strsplit(x, "[^[:alnum:]_]+") %>% 
         unlist()
     })
   
