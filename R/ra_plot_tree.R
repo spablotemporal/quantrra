@@ -27,6 +27,23 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T
     if(!"model" %in% names(m)){
       stop("When providing a list, make sure to include the elements correctly named")
     }else{
+      
+      # detect if parameter table is included
+      if("par" %in% names(m)){
+        mpar <- m$par
+        # get the choices for each node
+        choices <- mpar %>% split(.$id) %>% 
+          lapply(., function(x){
+            paste(x$choice, collapse = "<br>")
+          }) %>% unlist() %>% 
+          data.frame(id = names(.), title = .)
+        
+        m$model <- m$model %>% left_join(choices, by = "id")
+        
+        # join choices with model file 
+      }else{
+        mpar <- NULL
+      }
       m <- m$model
     }
   }
@@ -52,7 +69,8 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T
   if(fitlabels){
     m <- m %>% 
       mutate(
-        label = sapply(strwrap(label, maxchar, simplify=FALSE), paste, collapse="\n" )
+        label = sapply(strwrap(label, maxchar, simplify=FALSE), paste, collapse="\n" ),
+        title = paste("Options include: <br>", title)
       )
   }
   # Define nodes
@@ -108,8 +126,9 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T
         "}",
         sep = '\n'
       ))
-    }else{
+    }else{ # if not static make the figure with visNetwork
       # TODO: add warning if no shape matches the options
+      # TODO: Add a tooltip for the description of nodes
       visNetwork::visNetwork(m, es) %>% 
         visNetwork::visHierarchicalLayout(direction = direction) %>% 
         visNetwork::visOptions(manipulation = list(enabled = edit,
