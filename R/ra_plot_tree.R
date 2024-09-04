@@ -27,7 +27,6 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T
     if(!"model" %in% names(m)){
       stop("When providing a list, make sure to include the elements correctly named")
     }else{
-      
       # detect if parameter table is included
       if("par" %in% names(m)){
         mpar <- m$par
@@ -37,8 +36,9 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T
             paste(x$choice, collapse = "<br>")
           }) %>% unlist() %>% 
           data.frame(id = names(.), title = .)
-        
-        m$model <- m$model %>% left_join(choices, by = "id")
+        # Include the choices in the title:
+        m$model <- m$model %>% left_join(choices, by = "id") %>% 
+          mutate(title = paste("Options include: <br>", title))
         
         # join choices with model file 
       }else{
@@ -69,8 +69,7 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T
   if(fitlabels){
     m <- m %>% 
       mutate(
-        label = sapply(strwrap(label, maxchar, simplify=FALSE), paste, collapse="\n" ),
-        title = paste("Options include: <br>", title)
+        label = sapply(strwrap(label, maxchar, simplify=FALSE), paste, collapse="\n" )
       )
   }
   # Define nodes
