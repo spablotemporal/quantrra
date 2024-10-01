@@ -5,19 +5,41 @@ function(input, output, session){
     model = init_nodes, # Nodes
     # edges = ra_plot_tree(init_nodes, edgetbl = T), # Edges
     stratified = NULL,
-    res = NULL # Empty table for results
+    par = ra_model$par,
+    res = NULL, # Empty table for results
+    qual_nodes = data.frame(
+      id = character(),
+      label = character(),
+      type = character(),
+      level = character(),
+      distribution = character(),
+      formula =  character(),
+      input =  character(),
+      label_input =  character(),
+      stringsAsFactors = FALSE
+    )
   )
-  
   
   proxy = dataTableProxy('modelTbl')
   
-  # read from file -----------
+  ## Read file -----------
   observeEvent(input$upload, {
     im <- ra_import(input$upload$datapath)
-    rv$model <- im$model
+    rv$model <- im$model %>% 
+      mutate(distribution = as.character(distribution))
     rv$stratified <- im$stratified
-    # rv$edges <- ra_plot_tree(im$model, edgetbl = T)
+    rv$par <- im$par
+    
+    ### Update opts ---------
+    updateSelectInput(session = session, inputId = "par_id", choices = rv$model %>% filter(type %in% c("In", "in")) %>% pull(id))
   })
+  
+  # # read from file -----------
+  # observeEvent(input$upload, {
+  #   im <- ra_import(input$upload$datapath)
+  #   rv$model <- im$model
+  #   rv$stratified <- im$stratified
+  # })
   
   ## Make the edits to the table -------------
   observeEvent(input$nodes_cell_edit,{
@@ -163,12 +185,34 @@ function(input, output, session){
   ## Outputs --------
   ### Nodes ---------
   # Render the table showing all the nodes in the graph.
+  # output$nodes <- renderDT({
+  #   rv$model %>% 
+  #     select(c('id', 'label', 'type', 'level', 'distribution', 'formula')) %>%
+  #     DT::datatable(data = .,
+  #                   # rownames = F,
+  #                   editable = T)
+  # })
+  
+  ### Nodes ---------
+  # Render the table showing all the nodes in the graph.
   output$nodes <- renderDT({
     rv$model %>% 
       select(c('id', 'label', 'type', 'level', 'distribution', 'formula')) %>%
+      arrange(level) %>% 
+      DT::datatable(
+        data = .,
+        # rownames = F,
+        editable = T, options = list(dom = 'tp')
+      )
+  })
+  
+  ### Parameters ---------
+  # Render the table showing all the nodes in the graph.
+  output$parameters <- renderDT({
+    rv$par %>% 
       DT::datatable(data = .,
                     # rownames = F,
-                    editable = T)
+                    editable = T, options = list(dom = 'tp'))
   })
   
   ### Output table -----------
@@ -258,6 +302,26 @@ function(input, output, session){
   
   output$RT <- renderVisNetwork({
     SA()$RT
+  })
+  
+  ### Qualitative model -----------
+  output$treeplot_model <- renderVisNetwork({
+    
+    nodes <- NodesAdd() %>% 
+      rename(old_label = label) %>%
+      mutate(color = recode(type, Out = "#EE5C42", In = "#66CD00"),
+             shape = "box",
+             label = paste0(id, '\n', old_label)) %>%
+      select(-old_label) 
+    
+    edges <- EdgesAdd() %>%
+      select(from, to)
+    
+    visNetwork(nodes = nodes, edges = edges) %>% 
+      visEdges(arrows = "to", color = "black") %>% 
+      visPhysics(enabled = FALSE, solver = "hierarchicalRepulsion") %>%
+      visHierarchicalLayout(levelSeparation = input$Septree, direction = input$Dirtree, nodeSpacing = 200) %>%
+      visInteraction(navigationButtons = TRUE)
   })
   
   ## Downloads -------

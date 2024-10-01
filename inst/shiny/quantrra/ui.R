@@ -4,9 +4,10 @@ header$children[[2]]$children <-  tags$a(href='https://github.com/spablotemporal
 # Sidebar ---------
 sidebar <- dashboardSidebar(sidebarMenu(
   menuItem("Model", icon = icon("shield-virus"),
-           menuSubItem(text = 'Model', tabName = "ModelTab"),
-           menuSubItem(text = 'Stratified Model', tabName = 'StratifiedTab'),
-           menuSubItem(text = 'Sensitivity Analysis', tabName = 'SATab')
+           menuSubItem(text = 'Model', tabName = "tab_quant"),
+           menuSubItem(text = 'Stratified Model', tabName = 'tab_strat'),
+           menuSubItem(text = 'Sensitivity Analysis', tabName = 'tab_sa'),
+           menuSubItem(text = "Qualtative", tabName = "tab_qual")
            # menuSubItem(text = 'Distribution Fitting', tabName = 'DFTab')
            ),
   
@@ -21,23 +22,86 @@ body <- dashboardBody(
   ),
   tabItems(
     ## Model tab -----
-    tabItem(tabName = "ModelTab",
+    tabItem(tabName = "tab_quant",
             h1("quantrra: Quantitative risk assesment"),
             tags$i('This application is still under development, documentation is still in progress, for any questions please contact the developer: '), tags$a("Jose Pablo Gomez", href = 'mailto:jpgo@ucdavis.edu. '),
             # hr(),
             br(),
             # tags$em('Due to higher traffic than expected, we are experiencing some problems with the server. You can also download the R package and run the app locally using the QuantRRA::runQuantRRA() function, for more information visit: '),
-            # tags$a('Project repository', href = 'https://github.com/jpablo91/QuantRRA'),
+            # tags$a('Project repository', href = 'https://github.com/spablotemporal/quantrra'),
             'The following application was developed for the implementation of rapid risk assesment. A model tree file can be uploaded or specified in the app, and the risk is estimated using a stochastic probabilistic model.',
             br(),
             'Example model files can be found in the library of examples tab in this application',
             hr(),
             fluidRow(column(width = 12,
-                            ### Model table ---------
-                            box(title = 'Model table', width = 12, collapsible = T,
-                                'To start, you need to specify the model. Models can be constructed directly from the app using the network tools in the following section, or can be uploaded from a model file previosly created.',
-                                fileInput("upload", "Upload a model file", accept = c(".zip", ".xlsx")),
-                                # dropdown for new nodes ----------
+                            ### Instructions ----------------
+                            box(
+                              title = "Instructions", width = 12, collapsible = T,
+                              doc$ra_instructions,
+                              ### Upload file -----------
+                              # column(
+                              # width = 12,
+                              fileInput(
+                                "upload", 
+                                label = "Load a model file:",
+                                buttonLabel = "Search",
+                                accept = c(".zip", ".xlsx"),
+                                placeholder = "No file selected"
+                              ),
+                              # actionButton(inputId = "refresh", label = "Refresh"),
+                              # ),
+                              br(),
+                              # downloadButton('downloadData', 'Download Table'),
+                            ),
+                            ### Model details ------------
+                            tabBox(
+                              width = 12, title = tags$b("Model details"),
+                              side = "right", selected = "Model Tree", 
+                              ### Parameters table ------------
+                              tabPanel(
+                                "Parameters table",
+                                #### dropdown opts ------------
+                                dropdownButton(
+                                  tags$h3("Add parameter"), size = "sm",
+                                  selectInput(
+                                    inputId = "par_id",
+                                    label = "Id",
+                                    choices = ra_model$model %>% filter(type %in% c("In", "in")) %>% pull(id)
+                                  ),
+                                  textInput(
+                                    inputId = "par_choice",
+                                    label = "Choice label"
+                                  ),
+                                  textInput(
+                                    inputId = "par_val",
+                                    label = "Value"
+                                  ),
+                                  shinyWidgets::actionBttn(
+                                    inputId = "par_add",
+                                    label = "Add",
+                                    color = "success"
+                                  ),
+                                  
+                                  circle = TRUE, status = "success",
+                                  icon = icon("plus"), width = "150px",
+                                  
+                                  tooltip = tooltipOptions(title = "Click to add choices")
+                                ) %>% column(width = 6),
+                                actionBttn(
+                                  size = "sm",
+                                  inputId = "par_remove",
+                                  label = "Remove row",
+                                  style = "material-circle", 
+                                  color = "danger",
+                                  icon = icon("minus")
+                                ) %>% column(width = 6),
+                                #### tbl out ----------------
+                                DTOutput("parameters")
+                              ),
+                              ### Model table ------------
+                              tabPanel(
+                                "Model table",
+                                #### dropdown options ------------
                                 dropdownButton(
                                   tags$h3("Add node"), size = "sm",
                                   textInput(
@@ -77,40 +141,127 @@ body <- dashboardBody(
                                   icon = icon("plus"), width = "150px",
                                   
                                   tooltip = tooltipOptions(title = "Click to add nodes")
-                                ),
-                                # Add the model table ------------
-                                DTOutput("nodes"),
-                                'If you want to save your model to continue working on it later or to share it, you can download the file here:',
-                                br(),
-                                # downloadButton('downloadData', 'Download Table'),
-                                downloadButton("dl", "Download"),
-                                actionButton(inputId = 'reset', label = 'Clear Table', icon = icon("exclamation-triangle"))),
-                            ### Model Tree -------------
-                            box(title = 'Model Tree', width = 12, 
-                                'To start building a model, click on the edit button and start adding the nodes and edges. You can edit the node attributes directly in the table above, and you can delete nodes from the tree below. ',
-                                'Depending on the type of node, the user has to specify different parameters that can be updated later from the table above. ',
-                                br(),
-                                'There are two type of nodes:',
-                                tags$li('Inputs: These nodes represent a distribution specified by the user. To specify a distribution, write the name of the distribution and its parameters, i.e. Pert(0.1, 0.01, 0.2). Current distributions supported include Normal, Binomial, Poisson and Pert'),
-                                tags$li('Outputs: These nodes will be calculated by the model based on the equation specified by the user.'),
-                                br(),
-                                # dropdown for graph options ----------
+                                ) %>% column(width = 6),
+                                actionBttn(
+                                  size = "sm",
+                                  inputId = "node_remove",
+                                  label = "Remove row",
+                                  style = "material-circle", 
+                                  color = "danger",
+                                  icon = icon("minus")
+                                ) %>% column(width = 6),
+                                #### table out -----------------
+                                DTOutput("nodes")
+                              ),
+                              
+                              tabPanel(
+                                "Model Tree",
+                                ### dropdown for graph options ----------
                                 dropdownButton(
                                   tags$h3("Options"), size = "sm",
-                                  
                                   radioGroupButtons(
                                     inputId = "gdir",
                                     label = "Direction: ",
                                     choices = c("Left-Right" = "LR", "Right-Left" = "RL", "Up-down" = "UD", "Down-Up" = "DU"),
-                                    selected = "LR",
+                                    selected = "UD",
                                     direction = "vertical"
+                                  ),
+                                  sliderInput(
+                                    inputId = "gnchar",
+                                    label = "Characters before the breaks",
+                                    value = 15, min = 5, max = 50
                                   ),
                                   circle = TRUE, status = "success",
                                   icon = icon("gear"), width = "150px",
-                                  
                                   tooltip = tooltipOptions(title = "Click to see options")
                                 ),
-                                visNetworkOutput("ModelTree", height = "400px")),
+                                visNetworkOutput("ModelTree", height = "400px")
+                              ),
+                              hr()
+                            ),
+                            ### Model table ---------
+                            # box(title = 'Model table', width = 12, collapsible = T,
+                            #     'To start, you need to specify the model. Models can be constructed directly from the app using the network tools in the following section, or can be uploaded from a model file previosly created.',
+                            #     fileInput("upload", "Upload a model file", accept = c(".zip", ".xlsx")),
+                            #     # dropdown for new nodes ----------
+                            #     dropdownButton(
+                            #       tags$h3("Add node"), size = "sm",
+                            #       textInput(
+                            #         inputId = "newid",
+                            #         label = "Id"
+                            #       ),
+                            #       textInput(
+                            #         inputId = "newLab",
+                            #         label = "Label"
+                            #       ),
+                            #       selectInput(
+                            #         inputId = "newType",
+                            #         label = "Type",
+                            #         choices = c("In", "Out")
+                            #       ),
+                            #       conditionalPanel(
+                            #         condition = "input.newType == 'In'",
+                            #         textInput(
+                            #           inputId = "newDist",
+                            #           label = "Distribution"
+                            #         )
+                            #       ),
+                            #       conditionalPanel(
+                            #         condition = "input.newType == 'Out'",
+                            #         textInput(
+                            #           inputId = "newFormula",
+                            #           label = "Formula"
+                            #         )
+                            #       ),
+                            #       shinyWidgets::actionBttn(
+                            #         inputId = "newAdd",
+                            #         label = "Add node",
+                            #         color = "success"
+                            #       ),
+                            #       
+                            #       circle = TRUE, status = "success",
+                            #       icon = icon("plus"), width = "150px",
+                            #       
+                            #       tooltip = tooltipOptions(title = "Click to add nodes")
+                            #     ),
+                            #     # Add the model table ------------
+                            #     # DTOutput("nodes"),
+                            #     'If you want to save your model to continue working on it later or to share it, you can download the file here:',
+                            #     br(),
+                            #     # downloadButton('downloadData', 'Download Table'),
+                            #     downloadButton("dl", "Download"),
+                            #     actionButton(inputId = 'reset', label = 'Clear Table', icon = icon("exclamation-triangle"))),
+                            ### Model Tree -------------
+                            # box(title = 'Model Tree', width = 12, 
+                            #     'To start building a model, click on the edit button and start adding the nodes and edges. You can edit the node attributes directly in the table above, and you can delete nodes from the tree below. ',
+                            #     'Depending on the type of node, the user has to specify different parameters that can be updated later from the table above. ',
+                            #     br(),
+                            #     'There are two type of nodes:',
+                            #     tags$li('Inputs: These nodes represent a distribution specified by the user. To specify a distribution, write the name of the distribution and its parameters, i.e. Pert(0.1, 0.01, 0.2). Current distributions supported include Normal, Binomial, Poisson and Pert'),
+                            #     tags$li('Outputs: These nodes will be calculated by the model based on the equation specified by the user.'),
+                            #     br(),
+                            #     # dropdown for graph options ----------
+                            #     dropdownButton(
+                            #       tags$h3("Options"), size = "sm",
+                            #       
+                            #       radioGroupButtons(
+                            #         inputId = "gdir",
+                            #         label = "Direction: ",
+                            #         choices = c("Left-Right" = "LR", "Right-Left" = "RL", "Up-down" = "UD", "Down-Up" = "DU"),
+                            #         selected = "LR",
+                            #         direction = "vertical"
+                            #       ),
+                            #       sliderInput(
+                            #         inputId = "gnchar",
+                            #         label = "Characters before the breaks",
+                            #         value = 25, min = 5, max = 50
+                            #       ),
+                            #       circle = TRUE, status = "success",
+                            #       icon = icon("gear"), width = "150px",
+                            #       
+                            #       tooltip = tooltipOptions(title = "Click to see options")
+                            #     ),
+                            #     visNetworkOutput("ModelTree", height = "400px")),
                             ### Risk estimation ---------
                             box(title = 'Risk estimation', width = 12,
                                 'For every output defined, the model will estimate a distribution and the median is showed by the vertical line in each plot',
@@ -123,7 +274,7 @@ body <- dashboardBody(
             ))
     ),
     ## Sensitivity analysis tab -------
-    tabItem(tabName = 'SATab',
+    tabItem(tabName = 'tab_sa',
             h2('Sensitivity Analysis'),
             'To run the sensitivity analysis, make sure to run the model first on the main tab',
             hr(),
@@ -138,13 +289,68 @@ body <- dashboardBody(
                        visNetworkOutput(outputId = 'RT'), width = 12)
             )
     ),
-    
+    ## Qualitative tab------------
+    tabItem(tabName = "tab_qual",
+            box(width = 12, title = tags$b("Cargar datos del modelo"), 
+                solidHeader = TRUE, collapsible = T,
+                fluidRow(
+                  column(width = 4,
+                         fileInput(inputId = "model", label = "Cargar archivo:",
+                                   buttonLabel = "Buscar...",
+                                   placeholder = "Ningún archivo seleccionado")),
+                  column(
+                    width = 8,
+                    tags$h5(tags$b("Instrucciones:"))
+                    # Instrucciones
+                  )
+                )
+            ),
+            tabBox(width = 12, title = tags$b("Detalles del modelo"), 
+                   side = "right", selected = "Árbol de eventos", 
+                   tabPanel("Árbol de eventos",
+                            fluidRow(
+                              column(width = 12,
+                                     dropdownButton(tags$h4(tags$b("Configuración:"), align = "center"),
+                                                    radioButtons(inputId = "Dirtree", label = "Dirección del árbol de escenarios", 
+                                                                 choices = list( "Vertical" = "UD", "Horizontal" = "LR")),
+                                                    sliderInput(inputId = "Septree", label = "Separación",
+                                                                min = 0, max = 300,value = 100, ticks = FALSE),
+                                                    circle = TRUE, status = "danger", 
+                                                    icon = icon("gear"), width = "300px",
+                                                    tooltip = tooltipOptions(title = "Click para ver opciones !")
+                                     ),
+                                     visNetworkOutput("treeplot")))),
+                   tabPanel("Modelo", DTOutput("table_model"))
+            ),
+            fluidRow(
+              column(width = 12,
+                     box(width = 12,title = tags$b("Evaluación de riesgo de los nodos"), status = "primary", collapsible = T,
+                         uiOutput("inputs"),
+                         actionBttn(inputId = "submit",label = "Analizar",style = "material-flat", color = "primary")))
+            ),
+            conditionalPanel("input.submit > 0", 
+                             fluidRow(
+                               column(width = 6,
+                                      tabBox(width = 12, title = tags$b("Evaluación de riesgo de los nodos"),  side = "right", selected = "Gráfico de evaluación",
+                                             tabPanel("Tabla de evaluación",  DTOutput("result_risk")),
+                                             tabPanel("Gráfico de evaluación",  plotOutput("barResults"))
+                                      )
+                               ),
+                               column(width = 6,
+                                      tabBox(width = 12, title = tags$b("Resultados de evaluación de riesgo"),  side = "right", selected = "Resultado",
+                                             tabPanel("Tabla de resultados", DTOutput("results_table")),
+                                             tabPanel("Resultado", plotlyOutput("results_gauge"))
+                                      )
+                               )
+                             )
+            )
+    ),
     ## Fitting tab -------
     tabItem(tabName = 'DFTab',
             h2('Distribution fitting'),
             'Comming soon ...'),
     
-    tabItem(tabName = 'StratifiedTab',
+    tabItem(tabName = 'tab_strat',
             h2('Stratified Model'),
             'In this section you can use the model file and a dataset where each row represents a starata of the population with corresponding parameters, and run the model for each of those strata',
             br(),
