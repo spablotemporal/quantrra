@@ -36,15 +36,16 @@ ra_run_strat <- function(m, tbl = NULL, nsim, full = F, simplify = T){
   
   # Join data
   ms <- m %>% 
-    left_join(tbl_t, by = 'id')
+    left_join(tbl_t, by = "id") %>% 
+    mutate(type = tolower(type))
   
   # Get strata names
   strata <- tbl[,1]
   
   if(full){
-    varsOut <- c("In", "Out")
+    varsOut <- c("in", "input", "out", "output")
   }else{
-    varsOut <- c("Out") 
+    varsOut <- c("out", "output") 
   }
 
   # get outputs names
