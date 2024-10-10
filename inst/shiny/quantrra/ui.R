@@ -188,7 +188,7 @@ body <- dashboardBody(
                               hr()
                             ),
                             ### Parametros -------------
-                            box(title = "Parameters", width = 12, 
+                            box(title = "Parameters", width = 6, 
                                 uiOutput("par_inputs"),
                                 numericInput("Nsim", "Number of simulations",
                                              min = 1, value = 1000, width = '50%'),
@@ -196,7 +196,7 @@ body <- dashboardBody(
                                 # br(), DTOutput("testTbl") # Results
                             ),
                             ### Risk estimation ---------
-                            box(title = 'Risk estimation', width = 12,
+                            box(title = 'Risk estimation', width = 6,
                                 'For every output defined, the model will estimate a distribution and the median is showed by the vertical line in each plot',
                                 numericInput('Nsim', 'Number of simulations',
                                              min = 1, value = 5000, width = '60%'),
@@ -209,7 +209,7 @@ body <- dashboardBody(
             ))
     ),
     ## Sensitivity analysis tab -------
-    tabItem(tabName = 'tab_sa',
+    tabItem(tabName = "tab_sa",
             h2('Sensitivity Analysis'),
             'To run the sensitivity analysis, make sure to run the model first on the main tab',
             hr(),

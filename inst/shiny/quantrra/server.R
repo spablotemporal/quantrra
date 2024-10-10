@@ -83,6 +83,7 @@ function(input, output, session){
       # text = "All in order",
       type = "success"
     )
+    updateSelectInput(session = session, inputId = "par_id", choices = rv$model %>% filter(type %in% c("In", "in")) %>% pull(id))
   })
   
   ### remove node ----------------
@@ -93,7 +94,7 @@ function(input, output, session){
     }
     
     showNotification("Selected node removed", type = "warning")
-    
+    updateSelectInput(session = session, inputId = "par_id", choices = rv$model %>% filter(type %in% c("In", "in")) %>% pull(id))
   })
   
   ### Edit par tbl ----------
@@ -150,6 +151,11 @@ function(input, output, session){
       writexl::write_xlsx(data_list, path = file)
     }
   )
+  
+  # ## Update inputs
+  # observe(rv$model, {
+  #   updateSelectInput(session = session, inputId = "par_id", choices = rv$model %>% filter(type %in% c("In", "in")) %>% pull(id))
+  # })
   
   ## Run RA model -------
   observeEvent(input$Run,{
