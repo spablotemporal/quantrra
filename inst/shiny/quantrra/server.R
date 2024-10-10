@@ -5,6 +5,7 @@ function(input, output, session){
     model = init_nodes, # Nodes
     # edges = ra_plot_tree(init_nodes, edgetbl = T), # Edges
     stratified = NULL,
+    shp = NULL,
     par = ra_model$par,
     res = NULL, # Empty table for results
     qual_nodes = data.frame(
@@ -41,7 +42,7 @@ function(input, output, session){
   #   rv$stratified <- im$stratified
   # })
   
-  ## Make the edits to the table -------------
+  # Make the edits to the table -------------
   observeEvent(input$nodes_cell_edit,{
     rv$model <- editData(rv$model, input$nodes_cell_edit, 'modelTbl') %>% 
       mutate(
@@ -69,6 +70,7 @@ function(input, output, session){
     
     rv$model <- rbind(rv$model, nn)
     
+    ### Update opts ---------
     updateTextInput(inputId = "newid", value = "")
     updateTextInput(inputId = "newLab", value = "")
     updateSelectInput(inputId = "newType", selected = "In")
@@ -83,53 +85,125 @@ function(input, output, session){
     )
   })
   
-  ## Run the model -------
-  observeEvent(input$Run,{
-    showModal(modalDialog("Runing the model...", footer = NULL))
-    rv$res <- ra_run(m = rv$model, input$Nsim)
+  ### remove node ----------------
+  observeEvent(input$node_remove,{
     
-    removeModal()
-  })
-  
-  # in server()
-  map <- reactive({
-    # shpdf is a data.frame with the name, size, type and datapath
-    # of the uploaded files
-    shpdf <- input$filemap
-    
-    # The files are uploaded with names
-    # 0.dbf, 1.prj, 2.shp, 3.xml, 4.shx
-    # (path/names are in column datapath)
-    # We need to rename the files with the actual names:
-    # fe_2007_39_county.dbf, etc.
-    # (these are in column name)
-    
-    # Name of the temporary directory where files are uploaded
-    tempdirname <- dirname(shpdf$datapath[1])
-    
-    # Rename files
-    for (i in 1:nrow(shpdf)) {
-      file.rename(
-        shpdf$datapath[i],
-        paste0(tempdirname, "/", shpdf$name[i])
-      )
+    if (!is.null(input$nodes_rows_selected)) {
+      rv$model <- rv$model[-as.numeric(input$nodes_rows_selected),]
     }
     
-    # Now we read the shapefile with readOGR() of rgdal package
-    # passing the name of the file with .shp extension.
+    showNotification("Selected node removed", type = "warning")
     
-    # We use the function grep() to search the pattern "*.shp$"
-    # within each element of the character vector shpdf$name.
-    # grep(pattern="*.shp$", shpdf$name)
-    # ($ at the end denote files that finish with .shp,
-    # not only that contain .shp)
-    map <- readOGR(paste(tempdirname,
-                         shpdf$name[grep(pattern = "*.shp$", shpdf$name)],
-                         sep = "/"
-    ))
-    map
   })
   
+  ### Edit par tbl ----------
+  observeEvent(input$parameters_cell_edit,{
+    rv$par <- editData(rv$par, input$parameters_cell_edit, 'par_tbl')
+  })
+  
+  ### Add a par ------------
+  observeEvent(input$par_add,{
+    np <- data.frame(
+      id = input$par_id,
+      choice = input$par_choice,
+      value = input$par_val,
+      stringsAsFactors = F
+    )
+    
+    rv$par <- bind_rows(rv$par, np)
+    
+    updateTextInput(inputId = "par_choice", value = "")
+    updateTextInput(inputId = "par_val", value = "")
+    
+    sendSweetAlert(
+      session = session,
+      title = "Choice added",
+      # text = "All in order",
+      type = "success"
+    )
+  })
+  
+  ### remove par ----------------
+  observeEvent(input$par_remove,{
+    
+    if (!is.null(input$parameters_rows_selected)) {
+      rv$par <- rv$par[-as.numeric(input$parameters_rows_selected),]
+    }
+    
+    showNotification("Selected choice removed", type = "warning")
+    
+  })
+  # download excel ---------------
+  output$dxl <- downloadHandler(
+    filename = function() {
+      paste("model-", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      
+      # List of data frames
+      data_list <- list(
+        model = rv$model,
+        par = rv$par
+      )
+      
+      # Write data frames to an Excel file
+      writexl::write_xlsx(data_list, path = file)
+    }
+  )
+  
+  ## Run RA model -------
+  observeEvent(input$Run,{
+    showModal(modalDialog("Runing model...", footer = NULL))
+    # Make sure the parameter table is not empty:
+    if(length(rv$par) > 0){
+      # Pull the inputs only
+      nodes <- rv$model %>%
+        filter(type == "In")
+      # Merge the input nodes with the selected choices
+      input_values <- lapply(names(input)[names(input) %in% nodes$id], function(id) {
+        list(inputId = id, value = input[[id]])
+      })
+      
+      input_values <- do.call(rbind, lapply(input_values, function(x) {
+        data.frame(id = x$inputId, distribution = x$value, stringsAsFactors = FALSE)
+      }))
+      
+      tryCatch({ 
+        m <- left_join(select(rv$model, -distribution), input_values)
+        rv$res <- ra_run(m = m, input$Nsim) %>% 
+          select(-sim)
+        
+        showNotification("Parameter table present, parameters are sourced from the parameter table", type = "message")
+      }, error = function(e) {
+        # Manejo del error
+        showNotification("Error in model definition, check your inputs", type = "error")
+        NULL  # Devolver NULL para evitar que se renderice un objeto vacío
+      })
+    }else{
+      tryCatch({ 
+        rv$res <- ra_run(m = rv$model, input$Nsim) %>% 
+          select(-sim)
+        showNotification("No Parameter table found, parameters are sourced from the model table", type = "message")
+      }, error = function(e) {
+        # Manejo del error
+        showNotification("Error in model definition, check your inputs", type = "error")
+        NULL  # Devolver NULL para evitar que se renderice un objeto vacío
+      })
+    }
+    
+    
+    removeModal()
+    
+    
+    # Update the outputs for the plots
+    o <- rv$model %>% arrange(-level) %>% pull(id)
+    updateSelectInput(session = session, inputId = "outputs", choices = o)
+  })
+  
+  ## Read shapefile ---------
+  observeEvent(input$filemap,{
+    rv$shp <- read_sf(input$filemap$datapath)
+  })
   
   ## Run strat model -----
   observeEvent(input$RunStratified, {
@@ -168,21 +242,47 @@ function(input, output, session){
   ## Clear table -------
   observeEvent(input$reset,{
     rv$model = data.frame(
-      id = c("I1", "O1"),
+      id = c("i1", "o1"),
       label = c("Input 1", "Output 1"),
       type = c("In", "Out"),
       level = c(0, 1),
       distribution = c("Pert(0.1, 0.15, 0.5)", NA),
-      formula = c(NA, "I1"),
+      formula = c(NA, "i1"),
       shape = 'box',
       color = c("#A0F0A0", "#F0A0A0"),
       stringsAsFactors = F
     )
+    rv$par = data.frame(
+      id = "i1",
+      choice = "choice 1", 
+      value = "1"
+    )
     
-    # rv$edges = ra_plot_tree(rv$model, edgetbl = T)
+    ### Update opts ---------
+    updateSelectInput(session = session, inputId = "par_id", choices = rv$model %>% filter(type %in% c("In", "in")) %>% pull(id))
+    
+    showNotification("New model has been initiated", type = "warning")
   })
   
-  ## Outputs --------
+  # download excel ---------------
+  output$dxl <- downloadHandler(
+    filename = function() {
+      paste("model-", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      
+      # List of data frames
+      data_list <- list(
+        model = rv$model,
+        par = rv$par
+      )
+      
+      # Write data frames to an Excel file
+      writexl::write_xlsx(data_list, path = file)
+    }
+  )
+  
+  # Outputs --------
   ### Nodes ---------
   # Render the table showing all the nodes in the graph.
   # output$nodes <- renderDT({
@@ -232,7 +332,74 @@ function(input, output, session){
     ra_plot_tree(n, static = F, direction = input$gdir)
   })
   
-  ### P4 -----------
+  ## Render parameters opts ------------
+  output$par_inputs <- renderUI({
+    req(rv$par)
+    # FIlter inputs only
+    nodes <- rv$model %>% 
+      filter(type %in% c("In", "in"))
+    # Get the parameter table
+    par <- rv$par
+    
+    inputs <- lapply(1:nrow(nodes), function(i) {
+      
+      options <- subset(par, id == nodes$id[i])
+      choices <- setNames(options$value, options$choice)
+      uiElement <- radioButtons(inputId = nodes$id[i], 
+                                label = paste0(nodes$id[i], ". ", nodes$label_input[i]),
+                                choices = choices)
+      
+      column(3, uiElement)
+      # uiElement
+      
+    })
+    
+    fluidRow(inputs)
+  })
+  
+  #### Risk gauge ----------
+  output$riskGauge <- renderPlotly({
+    if(!is.null(reactiveModel$results)){
+      m <- reactiveModel$results %>%
+        pull(pf) %>% quantile()
+      
+      fig <- plot_ly(
+        domain = list(x = c(0, 1), y = c(0, 1)),
+        value = m[3],
+        title = list(text = "The risk of introduction \n is 1 in every"),
+        type = "indicator",
+        mode = "gauge+number",
+        # This following part is to add a threshold and the difference to it
+        # mode = "gauge+number+delta",
+        # delta = list(reference = 380),
+        gauge = list(
+          axis =list(range = list(NULL, m[4]*1.5)),
+          bar = list(color = "#204060"),
+          steps = list(
+            list(range = c(0, 100e3), color = "#FFD0D0"),
+            list(range = c(100e3, 300e3), color = "#FFFFD0"),
+            list(range = c(300e3, m[4]*2), color = "#D0FFD0"),
+            list(range = c(m[2], m[4]), thicness=0.5, color = "#00000000", line = list(color="#50206080", width=4))
+          )
+        )
+      )
+      fig <- fig %>%
+        layout(margin = list(l=20,r=30))
+      
+      fig
+      
+    }
+    
+  })
+  
+  ### Gauge plot ----------
+  output$scorePlot <- renderPlotly({
+    req(rv$res)
+    rv$res[,input$outputs] %>%
+      ra_plotScore(brks = c(0, 3, 7, 20)) 
+  })
+  
+  ### Histograms -----------
   output$P4 <- renderPlotly({
     if(!is.null(rv$res)){
       # Filter only outputs
@@ -281,13 +448,15 @@ function(input, output, session){
   
   # Map
   output$Map_p <- renderPlot({
-    map() %>%  # This is our spatial shape file
-      st_as_sf() %>% 
-      left_join(DFs(), by = c('Entidad' = 'IDs')) %>%  # we use left join to join our model results
-      ggplot() + # We call ggplot
-      geom_sf(aes(fill = O4_m)) + # We add a layer representing the polygons colored by the variable E
-      scale_fill_gradient(low = 'black', high = 'red') + # set the color scale
-      theme_void() # Theme of the plot
+    # require(map()){
+      rv$shp %>%  # This is our spatial shape file
+        # left_join(DFs(), by = c('Entidad' = 'IDs')) %>%  # we use left join to join our model results
+        ggplot() + # We call ggplot
+      geom_sf() + # We add a layer representing the polygons colored by the variable E
+        # geom_sf(aes(fill = O4_m)) + # We add a layer representing the polygons colored by the variable E
+        # scale_fill_gradient(low = 'black', high = 'red') + # set the color scale
+        theme_void() # Theme of the plot
+    # }
   })
   
   ### Sensitivity analysis outputs --------

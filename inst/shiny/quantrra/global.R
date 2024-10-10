@@ -32,6 +32,7 @@ library(writexl)
 DFs <- NULL
 
 source('Documentation.R')
+source("www/fun.R")
 
 # init_nodes <- read.csv(unz('www/asf_products.zip', 'nodes.csv'))
 init_nodes <- quantrra::asf_products$model

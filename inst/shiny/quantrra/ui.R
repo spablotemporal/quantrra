@@ -50,7 +50,15 @@ body <- dashboardBody(
                               ),
                               # actionButton(inputId = "refresh", label = "Refresh"),
                               # ),
-                              br(),
+                              actionButton(
+                                inputId = "reset",
+                                label = "Reset Model"
+                              ),
+                              # shinyWidgets::actionBttn(
+                              #   inputId = "reset",
+                              #   label = "Reset Model"
+                              # ),
+                              downloadButton("dl", "Export model")
                               # downloadButton('downloadData', 'Download Table'),
                             ),
                             ### Model details ------------
@@ -179,97 +187,24 @@ body <- dashboardBody(
                               ),
                               hr()
                             ),
-                            ### Model table ---------
-                            # box(title = 'Model table', width = 12, collapsible = T,
-                            #     'To start, you need to specify the model. Models can be constructed directly from the app using the network tools in the following section, or can be uploaded from a model file previosly created.',
-                            #     fileInput("upload", "Upload a model file", accept = c(".zip", ".xlsx")),
-                            #     # dropdown for new nodes ----------
-                            #     dropdownButton(
-                            #       tags$h3("Add node"), size = "sm",
-                            #       textInput(
-                            #         inputId = "newid",
-                            #         label = "Id"
-                            #       ),
-                            #       textInput(
-                            #         inputId = "newLab",
-                            #         label = "Label"
-                            #       ),
-                            #       selectInput(
-                            #         inputId = "newType",
-                            #         label = "Type",
-                            #         choices = c("In", "Out")
-                            #       ),
-                            #       conditionalPanel(
-                            #         condition = "input.newType == 'In'",
-                            #         textInput(
-                            #           inputId = "newDist",
-                            #           label = "Distribution"
-                            #         )
-                            #       ),
-                            #       conditionalPanel(
-                            #         condition = "input.newType == 'Out'",
-                            #         textInput(
-                            #           inputId = "newFormula",
-                            #           label = "Formula"
-                            #         )
-                            #       ),
-                            #       shinyWidgets::actionBttn(
-                            #         inputId = "newAdd",
-                            #         label = "Add node",
-                            #         color = "success"
-                            #       ),
-                            #       
-                            #       circle = TRUE, status = "success",
-                            #       icon = icon("plus"), width = "150px",
-                            #       
-                            #       tooltip = tooltipOptions(title = "Click to add nodes")
-                            #     ),
-                            #     # Add the model table ------------
-                            #     # DTOutput("nodes"),
-                            #     'If you want to save your model to continue working on it later or to share it, you can download the file here:',
-                            #     br(),
-                            #     # downloadButton('downloadData', 'Download Table'),
-                            #     downloadButton("dl", "Download"),
-                            #     actionButton(inputId = 'reset', label = 'Clear Table', icon = icon("exclamation-triangle"))),
-                            ### Model Tree -------------
-                            # box(title = 'Model Tree', width = 12, 
-                            #     'To start building a model, click on the edit button and start adding the nodes and edges. You can edit the node attributes directly in the table above, and you can delete nodes from the tree below. ',
-                            #     'Depending on the type of node, the user has to specify different parameters that can be updated later from the table above. ',
-                            #     br(),
-                            #     'There are two type of nodes:',
-                            #     tags$li('Inputs: These nodes represent a distribution specified by the user. To specify a distribution, write the name of the distribution and its parameters, i.e. Pert(0.1, 0.01, 0.2). Current distributions supported include Normal, Binomial, Poisson and Pert'),
-                            #     tags$li('Outputs: These nodes will be calculated by the model based on the equation specified by the user.'),
-                            #     br(),
-                            #     # dropdown for graph options ----------
-                            #     dropdownButton(
-                            #       tags$h3("Options"), size = "sm",
-                            #       
-                            #       radioGroupButtons(
-                            #         inputId = "gdir",
-                            #         label = "Direction: ",
-                            #         choices = c("Left-Right" = "LR", "Right-Left" = "RL", "Up-down" = "UD", "Down-Up" = "DU"),
-                            #         selected = "LR",
-                            #         direction = "vertical"
-                            #       ),
-                            #       sliderInput(
-                            #         inputId = "gnchar",
-                            #         label = "Characters before the breaks",
-                            #         value = 25, min = 5, max = 50
-                            #       ),
-                            #       circle = TRUE, status = "success",
-                            #       icon = icon("gear"), width = "150px",
-                            #       
-                            #       tooltip = tooltipOptions(title = "Click to see options")
-                            #     ),
-                            #     visNetworkOutput("ModelTree", height = "400px")),
+                            ### Parametros -------------
+                            box(title = "Parameters", width = 12, 
+                                uiOutput("par_inputs"),
+                                numericInput("Nsim", "Number of simulations",
+                                             min = 1, value = 1000, width = '50%'),
+                                actionButton(inputId = 'Run', label = "Run Model")
+                                # br(), DTOutput("testTbl") # Results
+                            ),
                             ### Risk estimation ---------
                             box(title = 'Risk estimation', width = 12,
                                 'For every output defined, the model will estimate a distribution and the median is showed by the vertical line in each plot',
                                 numericInput('Nsim', 'Number of simulations',
                                              min = 1, value = 5000, width = '60%'),
-                                actionButton(inputId = 'Run', label = 'Run model'),
+                                # actionButton(inputId = 'Run', label = 'Run model'),
                                 # DTOutput("MTbl")
-                                plotlyOutput('P4')
+                                selectInput(inputId = "outputs", label = "Output", choices = NULL),
+                                # plotlyOutput('P4')
+                                plotlyOutput("scorePlot")
                                 )
             ))
     ),
@@ -363,21 +298,21 @@ body <- dashboardBody(
               tabBox(width = 12,
                      tabPanel(title = 'Data',
                               # fileInput("uploadData", "Upload Data", accept = '.csv'),
-                              DTOutput('InData'))
+                              DTOutput('InData')),
                      # tabPanel(title = 'Spatial features', 
                      #          # fileInput("uploadSp", "Upload Shapefile"),
-                     #          fileInput(inputId = "filemap",
-                     #                    label = "Upload map. Choose shapefile",
-                     #                    multiple = TRUE,
-                     #                    accept = c('.shp','.dbf','.sbn','.sbx','.shx','.prj'))
+                              fileInput(inputId = "filemap",
+                                        label = "Upload map. Choose shapefile",
+                                        multiple = TRUE,
+                                        accept = c(".gpkg"))
                      #          )
                      ),
               actionButton(inputId = 'RunStratified', label = 'Run stratified model'),
               uiOutput(outputId = 'Outcomes_s'),
               hr(),
               tabBox(width = 12,
-                     tabPanel(title = 'Ranking', plotlyOutput(outputId = 'Ranking_p'))
-                     # tabPanel(title = 'Map', plotOutput(outputId = 'Map_p'))
+                     tabPanel(title = 'Ranking', plotlyOutput(outputId = 'Ranking_p')),
+                     tabPanel(title = 'Map', plotOutput(outputId = 'Map_p'))
               )
             )
             ### Select which variable (risk or uncertainty a.k.a variance?)
