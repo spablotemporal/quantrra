@@ -7,18 +7,7 @@ function(input, output, session){
     stratified = NULL,
     shp = NULL,
     par = ra_model$par,
-    res = NULL, # Empty table for results
-    qual_nodes = data.frame(
-      id = character(),
-      label = character(),
-      type = character(),
-      level = character(),
-      distribution = character(),
-      formula =  character(),
-      input =  character(),
-      label_input =  character(),
-      stringsAsFactors = FALSE
-    )
+    res = NULL # Empty table for results
   )
   
   proxy = dataTableProxy('modelTbl')
@@ -35,13 +24,6 @@ function(input, output, session){
     updateSelectInput(session = session, inputId = "par_id", choices = rv$model %>% filter(type %in% c("In", "in")) %>% pull(id))
   })
   
-  # # read from file -----------
-  # observeEvent(input$upload, {
-  #   im <- ra_import(input$upload$datapath)
-  #   rv$model <- im$model
-  #   rv$stratified <- im$stratified
-  # })
-  
   # Make the edits to the table -------------
   observeEvent(input$nodes_cell_edit,{
     rv$model <- editData(rv$model, input$nodes_cell_edit, 'modelTbl') %>% 
@@ -57,8 +39,9 @@ function(input, output, session){
       id = input$newid,
       label = input$newLab,
       type = input$newType,
-      level = max(rv$model$level),
-      distribution = ifelse(input$newType == "In", input$newDist, NA),
+      # level = max(rv$model$level),
+      level = 0,
+      distribution = ifelse((input$newType %in% c("In", "in", "IN")), input$newDist, NA),
       formula = ifelse(input$newType == "Out", input$newFormula, NA),
       shape = 'box',
       stringsAsFactors = F
@@ -68,7 +51,8 @@ function(input, output, session){
         color = ifelse(type == 'in', "#A0F0A0", '#F0A0A0'),
       )
     
-    rv$model <- rbind(rv$model, nn)
+    rv$model <- rbind(rv$model, nn) %>% 
+      arrange(type, level)
     
     ### Update opts ---------
     updateTextInput(inputId = "newid", value = "")
@@ -134,23 +118,6 @@ function(input, output, session){
     showNotification("Selected choice removed", type = "warning")
     
   })
-  # download excel ---------------
-  output$dxl <- downloadHandler(
-    filename = function() {
-      paste("model-", Sys.Date(), ".xlsx", sep = "")
-    },
-    content = function(file) {
-      
-      # List of data frames
-      data_list <- list(
-        model = rv$model,
-        par = rv$par
-      )
-      
-      # Write data frames to an Excel file
-      writexl::write_xlsx(data_list, path = file)
-    }
-  )
   
   # ## Update inputs
   # observe(rv$model, {
@@ -164,7 +131,10 @@ function(input, output, session){
     if(length(rv$par) > 0){
       # Pull the inputs only
       nodes <- rv$model %>%
-        filter(type == "In")
+        filter(type %in% c("In", "in", "IN"))
+      
+      # TODO: MAKE SURE ALL INPUTS HAVE OPTIONS, ELSE SEND A ERROR MESSAGE FOR THE USER
+      
       # Merge the input nodes with the selected choices
       input_values <- lapply(names(input)[names(input) %in% nodes$id], function(id) {
         list(inputId = id, value = input[[id]])
@@ -291,20 +261,10 @@ function(input, output, session){
   # Outputs --------
   ### Nodes ---------
   # Render the table showing all the nodes in the graph.
-  # output$nodes <- renderDT({
-  #   rv$model %>% 
-  #     select(c('id', 'label', 'type', 'level', 'distribution', 'formula')) %>%
-  #     DT::datatable(data = .,
-  #                   # rownames = F,
-  #                   editable = T)
-  # })
-  
-  ### Nodes ---------
-  # Render the table showing all the nodes in the graph.
   output$nodes <- renderDT({
     rv$model %>% 
       select(c('id', 'label', 'type', 'level', 'distribution', 'formula')) %>%
-      arrange(level) %>% 
+      arrange(type, level) %>% 
       DT::datatable(
         data = .,
         # rownames = F,
@@ -500,12 +460,28 @@ function(input, output, session){
   })
   
   ## Downloads -------
-  ### In xlsx
-  
+  # download excel ---------------
+  # TODO Add messages when one of the files is missing
   output$dl <- downloadHandler(
-    filename = function() { "model.xlsx"},
-    content = function(file) {write_xlsx(list(model = rv$model), path = file)}
+    # if(is.null(rv$par)){
+    #   # showNotification("No parameter table found", type = "warning")
+    # }
+    filename = function() {
+      paste("model-", Sys.Date(), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      
+      # List of data frames
+      data_list <- list(
+        model = rv$model,
+        par = rv$par
+      )
+      
+      # Write data frames to an Excel file
+      writexl::write_xlsx(data_list, path = file)
+    }
   )
+  
   
   # Example files ------------------------
   ## OIRSA ----------

@@ -21,35 +21,6 @@ doc <- list(
     br(), p("You can open and close the sidebar by using the button located at the upper header ", tags$img(src = "img/sidebar_bttn.png", width = "30px", height = "30px"), align = "center"),
     br(), "This dashboard was developed with the intention to explore the application of agent based models and risk assesment to evaluate the targeted surveillance and emergency response agaisnt African Swine Fever in the United States. "
   ),
-  # ABM documentation --------------------
-  abm = list(
-    h2('Disease spread model'),
-    hr(),
-    box(
-      width = 12,
-      column(
-        width = 6,
-        "To evaluate the potential disease spread of an ASF introduction into the United States, we developed a agent-based stochastic simulation model that recreates the transmission dynamics on both a local and national scale. 
-  To achieve this, we incorporated a hexagonal grid of 10 km radius as the basic unit of analysis and aggregated demographic characteristics of the population at risk within each cell. 
-  This approach allows for the incorporation of population heterogeneity and the effects of local interventions, such as culling and restriction of movements, within a 10 km radius.",
-        br(), "To model the transmission dynamics of the disease, we used a set of parameters that were sampled from defined probability distributions for each simulation run. This approach enables the estimation of the expected behavior of the disease spread, and allows for the analysis of various scenarios.\
-The model operates in three stages per time step, including: (I) updating the disease status for all agents, (II) local disease spread, and (III) long-distance spread. 
-  The progression of the disease through these stages is determined by a set of rules and functions that are based on biologically and epidemiologically-informed assumptions."
-      ), 
-      column(
-        width = 6, 
-        img(src = 'img/ModelFramework.png', width = '90%', align = 'center')
-      )
-    ), 
-    
-    br(),
-    br(),
-    hr(),
-    actionBttn(
-      inputId = "GoSpread", label = "Go to the Disease spread Model",
-      color = "success", size = "lg"
-    )
-  ),
   # Disease intro ------------------
   intro = list(
     h4("Disease introduction"),
@@ -63,7 +34,7 @@ The model operates in three stages per time step, including: (I) updating the di
   ),
   # ra instructions -----------
   ra_instructions = list(
-    "This module integrates stochastic risk modeling to evaluate the likelihood of an introduction of African Swine Fever into the country. An example model is already loaded into the platform. More examples can be found in the model library", br(),
+    "This module integrates stochastic risk modeling to evaluate the likelihood of an event happening. An example model is already loaded into the platform. More examples can be found in the model library", br(),
     "The basic structure of a model is a .xlsx file with different tables arranged into sheets. Each sheet represent a component of the model:",
     tags$li("model (required): Describes the events associated with the probability estimation "),
     tags$li("par (optional): Describes different parametrization options of the model"),

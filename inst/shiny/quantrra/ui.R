@@ -198,8 +198,6 @@ body <- dashboardBody(
                             ### Risk estimation ---------
                             box(title = 'Risk estimation', width = 6,
                                 'For every output defined, the model will estimate a distribution and the median is showed by the vertical line in each plot',
-                                numericInput('Nsim', 'Number of simulations',
-                                             min = 1, value = 5000, width = '60%'),
                                 # actionButton(inputId = 'Run', label = 'Run model'),
                                 # DTOutput("MTbl")
                                 selectInput(inputId = "outputs", label = "Output", choices = NULL),
@@ -222,62 +220,6 @@ body <- dashboardBody(
                      box(
                        plotlyOutput(outputId = 'VI', height  = '50%'),
                        visNetworkOutput(outputId = 'RT'), width = 12)
-            )
-    ),
-    ## Qualitative tab------------
-    tabItem(tabName = "tab_qual",
-            box(width = 12, title = tags$b("Cargar datos del modelo"), 
-                solidHeader = TRUE, collapsible = T,
-                fluidRow(
-                  column(width = 4,
-                         fileInput(inputId = "model", label = "Cargar archivo:",
-                                   buttonLabel = "Buscar...",
-                                   placeholder = "Ningún archivo seleccionado")),
-                  column(
-                    width = 8,
-                    tags$h5(tags$b("Instrucciones:"))
-                    # Instrucciones
-                  )
-                )
-            ),
-            tabBox(width = 12, title = tags$b("Detalles del modelo"), 
-                   side = "right", selected = "Árbol de eventos", 
-                   tabPanel("Árbol de eventos",
-                            fluidRow(
-                              column(width = 12,
-                                     dropdownButton(tags$h4(tags$b("Configuración:"), align = "center"),
-                                                    radioButtons(inputId = "Dirtree", label = "Dirección del árbol de escenarios", 
-                                                                 choices = list( "Vertical" = "UD", "Horizontal" = "LR")),
-                                                    sliderInput(inputId = "Septree", label = "Separación",
-                                                                min = 0, max = 300,value = 100, ticks = FALSE),
-                                                    circle = TRUE, status = "danger", 
-                                                    icon = icon("gear"), width = "300px",
-                                                    tooltip = tooltipOptions(title = "Click para ver opciones !")
-                                     ),
-                                     visNetworkOutput("treeplot")))),
-                   tabPanel("Modelo", DTOutput("table_model"))
-            ),
-            fluidRow(
-              column(width = 12,
-                     box(width = 12,title = tags$b("Evaluación de riesgo de los nodos"), status = "primary", collapsible = T,
-                         uiOutput("inputs"),
-                         actionBttn(inputId = "submit",label = "Analizar",style = "material-flat", color = "primary")))
-            ),
-            conditionalPanel("input.submit > 0", 
-                             fluidRow(
-                               column(width = 6,
-                                      tabBox(width = 12, title = tags$b("Evaluación de riesgo de los nodos"),  side = "right", selected = "Gráfico de evaluación",
-                                             tabPanel("Tabla de evaluación",  DTOutput("result_risk")),
-                                             tabPanel("Gráfico de evaluación",  plotOutput("barResults"))
-                                      )
-                               ),
-                               column(width = 6,
-                                      tabBox(width = 12, title = tags$b("Resultados de evaluación de riesgo"),  side = "right", selected = "Resultado",
-                                             tabPanel("Tabla de resultados", DTOutput("results_table")),
-                                             tabPanel("Resultado", plotlyOutput("results_gauge"))
-                                      )
-                               )
-                             )
             )
     ),
     ## Fitting tab -------
