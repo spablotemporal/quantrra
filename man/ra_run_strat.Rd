@@ -25,6 +25,6 @@ A strata represents different ways of grouping the target population. I.e. estim
 \examples{
 # use one of the example models
 m <- quantrra::asf_products
-ra_run_strat(m = m$nodes, tbl = m$stratified, nsim = 10e3)
+ra_run_strat(m = m, nsim = 10e2)
 
 }
