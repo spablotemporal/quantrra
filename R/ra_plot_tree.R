@@ -57,9 +57,9 @@ ra_plot_tree <- function(m, fontColor = 'black', shape = 'rectangle', static = T
     m <- m %>% 
       mutate(
         type = tolower(type),
-        type = recode(type, input = "in", output = "out")
+        type = recode(type, input = "in", output = "out", dataset = "data")
       ) %>% 
-      mutate(color = recode(type, out = '#FFF0F0', `in` = '#F0FFF0'))
+      mutate(color = recode(type, out = '#FFF0F0', `in` = '#F0FFF0', `data` = "#F0F0FF"))
   }
   
   if(is.null(m$shape)){
